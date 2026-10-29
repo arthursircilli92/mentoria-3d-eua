@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentoria 3D — EUA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0e14;
+  --bg-secondary: #111820;
+  --bg-card: #161d27;
+  --accent: #00d4aa;
+  --accent-dim: rgba(0, 212, 170, 0.15);
+  --accent-glow: rgba(0, 212, 170, 0.3);
+  --text-primary: #f0f4f8;
+  --text-secondary: #8b9bb4;
+  --text-muted: #5a6a80;
+  --border: rgba(255, 255, 255, 0.06);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.slide {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.slide-number {
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.nav-dots {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 100;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.nav-dot.active {
+  background: var(--accent);
+  opacity: 1;
+  box-shadow: 0 0 12px var(--accent-glow);
+  transform: scale(1.3);
+}
+
+.nav-dot:hover { opacity: 0.7; }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.1; }
+
+h1 {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+p { color: var(--text-secondary); font-size: 1.1rem; max-width: 60ch; }
+
+.label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--accent-dim);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+.card p { font-size: 0.95rem; line-height: 1.5; }
+
+.list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+
+.list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.list-item span { color: var(--text-secondary); font-size: 1.05rem; }
+
+.stat { text-align: center; }
+.stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label { color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem; }
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  width: 100%;
+  max-width: 1200px;
+  align-items: center;
+}
+
+.exercise-box {
+  background: linear-gradient(135deg, var(--accent-dim), transparent);
+  border: 1px solid var(--accent-dim);
+  border-radius: 16px;
+  padding: 3rem;
+  max-width: 800px;
+  text-align: center;
+}
+.exercise-box h3 { font-size: 1.8rem; margin-bottom: 1.5rem; }
+.exercise-box p { margin: 0 auto 1rem; }
+
+.animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.animate.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+
+@media (max-width: 1024px) {
+  .slide { padding: 3rem 2rem; }
+  .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; gap: 2rem; }
+}
+@media (max-width: 640px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 1.8rem; }
+  .nav-dots { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- SLIDE 1: Title -->
+<section class="slide" data-slide="1">
+  <span class="label animate">Mentoria Exclusiva</span>
+  <h1 class="animate delay-1">Impressão 3D<br>nos EUA</h1>
+  <p class="animate delay-2" style="margin-top: 1.5rem; font-size: 1.3rem;">Do zero à primeira venda em 4 aulas práticas</p>
+  <div class="animate delay-3" style="margin-top: 3rem; display: flex; gap: 2rem;">
+    <div class="stat">
+      <div class="stat-value">4</div>
+      <div class="stat-label">Aulas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">8h+</div>
+      <div class="stat-label">Conteúdo</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">100%</div>
+      <div class="stat-label">Prático</div>
+    </div>
+  </div>
+  <div class="slide-number">01 / 16</div>
+</section>
+
+<!-- SLIDE 2: Aula 1 Header -->
+<section class="slide" data-slide="2">
+  <span class="label animate">Aula 1</span>
+  <h1 class="animate delay-1">Introdução e<br>Fundamentos</h1>
+  <p class="animate delay-2" style="margin-top: 1.5rem;">Quem somos, por que o 3D nos EUA, máquinas e materiais</p>
+  <div class="slide-number">02 / 16</div>
+</section>
+
+<!-- SLIDE 3: Quem Somos -->
+<section class="slide" data-slide="3">
+  <span class="label animate">Visão Geral</span>
+  <h2 class="animate delay-1">Quem somos nós</h2>
+  <div class="grid grid-2 animate delay-2" style="margin-top: 2rem;">
+    <div class="card">
+      <span class="card-icon">👤</span>
+      <h3>Arthur</h3>
+      <p>Especialista em e-commerce com 200-500 pedidos/mês em múltiplas plataformas. Criador de ferramentas próprias de análise de mercado. Expert em SEO, precificação estratégica, anúncios de alta conversão e automação com IA.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">👤</span>
+      <h3>Guilherme</h3>
+      <p>Expert em impressão 3D desde 2018, validação de produtos e estratégias de vendas em marketplaces.</p>
+    </div>
+  </div>
+  <p class="animate delay-3" style="margin-top: 2rem; text-align: center;">Uma jornada completa do zero à primeira venda em dólar.</p>
+  <div class="slide-number">03 / 16</div>
+</section>
+
+<!-- SLIDE 4: Por que 3D nos EUA -->
+<section class="slide" data-slide="4">
+  <span class="label animate">Oportunidade</span>
+  <h2 class="animate delay-1">Por que impressão 3D nos EUA?</h2>
+  <div class="two-col animate delay-2" style="margin-top: 2rem;">
+    <ul class="list">
+      <li class="list-item"><span>Mercado maduro com alta demanda por produtos personalizados</span></li>
+      <li class="list-item"><span>Plataformas de venda estabelecidas e infraestrutura pronta</span></li>
+      <li class="list-item"><span>Logística simplificada com serviços agregadores de frete</span></li>
+      <li class="list-item"><span>Consumidores valorizam produtos únicos e sob medida</span></li>
+    </ul>
+    <div class="card" style="text-align: center;">
+      <div class="stat-value">$12B+</div>
+      <div class="stat-label">Mercado global de impressão 3D</div>
+      <p style="margin-top: 1rem; font-size: 0.9rem;">Crescimento anual impulsionado por manufatura personalizada</p>
+    </div>
+  </div>
+  <div class="slide-number">04 / 16</div>
+</section>
+
+<!-- SLIDE 5: Máquinas Iniciais -->
+<section class="slide" data-slide="5">
+  <span class="label animate">Equipamento</span>
+  <h2 class="animate delay-1">Máquinas para começar</h2>
+  <div class="grid grid-3 animate delay-2" style="margin-top: 2rem;">
+    <div class="card">
+      <span class="card-icon">🖨️</span>
+      <h3>Entrada</h3>
+      <p>Custo-benefício ideal para validar os primeiros produtos e aprender a operar.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">⚡</span>
+      <h3>Intermediária</h3>
+      <p>Velocidade e confiabilidade para escalar a produção com qualidade.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🏭</span>
+      <h3>Produção</h3>
+      <p>Farm de impressão para volume alto e materiais avançados.</p>
+    </div>
+  </div>
+  <div class="slide-number">05 / 16</div>
+</section>
+
+<!-- SLIDE 6: Filamentos -->
+<section class="slide" data-slide="6">
+  <span class="label animate">Materiais</span>
+  <h2 class="animate delay-1">Filamentos mais usados</h2>
+  <div class="grid grid-4 animate delay-2" style="margin-top: 2rem;">
+    <div class="card">
+      <h3>PLA</h3>
+      <p>Mais fácil de imprimir, biodegradável, ideal para decoração e protótipos.</p>
+    </div>
+    <div class="card">
+      <h3>PETG</h3>
+      <p>Resistente a temperatura, flexível, ótimo para utilidades e peças funcionais.</p>
+    </div>
+    <div class="card">
+      <h3>TPU</h3>
+      <p>Flexível e durável, perfeito para cases, acessórios e wearables.</p>
+    </div>
+    <div class="card">
+      <h3>ABS/ASA</h3>
+      <p>Alta resistência térmica e mecânica, uso externo e automotivo.</p>
+    </div>
+  </div>
+  <div class="slide-number">06 / 16</div>
+</section>
+
+<!-- SLIDE 7: Aula 2 Header -->
+<section class="slide" data-slide="7">
+  <span class="label animate">Aula 2</span>
+  <h1 class="animate delay-1">Produtos<br>Campeões</h1>
+  <p class="animate delay-2" style="margin-top: 1.5rem;">Como encontrar, validar e escolher os melhores produtos para vender</p>
+  <div class="slide-number">07 / 16</div>
+</section>
+
+<!-- SLIDE 8: Produto Campeão -->
+<section class="slide" data-slide="8">
+  <span class="label animate">Framework</span>
+  <h2 class="animate delay-1">O que é um produto campeão?</h2>
+  <div class="grid grid-4 animate delay-2" style="margin-top: 2rem;">
+    <div class="card" style="text-align: center; border-color: var(--accent-dim);">
+      <div class="stat-value" style="font-size: 2.5rem;">📈</div>
+      <h3>Demanda Alta</h3>
+      <p>Buscas consistentes e vendas recorrentes nas plataformas.</p>
+    </div>
+    <div class="card" style="text-align: center; border-color: var(--accent-dim);">
+      <div class="stat-value" style="font-size: 2.5rem;">💵</div>
+      <h3>Custo Baixo</h3>
+      <p>Material e tempo de impressão que permitem margem saudável.</p>
+    </div>
+    <div class="card" style="text-align: center; border-color: var(--accent-dim);">
+      <div class="stat-value" style="font-size: 2.5rem;">⚡</div>
+      <h3>Impressão Rápida</h3>
+      <p>Peças que imprimem em minutos, não horas — escala viável.</p>
+    </div>
+    <div class="card" style="text-align: center; border-color: var(--accent-dim);">
+      <div class="stat-value" style="font-size: 2.5rem;">🎯</div>
+      <h3>Pouca Concorrência</h3>
+      <p>Nicho com espaço para novos vendedores se destacarem.</p>
+    </div>
+  </div>
+  <div class="slide-number">08 / 16</div>
+</section>
+
+<!-- SLIDE 9: Categorias -->
+<section class="slide" data-slide="9">
+  <span class="label animate">Nichos</span>
+  <h2 class="animate delay-1">Categorias que mais vendem</h2>
+  <div class="grid grid-3 animate delay-2" style="margin-top: 2rem;">
+    <div class="card">
+      <span class="card-icon">🎄</span>
+      <h3>Sazonais</h3>
+      <p>Datas comemorativas com picos de demanda previsíveis e lucrativos.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🏠</span>
+      <h3>Decoração</h3>
+      <p>Itens funcionais com apelo estético para casa e escritório.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔧</span>
+      <h3>Utilidades</h3>
+      <p>Resolvem problemas reais do dia a dia com praticidade.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🎮</span>
+      <h3>Figures</h3>
+      <p>Colecionáveis e miniaturas com alta margem e público fiel.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">⚖️</span>
+      <h3>Licenças</h3>
+      <p>Produtos com licença comercial válida — evite IP protegido.</p>
+    </div>
+  </div>
+  <div class="slide-number">09 / 16</div>
+</section>
+
+<!-- SLIDE 10: Ferramentas de Validação -->
+<section class="slide" data-slide="10">
+  <span class="label animate">Ferramentas</span>
+  <h2 class="animate delay-1">Como achar e validar produtos</h2>
+  <div class="two-col animate delay-2" style="margin-top: 2rem;">
+    <div>
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>EverBee</h3>
+        <p>Análise de vendas estimadas, tendências de busca e concorrência por nicho.</p>
+      </div>
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Alura</h3>
+        <p>Pesquisa de produtos vencedores, análise de listings e insights de mercado.</p>
+      </div>
+      <div class="card">
+        <h3>eRank</h3>
+        <p>Palavras-chave otimizadas, volume de busca e score de competição.</p>
+      </div>
+    </div>
+    <div class="exercise-box">
+      <h3>Fluxo de Validação</h3>
+      <ul class="list" style="text-align: left; margin-top: 1.5rem;">
+        <li class="list-item"><span>1. Identificar tendência nas ferramentas</span></li>
+        <li class="list-item"><span>2. Validar palavras-chave</span></li>
+        <li class="list-item"><span>3. Analisar concorrência e diferenciação</span></li>
+        <li class="list-item"><span>4. Testar viabilidade de impressão e custo</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-number">10 / 16</div>
+</section>
+
+<!-- SLIDE 11: O que Evitar -->
+<section class="slide" data-slide="11">
+  <span class="label animate">Alerta</span>
+  <h2 class="animate delay-1">O que evitar</h2>
+  <div class="grid grid-3 animate delay-2" style="margin-top: 2rem;">
+    <div class="card" style="border-color: rgba(255, 100, 100, 0.3);">
+      <span class="card-icon">🚫</span>
+      <h3 style="color: #ff6b6b;">Saturado</h3>
+      <p>Nichos com milhares de sellers e preço esmagado — difícil competir.</p>
+    </div>
+    <div class="card" style="border-color: rgba(255, 100, 100, 0.3);">
+      <span class="card-icon">⚠️</span>
+      <h3 style="color: #ff6b6b;">IP Protegido</h3>
+      <p>Personagens e marcas sem licença — risco de banimento e processo.</p>
+    </div>
+    <div class="card" style="border-color: rgba(255, 100, 100, 0.3);">
+      <span class="card-icon">❌</span>
+      <h3 style="color: #ff6b6b;">Peças Difíceis</h3>
+      <p>Geometrias complexas e falhas frequentes — destroem sua margem.</p>
+    </div>
+  </div>
+  <div class="slide-number">11 / 16</div>
+</section>
+
+<!-- SLIDE 12: Exercício A -->
+<section class="slide" data-slide="12">
+  <span class="label animate">Exercício A</span>
+  <div class="exercise-box animate delay-1">
+    <h3>Escolha 3 Produtos Campeões</h3>
+    <p style="font-size: 1.2rem; margin-bottom: 2rem;">Cada aluno seleciona 3 produtos e justifica a escolha com dados reais.</p>
+    <div class="grid grid-3" style="margin-top: 2rem;">
+      <div class="card" style="background: var(--bg-secondary);">
+        <h3>Produto 1</h3>
+        <p>Dados de demanda, concorrência e viabilidade técnica.</p>
+      </div>
+      <div class="card" style="background: var(--bg-secondary);">
+        <h3>Produto 2</h3>
+        <p>Análise de palavras-chave e potencial de vendas.</p>
+      </div>
+      <div class="card" style="background: var(--bg-secondary);">
+        <h3>Produto 3</h3>
+        <p>Custo de produção, tempo de impressão e margem estimada.</p>
+      </div>
+    </div>
+    <p style="margin-top: 2rem; color: var(--accent); font-weight: 600;">Use as ferramentas de validação para embasar suas escolhas.</p>
+  </div>
+  <div class="slide-number">12 / 16</div>
+</section>
+
+<!-- SLIDE 13: Aula 3 Header -->
+<section class="slide" data-slide="13">
+  <span class="label animate">Aula 3</span>
+  <h1 class="animate delay-1">Vendas e<br>Precificação</h1>
+  <p class="animate delay-2" style="margin-top: 1.5rem;">Análise de exercícios, canais de venda e estratégia de preços</p>
+  <div class="slide-number">13 / 16</div>
+</section>
+
+<!-- SLIDE 14: Plataformas de Venda -->
+<section class="slide" data-slide="14">
+  <span class="label animate">Canais</span>
+  <h2 class="animate delay-1">Plataformas de venda</h2>
+  <div class="two-col animate delay-2" style="margin-top: 2rem;">
+    <div class="card">
+      <span class="card-icon" style="font-size: 3rem;">📘</span>
+      <h3>Marketplace Social</h3>
+      <p style="margin: 1rem 0;"><strong>Arthur</strong> — Estratégias de venda local e regional.</p>
+      <ul class="list">
+        <li class="list-item"><span>Contas brasileiras têm limitações para anúncios nos EUA</span></li>
+        <li class="list-item"><span>Necessário criar conta com perfil americano</span></li>
+        <li class="list-item"><span>Venda local com entrega ou retirada</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="card-icon" style="font-size: 3rem;">🧡</span>
+      <h3>Marketplace Global</h3>
+      <p style="margin: 1rem 0;"><strong>Gui</strong> — Aplicação dos produtos escolhidos.</p>
+      <ul class="list">
+        <li class="list-item"><span>Marketplace focado em handmade e itens únicos</span></li>
+        <li class="list-item"><span>Otimização de listing com SEO e fotos profissionais</span></li>
+        <li class="list-item"><span>Estratégia de tags e categorias para visibilidade</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-number">14 / 16</div>
+</section>
+
+<!-- SLIDE 15: Precificação -->
+<section class="slide" data-slide="15">
+  <span class="label animate">Lucro</span>
+  <h2 class="animate delay-1">Precificação estratégica</h2>
+  <div class="two-col animate delay-2" style="margin-top: 2rem;">
+    <div>
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>Fórmula Base</h3>
+        <p style="font-size: 1.3rem; color: var(--accent); font-family: var(--font-display); margin-top: 0.5rem;">
+          (Material + Energia + Tempo) × Markup + Taxas
+        </p>
+      </div>
+      <ul class="list">
+        <li class="list-item"><span>Custo do filamento por grama + energia elétrica</span></li>
+        <li class="list-item"><span>Valor da hora-máquina (depreciação + manutenção)</span></li>
+        <li class="list-item"><span>Taxas da plataforma variam por canal</span></li>
+        <li class="list-item"><span>Margem de lucro alvo: mínimo 40-60%</span></li>
+      </ul>
+    </div>
+    <div class="card" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+      <div class="stat-value" style="font-size: 3rem;">40-60%</div>
+      <div class="stat-label">Margem de Lucro Alvo</div>
+      <p style="margin-top: 1rem; font-size: 0.9rem;">Garanta que o preço cubra todos os custos e gere lucro real.</p>
+    </div>
+  </div>
+  <div class="slide-number">15 / 16</div>
+</section>
+
+<!-- SLIDE 16: Exercício B + Aula 4 + Encerramento -->
+<section class="slide" data-slide="16">
+  <span class="label animate">Próximos Passos</span>
+  <h2 class="animate delay-1">Exercício B & Aula 4</h2>
+  <div class="grid grid-2 animate delay-2" style="margin-top: 2rem;">
+    <div class="exercise-box" style="padding: 2rem;">
+      <h3 style="font-size: 1.4rem;">Exercício B</h3>
+      <p style="font-size: 1rem;">Criar no mínimo <strong>3 anúncios reais</strong> para apresentar na próxima aula.</p>
+    </div>
+    <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+      <h3>Aula 4: Logística</h3>
+      <ul class="list" style="margin-top: 1rem;">
+        <li class="list-item"><span>Plataforma de envios e agregadores de frete</span></li>
+        <li class="list-item"><span>Análise dos anúncios criados</span></li>
+        <li class="list-item"><span>Tira dúvidas e próximos passos</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="animate delay-3" style="margin-top: 3rem; color: var(--accent); font-weight: 600; font-size: 1.2rem;">Do zero à primeira venda — bora fazer dólar!</p>
+  <div class="slide-number">16 / 16</div>
+</section>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const navDots = document.getElementById('navDots');
+
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot';
+  dot.setAttribute('aria-label', `Ir para slide ${i + 1}`);
+  dot.addEventListener('click', () => {
+    slides[i].scrollIntoView({ behavior: 'smooth' });
+  });
+  navDots.appendChild(dot);
+});
+
+const dots = document.querySelectorAll('.nav-dot');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const index = parseInt(entry.target.dataset.slide) - 1;
+      dots.forEach(d => d.classList.remove('active'));
+      if (dots[index]) dots[index].classList.add('active');
+      entry.target.querySelectorAll('.animate').forEach(el => {
+        el.classList.add('visible');
+      });
+    }
+  });
+}, { threshold: 0.5 });
+
+slides.forEach(slide => observer.observe(slide));
+
+document.addEventListener('keydown', (e) => {
+  const currentSlide = [...slides].findIndex(s => {
+    const rect = s.getBoundingClientRect();
+    return rect.top >= -100 && rect.top < window.innerHeight / 2;
+  });
+
+  if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+    e.preventDefault();
+    if (currentSlide < slides.length - 1) {
+      slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+    e.preventDefault();
+    if (currentSlide > 0) {
+      slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    slides[0].scrollIntoView({ behavior: 'smooth' });
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+if (dots[0]) dots[0].classList.add('active');
+</script>
+</body>
+</html>
