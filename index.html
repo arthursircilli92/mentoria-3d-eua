@@ -181,6 +181,35 @@ footer { margin-top: 4rem; padding: 2rem; text-align: center; color: var(--text-
 </head>
 <body>
 
+<!-- TELA DE LOGIN (PROTEÇÃO DO SITE) -->
+<div id="auth-overlay" style="position:fixed; inset:0; z-index:9999; background:#0b0d12; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+<div style="text-align:center; max-width:400px; padding:2rem;">
+<div style="font-size:4rem; margin-bottom:1rem;">🔒</div>
+<h2 style="font-family:'Space Grotesk', sans-serif; font-size:1.8rem; margin-bottom:0.5rem; color:#eef2f8;">Acesso Restrito</h2>
+<p style="color:#a0acbf; margin-bottom:2rem; font-size:0.95rem;">Área exclusiva para Arthur e Guilherme</p>
+<input type="password" id="auth-pass" placeholder="Digite a senha de acesso" style="width:100%; padding:1rem; background:#171b24; border:1px solid rgba(255,255,255,0.14); border-radius:8px; color:#eef2f8; font-family:'JetBrains Mono', monospace; font-size:1.1rem; text-align:center; margin-bottom:1rem; outline:none;" onfocus="this.style.borderColor='#4ecdc4'" onblur="this.style.borderColor='rgba(255,255,255,0.14)'">
+<button onclick="checkAuth()" style="width:100%; padding:1rem; background:#4ecdc4; color:#03241f; border:none; border-radius:8px; font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1rem; cursor:pointer;">Entrar</button>
+<p id="auth-err" style="color:#ff6b6b; font-size:0.85rem; margin-top:1rem; display:none;">Senha incorreta.</p>
+</div>
+</div>
+<script>
+function checkAuth() {
+const pass = document.getElementById('auth-pass').value;
+if (pass === '6969') {
+// Não salva no localStorage — pede senha sempre que recarregar
+document.getElementById('auth-overlay').style.display = 'none';
+} else {
+document.getElementById('auth-err').style.display = 'block';
+document.getElementById('auth-pass').value = '';
+}
+}
+document.getElementById('auth-pass').addEventListener('keypress', function(e) {
+if (e.key === 'Enter') checkAuth();
+});
+// Sempre mostra a tela de login ao carregar (sem verificar localStorage)
+document.getElementById('auth-overlay').style.display = 'flex';
+</script>
+
 <!-- TOPBAR -->
 <div class="topbar">
 <h1>Mentoria 3D EUA <span>· Sala de Controle · Arthur + Guilherme</span></h1>
