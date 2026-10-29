@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercício B · Mentoria 3D EUA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #0b0d12;
+--bg-2: #11141b;
+--bg-card: #171b24;
+--bg-panel: #1d222d;
+--border: rgba(255,255,255,0.08);
+--border-strong: rgba(255,255,255,0.14);
+--text: #eef2f8;
+--text-dim: #a0acbf;
+--text-muted: #6b7790;
+--accent: #ffa552; /* Arthur/Orange theme for variety or keep teal? Let's stick to Teal for consistency with "Student" area, or maybe Gold for "Exercise B". Let's use the Warning/Gold color from main site to differentiate Exercise B from A. */
+--accent: #ffd166;
+--accent-dim: rgba(255,209,102,0.15);
+--accent-glow: rgba(255,209,102,0.35);
+--warn: #ff6b6b;
+--ok: #6bcf7f;
+--font-display: 'Space Grotesk', sans-serif;
+--font-body: 'Inter', sans-serif;
+--font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.topbar { position: sticky; top: 0; z-index: 50; background: rgba(11,13,18,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.8rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.topbar h1 { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.02em; color: var(--text); }
+.topbar h1 span { color: var(--text-muted); font-weight: 500; }
+.topbar .actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.btn { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-dim); cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+.btn:hover { color: var(--text); border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: #1a1404; border-color: var(--accent); }
+.btn.primary:hover { filter: brightness(1.1); }
+main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+.hero { padding: 3rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+.hero .tag { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.8rem; display: block; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.hero p { color: var(--text-dim); font-size: 1.05rem; max-width: 65ch; }
+.field { margin-bottom: 1.5rem; }
+.field label { display: block; font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.field .hint { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+.field input, .field textarea, .field select { width: 100%; padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 0.95rem; transition: border-color 0.2s; }
+.field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.field textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+.anuncio-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; border-top: 4px solid var(--accent); }
+.anuncio-card h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.anuncio-card h3 .num { background: var(--accent); color: #1a1404; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } main { padding: 1rem; } .topbar { padding: 0.8rem 1rem; } }
+.save-status { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; }
+.save-status.saved { color: var(--ok); }
+.instructions { background: linear-gradient(135deg, var(--accent-dim), transparent); border: 1px solid var(--accent-dim); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+.instructions h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--accent); margin-bottom: 0.8rem; }
+.instructions ul { padding-left: 1.2rem; color: var(--text-dim); font-size: 0.92rem; }
+.instructions li { margin-bottom: 0.4rem; }
+footer { margin-top: 4rem; padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); }
+/* Print Styles */
+@media print {
+body { background: white; color: #111; }
+.topbar, .btn, .save-status, .instructions { display: none !important; }
+main { max-width: none; padding: 0; }
+.hero { padding: 20px 0; border-color: #ccc; }
+.hero h1 { color: #111; font-size: 24pt; }
+.hero p, .field .hint { color: #555; }
+.field label { color: #111; }
+.field input, .field textarea, .field select { background: white !important; color: #111 !important; border-color: #aaa !important; }
+.anuncio-card { background: white; border-color: #ccc; break-inside: avoid; border-top-color: #b8860b; }
+.anuncio-card h3 { color: #b8860b; }
+.grid-2 { gap: 15px; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+<h1>Mentoria 3D EUA <span>· Exercício B · Aula 3</span></h1>
+<div class="actions">
+<button class="btn" id="exportJson">💾 Exportar JSON</button>
+<label class="btn" style="margin:0; cursor:pointer;">📂 Importar JSON<input id="importJson" type="file" accept=".json" hidden></label>
+<button class="btn primary" id="printPdf">📄 Salvar PDF</button>
+</div>
+</div>
+<main>
+<div class="hero">
+<span class="tag">Exercício B · Entregar até a Aula 4</span>
+<h1>Crie 3 Anúncios Reais</h1>
+<p>Agora é hora de colocar a mão na massa. Crie os anúncios no Facebook Marketplace e/ou Etsy usando os produtos validados no Exercício A. Preencha os detalhes abaixo e gere o PDF para entrega.</p>
+</div>
+<div class="instructions">
+<h3>📋 O que fazer</h3>
+<ul>
+<li><strong>Plataforma:</strong> Escolha onde vai anunciar (FB Marketplace ou Etsy).</li>
+<li><strong>Título:</strong> Use as palavras-chave pesquisadas (máximo 140 chars no Etsy).</li>
+<li><strong>Preço:</strong> Defina usando a fórmula aprendida na aula (Custo x 3 + Taxas).</li>
+<li><strong>Link/Print:</strong> Se já publicou, cole o link. Se é rascunho, descreva ou cole o link da imagem.</li>
+</ul>
+</div>
+<div class="field">
+<label for="aluno">Nome do aluno</label>
+<input type="text" id="aluno" data-save placeholder="Seu nome completo">
+</div>
+<div class="field">
+<label for="turma">Turma / Data</label>
+<input type="text" id="turma" data-save placeholder="Ex: Turma 1 · Outubro 2026">
+</div>
+<!-- Anúncio 1 -->
+<div class="anuncio-card">
+<h3><span class="num">1</span> Primeiro Anúncio</h3>
+<div class="grid-2">
+<div class="field">
+<label for="a1-plataforma">Plataforma</label>
+<select id="a1-plataforma" data-save>
+<option value="">Selecione...</option>
+<option value="facebook">Facebook Marketplace</option>
+<option value="etsy">Etsy</option>
+</select>
+</div>
+<div class="field">
+<label for="a1-produto">Produto (do Exercício A)</label>
+<input type="text" id="a1-produto" data-save placeholder="Ex: Vaso Geométrico">
+</div>
+</div>
+<div class="field">
+<label for="a1-titulo">Título do Anúncio</label>
+<span class="hint">Use palavras-chave principais. Ex: Modern Geometric Plant Pot 3D Printed</span>
+<input type="text" id="a1-titulo" data-save placeholder="Título otimizado para busca">
+</div>
+<div class="field">
+<label for="a1-descricao">Descrição / Copy</label>
+<span class="hint">Resumo dos benefícios, material, tamanho e política de envio.</span>
+<textarea id="a1-descricao" data-save placeholder="Cole aqui a descrição que você escreveu..."></textarea>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="a1-preco-custo">Custo Total (US$)</label>
+<span class="hint">Material + Energia + Tempo + Embalagem</span>
+<input type="number" id="a1-preco-custo" data-save placeholder="Ex: 4.50" step="0.01" min="0">
+</div>
+<div class="field">
+<label for="a1-preco-venda">Preço de Venda (US$)</label>
+<span class="hint">Definido pela fórmula</span>
+<input type="number" id="a1-preco-venda" data-save placeholder="Ex: 18.00" step="0.01" min="0">
+</div>
+</div>
+<div class="field">
+<label for="a1-link">Link do Anúncio ou Print</label>
+<span class="hint">Se estiver online, cole a URL. Se não, cole o link da imagem do print.</span>
+<input type="text" id="a1-link" data-save placeholder="https://etsy.com/listing/... ou https://imgur.com/...">
+</div>
+</div>
+<!-- Anúncio 2 -->
+<div class="anuncio-card">
+<h3><span class="num">2</span> Segundo Anúncio</h3>
+<div class="grid-2">
+<div class="field">
+<label for="a2-plataforma">Plataforma</label>
+<select id="a2-plataforma" data-save>
+<option value="">Selecione...</option>
+<option value="facebook">Facebook Marketplace</option>
+<option value="etsy">Etsy</option>
+</select>
+</div>
+<div class="field">
+<label for="a2-produto">Produto (do Exercício A)</label>
+<input type="text" id="a2-produto" data-save placeholder="Ex: Suporte de Fone">
+</div>
+</div>
+<div class="field">
+<label for="a2-titulo">Título do Anúncio</label>
+<input type="text" id="a2-titulo" data-save placeholder="Título otimizado para busca">
+</div>
+<div class="field">
+<label for="a2-descricao">Descrição / Copy</label>
+<textarea id="a2-descricao" data-save placeholder="Cole aqui a descrição que você escreveu..."></textarea>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="a2-preco-custo">Custo Total (US$)</label>
+<input type="number" id="a2-preco-custo" data-save placeholder="Ex: 2.10" step="0.01" min="0">
+</div>
+<div class="field">
+<label for="a2-preco-venda">Preço de Venda (US$)</label>
+<input type="number" id="a2-preco-venda" data-save placeholder="Ex: 12.00" step="0.01" min="0">
+</div>
+</div>
+<div class="field">
+<label for="a2-link">Link do Anúncio ou Print</label>
+<input type="text" id="a2-link" data-save placeholder="https://...">
+</div>
+</div>
+<!-- Anúncio 3 -->
+<div class="anuncio-card">
+<h3><span class="num">3</span> Terceiro Anúncio</h3>
+<div class="grid-2">
+<div class="field">
+<label for="a3-plataforma">Plataforma</label>
+<select id="a3-plataforma" data-save>
+<option value="">Selecione...</option>
+<option value="facebook">Facebook Marketplace</option>
+<option value="etsy">Etsy</option>
+</select>
+</div>
+<div class="field">
+<label for="a3-produto">Produto (do Exercício A)</label>
+<input type="text" id="a3-produto" data-save placeholder="Ex: Organizador de Cabos">
+</div>
+</div>
+<div class="field">
+<label for="a3-titulo">Título do Anúncio</label>
+<input type="text" id="a3-titulo" data-save placeholder="Título otimizado para busca">
+</div>
+<div class="field">
+<label for="a3-descricao">Descrição / Copy</label>
+<textarea id="a3-descricao" data-save placeholder="Cole aqui a descrição que você escreveu..."></textarea>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="a3-preco-custo">Custo Total (US$)</label>
+<input type="number" id="a3-preco-custo" data-save placeholder="Ex: 1.50" step="0.01" min="0">
+</div>
+<div class="field">
+<label for="a3-preco-venda">Preço de Venda (US$)</label>
+<input type="number" id="a3-preco-venda" data-save placeholder="Ex: 9.00" step="0.01" min="0">
+</div>
+</div>
+<div class="field">
+<label for="a3-link">Link do Anúncio ou Print</label>
+<input type="text" id="a3-link" data-save placeholder="https://...">
+</div>
+</div>
+<div class="save-status" id="saveStatus">Preenchimento salvo automaticamente neste navegador.</div>
+<footer>
+Exercício B · Mentoria Impressão 3D → EUA · Arthur + Guilherme<br>
+Entregue o PDF até 24h antes da Aula 4
+</footer>
+</main>
+<script>
+const inputs = document.querySelectorAll('[data-save]');
+const STORAGE_KEY = 'mentoria-3d-exercicio-b-v1';
+function getValues() {
+const data = {};
+inputs.forEach(el => {
+data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+});
+return data;
+}
+function setValues(data) {
+inputs.forEach(el => {
+if (data.hasOwnProperty(el.id)) {
+if (el.type === 'checkbox') {
+el.checked = Boolean(data[el.id]);
+} else {
+el.value = data[el.id] || '';
+}
+}
+});
+}
+function save() {
+try {
+localStorage.setItem(STORAGE_KEY, JSON.stringify(getValues()));
+const status = document.getElementById('saveStatus');
+status.textContent = '✓ Salvo automaticamente neste navegador';
+status.classList.add('saved');
+setTimeout(() => {
+status.textContent = 'Preenchimento salvo automaticamente neste navegador.';
+status.classList.remove('saved');
+}, 2000);
+} catch (e) {
+console.error('Erro ao salvar:', e);
+}
+}
+function load() {
+try {
+const saved = localStorage.getItem(STORAGE_KEY);
+if (saved) {
+setValues(JSON.parse(saved));
+}
+} catch (e) {
+console.error('Erro ao carregar:', e);
+}
+}
+inputs.forEach(el => {
+el.addEventListener('input', save);
+el.addEventListener('change', save);
+});
+document.getElementById('exportJson').addEventListener('click', () => {
+const data = {
+format: 'mentoria-3d-exercicio-b',
+version: 1,
+timestamp: new Date().toISOString(),
+data: getValues()
+};
+const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = `exercicio-b-${data.data.aluno || 'aluno'}-${new Date().toISOString().split('T')[0]}.json`;
+a.click();
+setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+document.getElementById('importJson').addEventListener('change', async (e) => {
+const file = e.target.files[0];
+if (!file) return;
+try {
+const text = await file.text();
+const json = JSON.parse(text);
+if (json.format !== 'mentoria-3d-exercicio-b' || !json.data) {
+throw new Error('Formato inválido');
+}
+if (confirm('Importar substituirá os campos atuais. Continuar?')) {
+setValues(json.data);
+save();
+alert('Dados importados com sucesso!');
+}
+} catch (err) {
+alert('Erro ao importar: arquivo inválido ou corrompido.');
+console.error(err);
+}
+e.target.value = '';
+});
+document.getElementById('printPdf').addEventListener('click', () => {
+window.print();
+});
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercício A · Mentoria 3D EUA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #0b0d12;
+--bg-2: #11141b;
+--bg-card: #171b24;
+--bg-panel: #1d222d;
+--border: rgba(255,255,255,0.08);
+--border-strong: rgba(255,255,255,0.14);
+--text: #eef2f8;
+--text-dim: #a0acbf;
+--text-muted: #6b7790;
+--accent: #4ecdc4;
+--accent-dim: rgba(78,205,196,0.15);
+--accent-glow: rgba(78,205,196,0.35);
+--warn: #ffd166;
+--ok: #6bcf7f;
+--danger: #ff6b6b;
+--font-display: 'Space Grotesk', sans-serif;
+--font-body: 'Inter', sans-serif;
+--font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.topbar { position: sticky; top: 0; z-index: 50; background: rgba(11,13,18,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.8rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.topbar h1 { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.02em; color: var(--text); }
+.topbar h1 span { color: var(--text-muted); font-weight: 500; }
+.topbar .actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.btn { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-dim); cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+.btn:hover { color: var(--text); border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: #03241f; border-color: var(--accent); }
+.btn.primary:hover { background: #5fe0d7; }
+main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+.hero { padding: 3rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+.hero .tag { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.8rem; display: block; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.hero p { color: var(--text-dim); font-size: 1.05rem; max-width: 65ch; }
+.field { margin-bottom: 1.5rem; }
+.field label { display: block; font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.field .hint { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+.field input, .field textarea, .field select { width: 100%; padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 0.95rem; transition: border-color 0.2s; }
+.field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.field textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+.produto-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.produto-card h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.produto-card h3 .num { background: var(--accent); color: #03241f; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } main { padding: 1rem; } .topbar { padding: 0.8rem 1rem; } }
+.save-status { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; }
+.save-status.saved { color: var(--ok); }
+.instructions { background: linear-gradient(135deg, var(--accent-dim), transparent); border: 1px solid var(--accent-dim); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+.instructions h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--accent); margin-bottom: 0.8rem; }
+.instructions ul { padding-left: 1.2rem; color: var(--text-dim); font-size: 0.92rem; }
+.instructions li { margin-bottom: 0.4rem; }
+footer { margin-top: 4rem; padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); }
+@media print {
+body { background: white; color: #111; }
+.topbar, .btn, .save-status, .instructions { display: none !important; }
+main { max-width: none; padding: 0; }
+.hero { padding: 20px 0; border-color: #ccc; }
+.hero h1 { color: #111; font-size: 24pt; }
+.hero p, .field .hint { color: #555; }
+.field label { color: #111; }
+.field input, .field textarea, .field select { background: white !important; color: #111 !important; border-color: #aaa !important; }
+.produto-card { background: white; border-color: #ccc; break-inside: avoid; }
+.produto-card h3 { color: #135e50; }
+.grid-2 { gap: 15px; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+<h1>Mentoria 3D EUA <span>· Exercício A · Aula 2</span></h1>
+<div class="actions">
+<button class="btn" id="exportJson">💾 Exportar JSON</button>
+<label class="btn" style="margin:0; cursor:pointer;">📂 Importar JSON<input id="importJson" type="file" accept=".json" hidden></label>
+<button class="btn primary" id="printPdf">📄 Salvar PDF</button>
+</div>
+</div>
+<main>
+<div class="hero">
+<span class="tag">Exercício A · Entregar até a Aula 3</span>
+<h1>Escolha 3 Produtos Campeões</h1>
+<p>Use as ferramentas EverBee, Alura e eRank para validar cada produto. Preencha os campos abaixo com dados reais — isso será analisado ao vivo na Aula 3.</p>
+</div>
+<div class="instructions">
+<h3>📋 Como preencher</h3>
+<ul>
+<li><strong>Produto:</strong> nome claro do que você quer vender (ex: "Suporte de fone de ouvido geométrico")</li>
+<li><strong>Categoria:</strong> sazonais, decoração, utilidades, figures ou outro</li>
+<li><strong>Vendas/mês:</strong> soma das vendas estimadas dos top 10 anúncios no nicho (EverBee/Alura)</li>
+<li><strong>Anúncios ativos:</strong> quantos sellers estão vendendo isso agora</li>
+<li><strong>Peso e tempo:</strong> estime no fatiador (Cura/Bambu Studio) antes de imprimir</li>
+<li><strong>Justificativa:</strong> por que esse produto é campeão? Use os 4 pilares (demanda, custo, velocidade, concorrência)</li>
+</ul>
+</div>
+<div class="field">
+<label for="aluno">Nome do aluno</label>
+<input type="text" id="aluno" data-save placeholder="Seu nome completo">
+</div>
+<div class="field">
+<label for="turma">Turma / Data</label>
+<input type="text" id="turma" data-save placeholder="Ex: Turma 1 · Outubro 2026">
+</div>
+<!-- Produto 1 -->
+<div class="produto-card">
+<h3><span class="num">1</span> Primeiro Produto</h3>
+<div class="field">
+<label for="p1-nome">Nome do produto</label>
+<input type="text" id="p1-nome" data-save placeholder="Ex: Vaso geométrico para suculentas">
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="p1-categoria">Categoria</label>
+<select id="p1-categoria" data-save>
+<option value="">Selecione...</option>
+<option value="sazonais">Sazonais</option>
+<option value="decoracao">Decoração</option>
+<option value="utilidades">Utilidades</option>
+<option value="figures">Figures</option>
+<option value="outro">Outro</option>
+</select>
+</div>
+<div class="field">
+<label for="p1-vendas">Vendas/mês estimadas (nicho)</label>
+<input type="number" id="p1-vendas" data-save placeholder="Ex: 1200" min="0">
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="p1-anuncios">Anúncios ativos no nicho</label>
+<input type="number" id="p1-anuncios" data-save placeholder="Ex: 380" min="0">
+</div>
+<div class="field">
+<label for="p1-peso">Peso estimado (gramas)</label>
+<input type="number" id="p1-peso" data-save placeholder="Ex: 25" min="0">
+</div>
+</div>
+<div class="field">
+<label for="p1-tempo">Tempo de impressão estimado</label>
+<input type="text" id="p1-tempo" data-save placeholder="Ex: 1h 40min">
+</div>
+<div class="field">
+<label for="p1-justificativa">Por que é um produto campeão?</label>
+<span class="hint">Use os 4 pilares: demanda alta, custo baixo, impressão rápida, pouca concorrência</span>
+<textarea id="p1-justificativa" data-save placeholder="Ex: Demanda de 1200 vendas/mês, custo de $0.50 de filamento, impressão em 1h40, concorrência moderada (380 anúncios). Diferenciação possível pelo design geométrico único."></textarea>
+</div>
+<div class="field">
+<label for="p1-print">Print da tela (EverBee/Alura/eRank)</label>
+<span class="hint">Cole o link da imagem ou descreva o que viu na ferramenta</span>
+<textarea id="p1-print" data-save placeholder="Ex: https://imgur.com/abc123 ou 'EverBee mostrou 1200 vendas/mês, receita $21k, 380 anúncios, tendência estável'"></textarea>
+</div>
+</div>
+<!-- Produto 2 -->
+<div class="produto-card">
+<h3><span class="num">2</span> Segundo Produto</h3>
+<div class="field">
+<label for="p2-nome">Nome do produto</label>
+<input type="text" id="p2-nome" data-save placeholder="Ex: Suporte de fone de ouvido minimalista">
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="p2-categoria">Categoria</label>
+<select id="p2-categoria" data-save>
+<option value="">Selecione...</option>
+<option value="sazonais">Sazonais</option>
+<option value="decoracao">Decoração</option>
+<option value="utilidades">Utilidades</option>
+<option value="figures">Figures</option>
+<option value="outro">Outro</option>
+</select>
+</div>
+<div class="field">
+<label for="p2-vendas">Vendas/mês estimadas (nicho)</label>
+<input type="number" id="p2-vendas" data-save placeholder="Ex: 800" min="0">
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="p2-anuncios">Anúncios ativos no nicho</label>
+<input type="number" id="p2-anuncios" data-save placeholder="Ex: 220" min="0">
+</div>
+<div class="field">
+<label for="p2-peso">Peso estimado (gramas)</label>
+<input type="number" id="p2-peso" data-save placeholder="Ex: 18" min="0">
+</div>
+</div>
+<div class="field">
+<label for="p2-tempo">Tempo de impressão estimado</label>
+<input type="text" id="p2-tempo" data-save placeholder="Ex: 45min">
+</div>
+<div class="field">
+<label for="p2-justificativa">Por que é um produto campeão?</label>
+<span class="hint">Use os 4 pilares: demanda alta, custo baixo, impressão rápida, pouca concorrência</span>
+<textarea id="p2-justificativa" data-save placeholder="Ex: Demanda consistente, custo baixo ($0.35), impressão rápida (45min), concorrência baixa (220 anúncios). Peça funcional com apelo estético."></textarea>
+</div>
+<div class="field">
+<label for="p2-print">Print da tela (EverBee/Alura/eRank)</label>
+<span class="hint">Cole o link da imagem ou descreva o que viu na ferramenta</span>
+<textarea id="p2-print" data-save placeholder="Ex: https://imgur.com/def456 ou 'Alura mostrou score 75, volume 800/mês, concorrência baixa'"></textarea>
+</div>
+</div>
+<!-- Produto 3 -->
+<div class="produto-card">
+<h3><span class="num">3</span> Terceiro Produto</h3>
+<div class="field">
+<label for="p3-nome">Nome do produto</label>
+<input type="text" id="p3-nome" data-save placeholder="Ex: Organizador de cabos modular">
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="p3-categoria">Categoria</label>
+<select id="p3-categoria" data-save>
+<option value="">Selecione...</option>
+<option value="sazonais">Sazonais</option>
+<option value="decoracao">Decoração</option>
+<option value="utilidades">Utilidades</option>
+<option value="figures">Figures</option>
+<option value="outro">Outro</option>
+</select>
+</div>
+<div class="field">
+<label for="p3-vendas">Vendas/mês estimadas (nicho)</label>
+<input type="number" id="p3-vendas" data-save placeholder="Ex: 600" min="0">
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="p3-anuncios">Anúncios ativos no nicho</label>
+<input type="number" id="p3-anuncios" data-save placeholder="Ex: 150" min="0">
+</div>
+<div class="field">
+<label for="p3-peso">Peso estimado (gramas)</label>
+<input type="number" id="p3-peso" data-save placeholder="Ex: 12" min="0">
+</div>
+</div>
+<div class="field">
+<label for="p3-tempo">Tempo de impressão estimado</label>
+<input type="text" id="p3-tempo" data-save placeholder="Ex: 30min">
+</div>
+<div class="field">
+<label for="p3-justificativa">Por que é um produto campeão?</label>
+<span class="hint">Use os 4 pilares: demanda alta, custo baixo, impressão rápida, pouca concorrência</span>
+<textarea id="p3-justificativa" data-save placeholder="Ex: Demanda recorrente, custo mínimo ($0.25), impressão ultra-rápida (30min), pouca concorrência (150 anúncios). Resolve problema real do dia a dia."></textarea>
+</div>
+<div class="field">
+<label for="p3-print">Print da tela (EverBee/Alura/eRank)</label>
+<span class="hint">Cole o link da imagem ou descreva o que viu na ferramenta</span>
+<textarea id="p3-print" data-save placeholder="Ex: https://imgur.com/ghi789 ou 'eRank mostrou volume 600/mês, competição 25 (baixa), tendência crescente'"></textarea>
+</div>
+</div>
+<div class="save-status" id="saveStatus">Preenchimento salvo automaticamente neste navegador.</div>
+<footer>
+Exercício A · Mentoria Impressão 3D → EUA · Arthur + Guilherme<br>
+Entregue o PDF até 24h antes da Aula 3
+</footer>
+</main>
+<script>
+const inputs = document.querySelectorAll('[data-save]');
+const STORAGE_KEY = 'mentoria-3d-exercicio-a-v1';
+function getValues() {
+const data = {};
+inputs.forEach(el => {
+data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+});
+return data;
+}
+function setValues(data) {
+inputs.forEach(el => {
+if (data.hasOwnProperty(el.id)) {
+if (el.type === 'checkbox') {
+el.checked = Boolean(data[el.id]);
+} else {
+el.value = data[el.id] || '';
+}
+}
+});
+}
+function save() {
+try {
+localStorage.setItem(STORAGE_KEY, JSON.stringify(getValues()));
+const status = document.getElementById('saveStatus');
+status.textContent = '✓ Salvo automaticamente neste navegador';
+status.classList.add('saved');
+setTimeout(() => {
+status.textContent = 'Preenchimento salvo automaticamente neste navegador.';
+status.classList.remove('saved');
+}, 2000);
+} catch (e) {
+console.error('Erro ao salvar:', e);
+}
+}
+function load() {
+try {
+const saved = localStorage.getItem(STORAGE_KEY);
+if (saved) {
+setValues(JSON.parse(saved));
+}
+} catch (e) {
+console.error('Erro ao carregar:', e);
+}
+}
+inputs.forEach(el => {
+el.addEventListener('input', save);
+el.addEventListener('change', save);
+});
+document.getElementById('exportJson').addEventListener('click', () => {
+const data = {
+format: 'mentoria-3d-exercicio-a',
+version: 1,
+timestamp: new Date().toISOString(),
+data: getValues()
+};
+const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = `exercicio-a-${data.data.aluno || 'aluno'}-${new Date().toISOString().split('T')[0]}.json`;
+a.click();
+setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+document.getElementById('importJson').addEventListener('change', async (e) => {
+const file = e.target.files[0];
+if (!file) return;
+try {
+const text = await file.text();
+const json = JSON.parse(text);
+if (json.format !== 'mentoria-3d-exercicio-a' || !json.data) {
+throw new Error('Formato inválido');
+}
+if (confirm('Importar substituirá os campos atuais. Continuar?')) {
+setValues(json.data);
+save();
+alert('Dados importados com sucesso!');
+}
+} catch (err) {
+alert('Erro ao importar: arquivo inválido ou corrompido.');
+console.error(err);
+}
+e.target.value = '';
+});
+document.getElementById('printPdf').addEventListener('click', () => {
+window.print();
+});
+load();
+</script>
+</body>
+</html>

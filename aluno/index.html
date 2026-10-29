@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal do Aluno · Mentoria 3D EUA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #0b0d12;
+--bg-2: #11141b;
+--bg-card: #171b24;
+--bg-panel: #1d222d;
+--border: rgba(255,255,255,0.08);
+--border-strong: rgba(255,255,255,0.14);
+--text: #eef2f8;
+--text-dim: #a0acbf;
+--text-muted: #6b7790;
+--accent: #4ecdc4;
+--accent-dim: rgba(78,205,196,0.15);
+--accent-glow: rgba(78,205,196,0.35);
+--warn: #ffd166;
+--danger: #ff6b6b;
+--font-display: 'Space Grotesk', sans-serif;
+--font-body: 'Inter', sans-serif;
+--font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+.container { max-width: 800px; margin: 0 auto; padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+/* Login Screen */
+#login-screen { text-align: center; animation: fadeIn 0.5s ease; }
+.lock-icon { font-size: 4rem; margin-bottom: 1.5rem; display: block; filter: drop-shadow(0 0 20px var(--accent-glow)); }
+h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.subtitle { color: var(--text-dim); margin-bottom: 2.5rem; font-size: 1.1rem; }
+.login-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; max-width: 450px; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.input-group { margin-bottom: 1.5rem; text-align: left; }
+.input-group label { display: block; font-family: var(--font-display); font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.5rem; }
+.input-group input { width: 100%; padding: 1rem; background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: 8px; color: var(--text); font-family: var(--font-mono); font-size: 1.1rem; text-align: center; letter-spacing: 0.1em; transition: all 0.2s; }
+.input-group input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.btn-primary { width: 100%; padding: 1rem; background: var(--accent); color: #03241f; border: none; border-radius: 8px; font-family: var(--font-display); font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 0.1s, filter 0.2s; }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-primary:active { transform: scale(0.98); }
+.error-msg { color: var(--danger); font-size: 0.9rem; margin-top: 1rem; display: none; }
+/* Dashboard */
+#dashboard { display: none; animation: slideUp 0.5s ease; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.header h2 { font-family: var(--font-display); font-size: 1.8rem; }
+.btn-logout { background: transparent; border: 1px solid var(--border-strong); color: var(--text-dim); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+.btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+.grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); opacity: 0.5; transition: opacity 0.3s; }
+.card:hover::before { opacity: 1; }
+.card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.card h3 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 0.5rem; }
+.card p { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 1.5rem; flex: 1; }
+.card-link { display: inline-flex; align-items: center; justify-content: center; padding: 0.8rem; background: var(--bg-panel); border: 1px solid var(--border-strong); border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600; transition: all 0.2s; }
+.card-link:hover { background: var(--accent); color: #03241f; border-color: var(--accent); }
+.status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+.status-open { background: rgba(107, 207, 127, 0.15); color: var(--ok); border: 1px solid rgba(107, 207, 127, 0.3); }
+.status-closed { background: rgba(255, 107, 107, 0.15); color: var(--danger); border: 1px solid rgba(255, 107, 107, 0.3); }
+footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: auto; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 600px) { .container { padding: 1.5rem; } h1 { font-size: 2rem; } .login-box { padding: 1.5rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+<!-- Login Screen -->
+<div id="login-screen">
+<span class="lock-icon">🔒</span>
+<h1>Portal do Aluno</h1>
+<p class="subtitle">Área exclusiva da Mentoria 3D nos EUA</p>
+<div class="login-box">
+<div class="input-group">
+<label for="access-key">Chave de Acesso da Turma</label>
+<input type="password" id="access-key" placeholder="••••••••" autocomplete="off">
+</div>
+<button class="btn-primary" id="btn-login">Entrar no Portal</button>
+<div class="error-msg" id="login-error">Chave inválida. Tente novamente.</div>
+</div>
+<p style="margin-top: 2rem; font-size: 0.85rem; color: var(--text-muted);">
+Dúvidas? Fale com o Arthur ou Guilherme no grupo da turma.
+</p>
+</div>
+<!-- Dashboard -->
+<div id="dashboard">
+<div class="header">
+<h2>Olá, Aluno! 👋</h2>
+<button class="btn-logout" id="btn-logout">Sair</button>
+</div>
+<p style="margin-bottom: 2rem; color: var(--text-dim);">
+Acesse abaixo os cadernos de exercícios. O preenchimento é salvo automaticamente neste navegador. Lembre-se de exportar o PDF para entregar.
+</p>
+<div class="grid-cards">
+<!-- Card Exercício A -->
+<div class="card">
+<span class="status-badge status-open">Disponível</span>
+<div class="card-icon">📝</div>
+<h3>Exercício A</h3>
+<p>Validação de Produtos (Aula 2). Escolha 3 produtos campeões e justifique com dados do EverBee/Alura.</p>
+<a href="exercicio-a.html" class="card-link">Abrir Caderno A →</a>
+</div>
+<!-- Card Exercício B -->
+<div class="card">
+<span class="status-badge status-open">Disponível</span>
+<div class="card-icon">📢</div>
+<h3>Exercício B</h3>
+<p>Criação de Anúncios (Aula 3). Crie 3 anúncios reais no FB Marketplace ou Etsy e calcule o preço.</p>
+<a href="exercicio-b.html" class="card-link">Abrir Caderno B →</a>
+</div>
+</div>
+<div style="margin-top: 3rem; padding: 1.5rem; background: var(--bg-card); border-radius: 12px; border-left: 4px solid var(--warn);">
+<h4 style="color: var(--warn); margin-bottom: 0.5rem; font-family: var(--font-display);">⚠️ Importante</h4>
+<p style="font-size: 0.9rem; color: var(--text-dim); margin: 0;">
+Os dados ficam salvos apenas neste navegador (LocalStorage). Se você limpar o cache ou trocar de celular/computador, precisará importar o arquivo JSON de backup ou preencher novamente. <strong>Sempre exporte o PDF</strong> quando terminar para garantir sua entrega.
+</p>
+</div>
+</div>
+</div>
+<footer>
+Mentoria 3D EUA · Arthur + Guilherme<br>
+© 2026 · Todos os direitos reservados
+</footer>
+<script>
+// Configuração
+const ACCESS_KEY = '3DNA_GRINGA_2026'; // Chave simples para a turma
+const STORAGE_AUTH_KEY = 'mentoria-3d-auth-v1';
+// Elementos
+const loginScreen = document.getElementById('login-screen');
+const dashboard = document.getElementById('dashboard');
+const inputKey = document.getElementById('access-key');
+const btnLogin = document.getElementById('btn-login');
+const btnLogout = document.getElementById('btn-logout');
+const errorMsg = document.getElementById('login-error');
+// Verificar se já está logado
+function checkAuth() {
+const isAuth = localStorage.getItem(STORAGE_AUTH_KEY);
+if (isAuth === 'true') {
+showDashboard();
+} else {
+showLogin();
+}
+}
+function showLogin() {
+loginScreen.style.display = 'block';
+dashboard.style.display = 'none';
+inputKey.value = '';
+errorMsg.style.display = 'none';
+}
+function showDashboard() {
+loginScreen.style.display = 'none';
+dashboard.style.display = 'block';
+}
+// Evento de Login
+btnLogin.addEventListener('click', () => {
+const val = inputKey.value.trim().toUpperCase();
+// Comparação simples (case insensitive)
+if (val === ACCESS_KEY || val === '3DNAGRINGA' || val === 'MENTORIA3D') {
+localStorage.setItem(STORAGE_AUTH_KEY, 'true');
+showDashboard();
+} else {
+errorMsg.style.display = 'block';
+inputKey.classList.add('error');
+setTimeout(() => inputKey.classList.remove('error'), 500);
+}
+});
+// Permitir Enter no input
+inputKey.addEventListener('keypress', (e) => {
+if (e.key === 'Enter') btnLogin.click();
+});
+// Evento de Logout
+btnLogout.addEventListener('click', () => {
+localStorage.removeItem(STORAGE_AUTH_KEY);
+showLogin();
+});
+// Inicializar
+checkAuth();
+</script>
+</body>
+</html>
