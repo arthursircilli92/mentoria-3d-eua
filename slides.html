@@ -274,37 +274,6 @@ p { color: var(--text-secondary); font-size: 1.1rem; max-width: 60ch; }
 </head>
 <body>
 
-<!-- TELA DE LOGIN (PROTEÇÃO DOS SLIDES) -->
-<div id="auth-overlay" style="position:fixed; inset:0; z-index:9999; background:#0a0e14; display:flex; align-items:center; justify-content:center; flex-direction:column;">
-  <div style="text-align:center; max-width:400px; padding:2rem;">
-    <div style="font-size:4rem; margin-bottom:1rem;">🔒</div>
-    <h2 style="font-family:'Space Grotesk', sans-serif; font-size:1.8rem; margin-bottom:0.5rem; color:#f0f4f8;">Acesso Restrito</h2>
-    <p style="color:#8b9bb4; margin-bottom:2rem; font-size:0.95rem;">Área exclusiva para Arthur e Guilherme</p>
-    <input type="password" id="auth-pass" placeholder="Digite a senha de acesso" style="width:100%; padding:1rem; background:#161d27; border:1px solid rgba(255,255,255,0.14); border-radius:8px; color:#f0f4f8; font-family:'Inter', sans-serif; font-size:1.1rem; text-align:center; margin-bottom:1rem; outline:none;" onfocus="this.style.borderColor='#00d4aa'" onblur="this.style.borderColor='rgba(255,255,255,0.14)'">
-    <button onclick="checkAuth()" style="width:100%; padding:1rem; background:#00d4aa; color:#071410; border:none; border-radius:8px; font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1rem; cursor:pointer;">Entrar</button>
-    <p id="auth-err" style="color:#ff6b6b; font-size:0.85rem; margin-top:1rem; display:none;">Senha incorreta.</p>
-    <a href="index.html" style="display:inline-block; margin-top:1.5rem; color:#8b9bb4; text-decoration:none; font-size:0.9rem;">← Voltar para a Sala de Controle</a>
-  </div>
-</div>
-<script>
-function checkAuth() {
-  const pass = document.getElementById('auth-pass').value;
-  if (pass === '6969') {
-    document.getElementById('auth-overlay').style.display = 'none';
-  } else {
-    document.getElementById('auth-err').style.display = 'block';
-    document.getElementById('auth-pass').value = '';
-  }
-}
-document.getElementById('auth-pass').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') checkAuth();
-});
-document.getElementById('auth-overlay').style.display = 'flex';
-</script>
-
-<!-- BOTÃO VOLTAR (FLUTUANTE) -->
-<a href="index.html" style="position:fixed; top:1.5rem; left:1.5rem; z-index:100; background:rgba(22,29,39,0.9); border:1px solid rgba(255,255,255,0.1); color:#8b9bb4; padding:0.5rem 1rem; border-radius:8px; text-decoration:none; font-family:'Inter', sans-serif; font-size:0.85rem; backdrop-filter:blur(10px); transition:all 0.2s;" onmouseover="this.style.color='#00d4aa'; this.style.borderColor='#00d4aa'" onmouseout="this.style.color='#8b9bb4'; this.style.borderColor='rgba(255,255,255,0.1)'">← Sala de Controle</a>
-
 <nav class="nav-dots" id="navDots"></nav>
 
 <!-- SLIDE 1: Title -->
@@ -345,12 +314,12 @@ document.getElementById('auth-overlay').style.display = 'flex';
     <div class="card">
       <span class="card-icon">👤</span>
       <h3>Arthur</h3>
-      <p>Especialista em e-commerce com 200-500 pedidos/mês em múltiplas plataformas. Criador de ferramentas próprias de análise de mercado. Expert em SEO, precificação estratégica, anúncios de alta conversão e automação com IA.</p>
+      <p>Estrategista de e-commerce (200-500 pedidos/mês) com experiência em modelagem 3D. Criador de ferramentas de análise de mercado. Expert em SEO, precificação, anúncios de alta conversão e automação com IA.</p>
     </div>
     <div class="card">
       <span class="card-icon">👤</span>
       <h3>Guilherme</h3>
-      <p>Expert em impressão 3D desde 2018, validação de produtos e estratégias de vendas em marketplaces.</p>
+      <p>Especialista técnico em impressão 3D desde 2018. Mestre em operação de máquinas, materiais, validação de produtos e estratégias de vendas em marketplaces.</p>
     </div>
   </div>
   <p class="animate delay-3" style="margin-top: 2rem; text-align: center;">Uma jornada completa do zero à primeira venda em dólar.</p>
