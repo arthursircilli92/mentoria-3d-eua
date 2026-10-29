@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentoria 3D EUA — Sala de Controle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #0b0d12;
+--bg-2: #11141b;
+--bg-card: #171b24;
+--bg-panel: #1d222d;
+--border: rgba(255,255,255,0.08);
+--border-strong: rgba(255,255,255,0.14);
+--text: #eef2f8;
+--text-dim: #a0acbf;
+--text-muted: #6b7790;
+--arthur: #ffa552;
+--arthur-dim: rgba(255,165,82,0.15);
+--arthur-glow: rgba(255,165,82,0.35);
+--gui: #4ecdc4;
+--gui-dim: rgba(78,205,196,0.15);
+--gui-glow: rgba(78,205,196,0.35);
+--ambos: #b8c2d4;
+--ambos-dim: rgba(184,194,212,0.12);
+--danger: #ff6b6b;
+--warn: #ffd166;
+--ok: #6bcf7f;
+--font-display: 'Space Grotesk', sans-serif;
+--font-body: 'Inter', sans-serif;
+--font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+/* ===== TOPBAR ===== */
+.topbar { position: sticky; top: 0; z-index: 60; background: rgba(11,13,18,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.7rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.topbar h1 { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.02em; color: var(--text); }
+.topbar h1 span { color: var(--text-muted); font-weight: 500; }
+.legend { display: flex; gap: 0.8rem; flex-wrap: wrap; font-size: 0.8rem; }
+.legend .chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.25rem 0.7rem; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border); }
+.legend .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.dot.arthur { background: var(--arthur); box-shadow: 0 0 8px var(--arthur-glow); }
+.dot.gui { background: var(--gui); box-shadow: 0 0 8px var(--gui-glow); }
+.dot.ambos { background: var(--ambos); }
+
+/* ===== PAINEL DE CONTROLE (troca de apresentador) ===== */
+.control-panel { background: linear-gradient(135deg, rgba(255,209,102,0.06), rgba(78,205,196,0.04)); border: 1px solid rgba(255,209,102,0.25); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+.control-panel .cp-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.control-panel .cp-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--warn); display: flex; align-items: center; gap: 0.5rem; }
+.control-panel .cp-title::before { content: "⚙️"; }
+.control-panel .cp-hint { font-size: 0.82rem; color: var(--text-dim); max-width: 60ch; }
+.cp-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.cp-btn { font-family: var(--font-display); font-size: 0.78rem; font-weight: 600; padding: 0.45rem 0.9rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+.cp-btn:hover { color: var(--text); border-color: var(--warn); }
+.cp-btn.active { background: var(--warn); color: #1a1404; border-color: var(--warn); }
+.cp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.6rem; max-height: 320px; overflow-y: auto; padding-right: 0.5rem; }
+.cp-grid::-webkit-scrollbar { width: 6px; }
+.cp-grid::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+.cp-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: 8px; font-size: 0.82rem; transition: all 0.25s ease; }
+.cp-row.sp-arthur { border-left-color: var(--arthur); background: linear-gradient(90deg, var(--arthur-dim), var(--bg-card) 70%); }
+.cp-row.sp-gui { border-left-color: var(--gui); background: linear-gradient(90deg, var(--gui-dim), var(--bg-card) 70%); }
+.cp-row.sp-ambos { border-left-color: var(--ambos); background: linear-gradient(90deg, var(--ambos-dim), var(--bg-card) 70%); }
+.cp-row.sp-arthur .cp-label b { color: var(--arthur); }
+.cp-row.sp-gui .cp-label b { color: var(--gui); }
+.cp-row.sp-ambos .cp-label b { color: var(--ambos); }
+.cp-row .cp-label { flex: 1; color: var(--text-dim); font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.3; }
+.cp-row .cp-label b { color: var(--text); font-family: var(--font-display); display: block; font-size: 0.8rem; margin-bottom: 0.1rem; }
+.cp-select { font-family: var(--font-mono); font-size: 0.72rem; padding: 0.3rem 0.5rem; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-panel); color: var(--text); cursor: pointer; }
+.cp-select option[value="arthur"] { color: var(--arthur); }
+.cp-select option[value="gui"] { color: var(--gui); }
+.cp-select option[value="ambos"] { color: var(--ambos); }
+.cp-collapsed .cp-grid { display: none; }
+.cp-toggle { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); cursor: pointer; user-select: none; }
+.cp-toggle:hover { color: var(--text); }
+
+/* ===== NAV ===== */
+.nav { position: sticky; top: 52px; z-index: 40; background: rgba(17,20,27,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 0.6rem 2rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.nav a { font-family: var(--font-display); font-size: 0.82rem; font-weight: 500; color: var(--text-dim); text-decoration: none; padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; cursor: pointer; }
+.nav a:hover { color: var(--text); border-color: var(--border-strong); background: var(--bg-card); }
+.nav a.active { color: var(--text); background: var(--bg-card); border-color: var(--border-strong); }
+
+main { max-width: 1280px; margin: 0 auto; padding: 2rem; }
+section { margin-bottom: 4rem; scroll-margin-top: 120px; }
+h2.section-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+.section-sub { color: var(--text-dim); margin-bottom: 2rem; max-width: 70ch; }
+
+/* ===== HERO ===== */
+.hero { padding: 3.5rem 2rem; border: 1px solid var(--border); border-radius: 20px; background: radial-gradient(circle at 20% 30%, var(--gui-dim) 0%, transparent 50%), radial-gradient(circle at 80% 70%, var(--arthur-dim) 0%, transparent 50%), linear-gradient(180deg, var(--bg-2), var(--bg-card)); margin-bottom: 3rem; }
+.hero .tag { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0.5rem 0 1rem; }
+.hero h1 .accent-a { color: var(--arthur); }
+.hero h1 .accent-g { color: var(--gui); }
+.hero p.lead { font-size: 1.1rem; color: var(--text-dim); max-width: 65ch; margin-bottom: 1.5rem; }
+.hero-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin-top: 1.5rem; }
+.hero-meta .cell { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; }
+.hero-meta .k { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.hero-meta .v { font-size: 0.95rem; margin-top: 0.25rem; color: var(--text); }
+
+/* ===== MEET GUIDE ===== */
+.meet-guide { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+.meet-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; }
+.meet-card .num { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--text-muted); line-height: 1; margin-bottom: 0.5rem; }
+.meet-card h3 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 0.4rem; }
+.meet-card p { color: var(--text-dim); font-size: 0.9rem; }
+.meet-card code { background: var(--bg-panel); color: var(--gui); font-family: var(--font-mono); font-size: 0.8rem; padding: 0.1rem 0.4rem; border-radius: 4px; }
+
+/* ===== AULA ===== */
+.aula { border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: var(--bg-card); margin-bottom: 2rem; }
+.aula-header { padding: 1.4rem 2rem; background: linear-gradient(90deg, var(--bg-panel), var(--bg-card)); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.aula-header .aula-num { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; color: var(--text-muted); text-transform: uppercase; }
+.aula-header h3 { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: -0.01em; margin-top: 0.2rem; }
+.aula-header .meta { display: flex; gap: 1rem; font-size: 0.82rem; color: var(--text-dim); flex-wrap: wrap; }
+.aula-header .meta span strong { color: var(--text); }
+
+/* ===== TÓPICO (speaker-colored, dinâmico via data-speaker) ===== */
+.topico { border-left: 4px solid var(--ambos); background: var(--bg-panel); margin: 1rem 1.5rem; padding: 1.4rem 1.7rem; border-radius: 0 12px 12px 0; position: relative; transition: all 0.3s ease; }
+.topico[data-speaker="arthur"] { border-left-color: var(--arthur); background: linear-gradient(90deg, var(--arthur-dim), transparent 60%); }
+.topico[data-speaker="gui"] { border-left-color: var(--gui); background: linear-gradient(90deg, var(--gui-dim), transparent 60%); }
+.topico[data-speaker="ambos"] { border-left-color: var(--ambos); background: var(--ambos-dim); }
+
+.speaker-badge { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.28rem 0.65rem; border-radius: 6px; margin-bottom: 0.7rem; transition: all 0.3s ease; }
+.topico[data-speaker="arthur"] .speaker-badge { background: var(--arthur); color: #1a0f04; font-weight: 600; }
+.topico[data-speaker="gui"] .speaker-badge { background: var(--gui); color: #03241f; font-weight: 600; }
+.topico[data-speaker="ambos"] .speaker-badge { background: var(--ambos); color: #0b0d12; font-weight: 600; }
+
+.topico h4 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.5rem; }
+.topico p { color: var(--text-dim); margin-bottom: 0.6rem; font-size: 0.95rem; }
+.topico ul { padding-left: 1.2rem; color: var(--text-dim); margin-bottom: 0.6rem; font-size: 0.93rem; }
+.topico ul li { margin-bottom: 0.22rem; }
+.topico ul li strong { color: var(--text); }
+
+.roteiro { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); line-height: 1.7; }
+.roteiro .label { display: block; font-size: 0.68rem; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 0.4rem; }
+.roteiro b { color: var(--text); font-family: var(--font-display); }
+.roteiro .a { color: var(--arthur); font-weight: 600; }
+.roteiro .g { color: var(--gui); font-weight: 600; }
+.roteiro .troca { color: var(--warn); font-weight: 500; display: block; margin: 0.4rem 0; }
+
+.mostra { margin-top: 0.9rem; padding: 0.75rem 1rem; background: rgba(107, 207, 127, 0.08); border: 1px solid rgba(107, 207, 127, 0.25); border-radius: 8px; font-size: 0.86rem; color: var(--text-dim); }
+.mostra .label { display: block; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; color: var(--ok); margin-bottom: 0.25rem; }
+
+.exercicio { margin: 1rem 1.5rem; padding: 1.4rem; background: linear-gradient(135deg, rgba(255,209,102,0.08), transparent); border: 1px dashed var(--warn); border-radius: 12px; }
+.exercicio .badge { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--warn); text-transform: uppercase; margin-bottom: 0.5rem; }
+.exercicio h4 { font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 0.5rem; }
+.exercicio p, .exercicio li { color: var(--text-dim); font-size: 0.92rem; }
+.exercicio ul { padding-left: 1.2rem; margin-top: 0.4rem; }
+
+/* ===== TABELA FERRAMENTAS ===== */
+.tool-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 1rem; }
+.tool-table th, .tool-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+.tool-table th { background: var(--bg-panel); font-family: var(--font-display); font-weight: 600; color: var(--text); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.tool-table td { color: var(--text-dim); }
+.tool-table tr:last-child td { border-bottom: none; }
+.tool-table .s-arthur { color: var(--arthur); font-weight: 600; }
+.tool-table .s-gui { color: var(--gui); font-weight: 600; }
+.tool-table .s-ambos { color: var(--ambos); font-weight: 600; }
+
+/* ===== CRONOGRAMA ===== */
+.timeline { position: relative; padding-left: 2rem; margin-top: 1.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--gui), var(--arthur), var(--ambos)); }
+.tl-item { position: relative; margin-bottom: 1rem; padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; transition: all 0.3s ease; }
+.tl-item::before { content: ''; position: absolute; left: -1.7rem; top: 0.95rem; width: 11px; height: 11px; border-radius: 50%; background: var(--ambos); border: 2px solid var(--bg); transition: all 0.3s ease; }
+.tl-item[data-speaker="arthur"]::before { background: var(--arthur); box-shadow: 0 0 8px var(--arthur-glow); }
+.tl-item[data-speaker="gui"]::before { background: var(--gui); box-shadow: 0 0 8px var(--gui-glow); }
+.tl-item .t { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+.tl-item .who { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; margin-left: 0.5rem; }
+.tl-item[data-speaker="arthur"] .who { color: var(--arthur); }
+.tl-item[data-speaker="gui"] .who { color: var(--gui); }
+.tl-item[data-speaker="ambos"] .who { color: var(--ambos); }
+.tl-item .desc { margin-top: 0.2rem; color: var(--text-dim); font-size: 0.88rem; }
+
+footer { margin-top: 4rem; padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); }
+
+@media (max-width: 720px) { main { padding: 1rem; } .topico, .exercicio { margin: 1rem 0.5rem; padding: 1.1rem; } .aula-header { padding: 1.1rem; } .nav { top: 64px; } .control-panel { padding: 1rem; } }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+<h1>Mentoria 3D EUA <span>· Sala de Controle · Arthur + Guilherme</span></h1>
+<div class="legend">
+<span class="chip"><span class="dot arthur"></span> Arthur · FB Marketplace</span>
+<span class="chip"><span class="dot gui"></span> Guilherme · Etsy</span>
+<span class="chip"><span class="dot ambos"></span> Juntos / Transição</span>
+</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+<a href="#painel">⚙️ Painel de Troca</a>
+<a href="#meet">Meet & Troca de Tela</a>
+<a href="#aula1">Aula 1 · Fundamentos</a>
+<a href="#aula2">Aula 2 · Produtos</a>
+<a href="#aula3">Aula 3 · Vendas</a>
+<a href="#aula4">Aula 4 · Logística</a>
+<a href="#ferramentas">Ferramentas</a>
+<a href="#cronograma">Cronograma</a>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<div class="hero">
+<div class="tag">Sala de Controle · Mentoria Impressão 3D → EUA</div>
+<h1>Um único HTML<br>pra <span class="accent-g">Gui</span> e <span class="accent-a">Arthur</span> apresentarem juntos.</h1>
+<p class="lead">Gui montou a mentoria e abre a Aula 1. Cada bloco tem cor de quem fala: <b style="color:var(--gui)">teal = Guilherme</b>, <b style="color:var(--arthur)">âmbar = Arthur</b>, <b style="color:var(--ambos)">cinza = juntos</b>. Antes da reunião de alinhamento, usem o <b>Painel de Troca</b> abaixo pra definir quem apresenta cada bloco — as cores, badges, cronograma e roteiros atualizam na hora, sem editar código.</p>
+<div class="hero-meta">
+<div class="cell"><div class="k">Formato</div><div class="v">4 aulas · 1h30 a 2h+</div></div>
+<div class="cell"><div class="k">Turma</div><div class="v">Até 10 alunos · Meet</div></div>
+<div class="cell"><div class="k">Apresentadores</div><div class="v">Gui (FL) + Arthur (BR)</div></div>
+<div class="cell"><div class="k">Máquinas em cena</div><div class="v">Snapmaker U1 · Bambu P1S</div></div>
+<div class="cell"><div class="k">Filamentos</div><div class="v">Sunlu PLA · PLA Silk</div></div>
+<div class="cell"><div class="k">Plataformas</div><div class="v">Etsy · FB Marketplace · GoShipoo</div></div>
+</div>
+</div>
+
+<!-- =============== PAINEL DE CONTROLE =============== -->
+<section id="painel">
+<h2 class="section-title">⚙️ Painel de Troca de Apresentador</h2>
+<p class="section-sub">Usem isso na reunião de alinhamento. Cada linha é um bloco da aula — escolhe quem apresenta (Arthur, Gui ou Ambos) e a cor, o badge, o cronograma e o destaque do roteiro mudam na hora. As escolhas ficam salvas no navegador (localStorage), então quando vocês fecharem e abrirem de novo, continua do jeito que deixaram. Tem botão pra voltar ao padrão e pra exportar/importar a configuração se quiserem mandar pro outro por WhatsApp.</p>
+
+<div class="control-panel" id="controlPanel">
+<div class="cp-header">
+<div>
+<div class="cp-title">Definir quem apresenta cada bloco</div>
+<div class="cp-hint">As mudanças aplicam na hora em todos os blocos, no cronograma e nos badges. Salva automaticamente neste navegador.</div>
+</div>
+<div class="cp-actions">
+<button class="cp-btn" id="btnReset" title="Voltar tudo ao padrão original">↺ Padrão</button>
+<button class="cp-btn" id="btnExport" title="Copiar configuração pra mandar pro outro">📋 Copiar config</button>
+<button class="cp-btn" id="btnImport" title="Colar configuração recebida do outro">📥 Colar config</button>
+<span class="cp-toggle" id="cpToggle">[ ocultar lista ]</span>
+</div>
+</div>
+<div class="cp-grid" id="cpGrid"></div>
+</div>
+</section>
+
+<!-- =============== MEET GUIDE =============== -->
+<section id="meet">
+<h2 class="section-title">Como trocar de tela no Meet</h2>
+<p class="section-sub">Você (Arthur) tá no Brasil, o Gui na Flórida. Os dois entram na mesma call. A qualquer momento dá pra alternar quem compartilha a tela sem cortar a webcam do outro.</p>
+<div class="meet-guide">
+<div class="meet-card"><div class="num">01</div><h3>Os dois entram como "Apresentadores"</h3><p>O organizador convida o outro. No Meet, quem entra pode compartilhar tela. Os dois precisam ter permissão — verifica no <code>⚙️ > Controles do anfitrião</code>.</p></div>
+<div class="meet-card"><div class="num">02</div><h3>Gui começa compartilhando (ele abre a Aula 1)</h3><p>Aperte <code>Apresentar agora</code> → <code>Uma guia</code> (recomendado, não a tela inteira). Escolhe a guia do Chrome onde esse HTML tá aberto. A webcam dos dois continua visível.</p></div>
+<div class="meet-card"><div class="num">03</div><h3>Na virada, Gui para e Arthur apresenta</h3><p>Gui clica em <code>Parar apresentação</code>. Arthur clica em <code>Apresentar agora</code> no lado dele, <b>abre o mesmo HTML</b> (link mandado antes no grupo) e rola no ponto combinado.</p></div>
+<div class="meet-card"><div class="num">04</div><h3>Sincroniza pelo chat do Meet</h3><p>Manda no chat: "trocando tela agora" — assim todo mundo entende a virada. Usem também o <code>Levantar a mão</code> pra sinalizar quando o outro pode entrar.</p></div>
+<div class="meet-card"><div class="num">05</div><h3>Ferramenta extra (opcional)</h3><p>Se quiserem <b>os dois compartilhando ao mesmo tempo</b> (tela dividida), usem o <b>Switcher Studio</b> ou simplesmente alternem com o <b>OBS</b> — mas pra 10 alunos, o esquema acima já funciona perfeitamente.</p></div>
+<div class="meet-card"><div class="num">06</div><h3>Webcam do Guilherme mostrando peças</h3><p>Quando o Gui for mostrar a <b>Snapmaker U1</b>, a <b>P1S</b> ou os filamentos <b>Sunlu</b>, ele aponta a webcam pra máquina. Nos blocos "MOSTRAR NA CÂMERA" desse material tá marcado o que ele precisa ter na mesa.</p></div>
+</div>
+</section>
+
+<!-- =============== AULA 1 =============== -->
+<section id="aula1">
+<h2 class="section-title">Aula 1 · Introdução e Fundamentos</h2>
+<p class="section-sub">Quem somos, por que EUA, máquinas e filamentos. O aluno sai sabendo o que comprar e onde está pisando.</p>
+<div class="aula">
+<div class="aula-header">
+<div><div class="aula-num">Aula 01 / 04</div><h3>Fundamentos da operação 3D nos EUA</h3></div>
+<div class="meta"><span><strong>1h30–2h</strong></span><span><strong>Gui abre (ele montou a mentoria) · Arthur entra no meio</strong></span></div>
+</div>
+
+<!-- Tópico 1: Quem Somos -->
+<div class="topico" data-block="a1-quem-somos" data-speaker="ambos">
+<span class="speaker-badge">Arthur + Guilherme</span>
+<h4>Quem somos nós (visão geral da mentoria)</h4>
+<p>Abertura rápida. Os dois aparecem juntos na webcam. Apresentação de 2-3 minutos cada. Gui abre já que montou a mentoria.</p>
+<ul>
+<li><b>Guilherme:</b> impressão 3D desde 2018, expert em Etsy, validação de produto, SEO de plataforma. Montou a mentoria. É ele quem tem as máquinas na Flórida.</li>
+<li><b>Arthur:</b> background em e-commerce, operação logística Brasil → EUA, especialista em Facebook Marketplace e estruturação de contas americanas.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Fala galera, boa noite. Eu sou o Guilherme, tô aqui na Flórida com as máquinas ligadas do meu lado. Eu que montei essa mentoria, trabalho com impressão 3D desde 2018, vendo no Etsy há anos. A ideia é simples: sair do zero e fazer a primeira venda em dólar em 4 semanas. Vou ensinar vocês a escolher produto certo, validar com dados reais, fazer SEO dentro da plataforma e imprimir sem desperdício. Agora passo pro Arthur, que cuida de toda a parte de venda no Facebook e logística."
+<span class="troca">↳ Gui passa a palavra pro Arthur</span>
+<span class="a">Arthur:</span> "E eu sou o Arthur, tô aqui no Brasil. Vou cuidar de toda a parte de Facebook Marketplace, conta americana, logística Brasil→EUA e precificação em dólar. Entre a gente, a operação completa fica coberta. Bora começar."
+</div>
+</div>
+
+<!-- Tópico 2: Por que 3D nos EUA -->
+<div class="topico" data-block="a1-por-que-eua" data-speaker="arthur">
+<span class="speaker-badge">Arthur</span>
+<h4>Por que impressão 3D nos EUA (e não no Brasil)</h4>
+<p>Contexto de mercado. Arthur explica a oportunidade em dólar, margem, demanda e por que o Brasil não compensa pra esse modelo.</p>
+<ul>
+<li><b>Margem:</b> peça que custa R$ 3 de filamento vende por US$ 15–40 no Etsy/FB Marketplace.</li>
+<li><b>Demanda:</b> mercado americano consome personalização, decoração, utilidades, gifts — nichos infinitos.</li>
+<li><b>Concorrência BR vs EUA:</b> no Brasil você briga por centavos; nos EUA o cliente paga por valor percebido.</li>
+<li><b>Logística reversa quase zero:</b> produto sob demanda, sem estoque parado.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Galera, vamos ser diretos. Por que EUA? Três motivos. Primeiro: <b>margem</b>. Um chaveiro que te custa 3 reais de PLA, tu vende por 15 dólares no Etsy. Faz a conta. Segundo: <b>demanda</b>. Americano compra personalização o ano inteiro — aniversário, casamento, pet, decoração de casa, presente de Natal. Terceiro: <b>concorrência</b>. No Brasil tu briga com Shopee de 5 reais. Nos EUA o cliente quer algo único e paga por isso. E o melhor: tu imprime sob demanda, não precisa ter estoque. Se não vender, não gastou nada além do tempo."
+</div>
+</div>
+
+<!-- Tópico 3: Máquinas iniciais -->
+<div class="topico" data-block="a1-maquinas" data-speaker="gui">
+<span class="speaker-badge">Guilherme</span>
+<h4>Máquinas iniciais — o que comprar pra começar</h4>
+<p>Gui mostra as duas máquinas ao vivo (Snapmaker U1 e Bambu Lab P1S), explica diferença, preço, quando usar cada uma.</p>
+<ul>
+<li><b>Bambu Lab P1S:</b> workhorse. Rápida, confiável, AMS opcional pra multicor. Ideal pra produção em volume.</li>
+<li><b>Snapmaker U1:</b> versátil (3D + laser + CNC), boa pra quem quer testar vários formatos. Mais lenta que a P1S.</li>
+<li><b>Preço:</b> P1S ~US$ 600–700; Snapmaker U1 ~US$ 800–1200 dependendo do kit.</li>
+<li><b>Recomendação pra iniciante:</b> começar com UMA P1S. Só adiciona máquina quando tiver pedido repetido.</li>
+</ul>
+<div class="mostra">
+<span class="label">📦 MOSTRAR NA CÂMERA</span>
+Gui aponta a webcam pra <b>Bambu P1S</b> imprimindo uma peça de teste, depois pra <b>Snapmaker U1</b> parada na mesa. Mostra o painel, o bico, a mesa aquecida.
+</div>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Beleza, máquinas. Eu tenho duas aqui do meu lado. Essa aqui é a <b>Bambu Lab P1S</b> — é o cavalo de batalha. Rápida, raramente falha, e se tu colocar o AMS ela imprime em até 4 cores sozinho. Pra quem tá começando e quer vender, é essa. Custa uns 600 a 700 dólares. Agora essa aqui é a <b>Snapmaker U1</b> — ela faz 3D, mas também corta a laser e faz CNC. É mais lenta que a P1S, mas é 3-em-1. Custa entre 800 e 1200. Minha recomendação honesta: <b>começa com uma P1S só</b>. Quando tu tiver pedido todo dia aí tu pensa na segunda máquina. Não compra duas logo de cara achando que vai produzir o dobro — vai produzir o dobro de dor de cabeça."
+</div>
+</div>
+
+<!-- Tópico 4: Filamentos -->
+<div class="topico" data-block="a1-filamentos" data-speaker="gui">
+<span class="speaker-badge">Guilherme</span>
+<h4>Tipos de filamento mais usados</h4>
+<p>Gui mostra os rolos Sunlu, explica PLA vs PLA Silk vs PETG vs ABS, quando usar cada um, preço médio.</p>
+<ul>
+<li><b>PLA (Sunlu):</b> o padrão. Fácil de imprimir, barato (~US$ 20/kg), ideal pra decoração, figures, utilidades leves.</li>
+<li><b>PLA Silk (Sunlu):</b> acabamento brilhante, parece metal. Ótimo pra vasos, troféus, peças decorativas. Mesmo preço do PLA normal.</li>
+<li><b>PETG:</b> mais resistente, aguenta calor e umidade. Pra peças funcionais (suporte de celular, organizador de carro).</li>
+<li><b>ABS:</b> evite no começo. Precisa de gabinete fechado, exala cheiro, empena fácil.</li>
+<li><b>Regra prática:</b> 80% das vendas = PLA ou PLA Silk. Começa com 3–5 cores de PLA Sunlu (branco, preto, cinza, dourado silk, prata silk).</li>
+</ul>
+<div class="mostra">
+<span class="label">📦 MOSTRAR NA CÂMERA</span>
+Gui segura na frente da câmera: 1 rolo <b>Sunlu PLA branco</b>, 1 rolo <b>Sunlu PLA Silk dourado</b>, 1 rolo <b>PETG</b>. Mostra uma peça impressa em PLA normal ao lado de uma em Silk pra comparar o brilho.
+</div>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Filamento. Esquece tudo que tu viu na internet sobre ABS, nylon, TPU. Pra começar tu precisa de UMA coisa: <b>PLA</b>. Esse rolo aqui é Sunlu PLA branco, custa uns 20 dólares o quilo, imprime fácil, não precisa mesa quente alta, não empena. 80% do que eu vendo é PLA. Agora esse aqui é o <b>PLA Silk</b> — olha o brilho. Parece metal. Vasos, troféus, peça decorativa, o cliente vê a foto e já quer. Mesmo preço do PLA normal. PETG tu usa só quando o cliente pedir peça funcional — suporte de celular, organizador, coisa que vai tomar sol ou calor. ABS? Esquece. Empena, fede, precisa de gabinete. Não vale a dor de cabeça no começo. Compra 3 a 5 cores de PLA Sunlu — branco, preto, cinza, um dourado silk e um prata silk — e tu resolve 90% dos pedidos."
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- =============== AULA 2 =============== -->
+<section id="aula2">
+<h2 class="section-title">Aula 2 · Produtos Campeões</h2>
+<p class="section-sub">O que vender, como validar com dados, o que evitar. O aluno sai com 3 produtos escolhidos e justificados.</p>
+<div class="aula">
+<div class="aula-header">
+<div><div class="aula-num">Aula 02 / 04</div><h3>Escolhendo e validando produto</h3></div>
+<div class="meta"><span><strong>1h30–2h</strong></span><span><strong>Gui abre · Arthur fecha</strong></span></div>
+</div>
+
+<!-- Tópico 1: Produto campeão -->
+<div class="topico" data-block="a2-produto-campeao" data-speaker="gui">
+<span class="speaker-badge">Guilherme</span>
+<h4>O que é um produto campeão</h4>
+<p>Gui define os 4 pilares de um produto que vende bem em 3D: demanda alta, custo baixo, impressão rápida, pouca concorrência.</p>
+<ul>
+<li><b>Demanda alta:</b> tem gente pesquisando todo dia (valida com EverBee / eRank).</li>
+<li><b>Custo baixo:</b> menos de 30g de filamento = menos de US$ 0,60 de matéria-prima.</li>
+<li><b>Impressão rápida:</b> até 2h por peça. Mais que isso, tua máquina vira gargalo.</li>
+<li><b>Pouca concorrência:</b> menos de 500 anúncios ativos com boas avaliações no nicho.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Produto campeão tem 4 características. Primeira: <b>demanda</b>. Tem gente procurando isso todo dia — a gente valida com ferramenta, não com achismo. Segunda: <b>custo baixo</b>. Se a peça usa mais de 30 gramas de filamento, esquece — tua margem some. Terceira: <b>impressão rápida</b>. Até 2 horas por peça. Mais que isso, tua P1S vira gargalo e tu não escala. Quarta: <b>concorrência baixa</b>. Menos de 500 anúncios ativos no nicho com avaliação boa. Se tem 5 mil vendedor fazendo igual, tu entra no final da fila. Anota esses 4 pilares, a gente vai usar eles daqui a pouco no exercício."
+</div>
+</div>
+
+<!-- Tópico 2: Categorias que mais vendem -->
+<div class="topico" data-block="a2-categorias" data-speaker="gui">
+<span class="speaker-badge">Guilherme</span>
+<h4>Categorias que mais vendem em 3D</h4>
+<p>Gui lista as 5 categorias campeãs, com exemplos reais e alerta sobre licenciamento.</p>
+<ul>
+<li><b>Sazonais:</b> Natal, Halloween, Páscoa, Dia das Mães. Pico de venda 4–6 semanas antes da data.</li>
+<li><b>Decoração:</b> vasos, luminárias, quadros 3D, organizadores de parede.</li>
+<li><b>Utilidades:</b> suporte de fone, organizador de cabo, gancho, porta-copos.</li>
+<li><b>Figures:</b> miniaturas de D&D, personagens genéricos (NÃO licenciados), pets personalizados.</li>
+<li><b>⚠️ Diretrizes e licenças:</b> NUNCA vender personagem protegido (Disney, Marvel, Nintendo, anime). Etsy derruba a loja e tu toma processo. Só vende fan-art se o criador liberou explicitamente (Creative Commons / "fan art ok").</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "As 5 categorias que mais vendem. <b>Sazonais</b> — Natal, Halloween, Páscoa. O pico é 4 a 6 semanas antes da data, então tu prepara o anúncio com antecedência. <b>Decoração</b> — vaso, luminária, quadro 3D. Margem alta porque o cliente paga pelo design. <b>Utilidades</b> — suporte de fone, organizador de cabo, gancho. Venda recorrente. <b>Figures</b> — miniatura de D&D, pet personalizado. Agora o alerta vermelho: <b>NUNCA, jamais, venda personagem protegido</b>. Disney, Marvel, Nintendo, anime, Pokémon. O Etsy derruba tua loja em 24h e tu ainda pode tomar processo nos EUA. Só vende fan-art se o criador colocou 'fan art ok' na licença. Isso aqui não é opinião, é regra. Grava isso."
+</div>
+</div>
+
+<!-- Tópico 3: Validar com EverBee e Alura -->
+<div class="topico" data-block="a2-everbee-alura" data-speaker="gui">
+<span class="speaker-badge">Guilherme</span>
+<h4>Achar e validar produto com EverBee e Alura</h4>
+<p>Gui compartilha tela e mostra AO VIVO como usar EverBee (extensão Chrome do Etsy) e Alura pra validar demanda e concorrência.</p>
+<ul>
+<li><b>EverBee:</b> extensão grátis do Chrome. Abre qualquer busca do Etsy e mostra vendas estimadas, receita, idade do anúncio, avaliações.</li>
+<li><b>Alura:</b> ferramenta paga (tem trial). Mostra keyword volume, concorrência, sugestão de título e tags.</li>
+<li><b>Regra de ouro:</b> procura nicho com 300–3000 vendas/mês somadas e menos de 500 anúncios. Fora disso, ou é saturado ou não tem demanda.</li>
+</ul>
+<div class="mostra">
+<span class="label">📦 COMPARTILHAR TELA</span>
+Gui abre Chrome → Etsy.com → pesquisa "plant pot 3d printed" → ativa EverBee → mostra a tabela de vendas/receita por anúncio. Depois abre Alura e mostra o volume da keyword.
+</div>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Agora a parte prática. Vou compartilhar minha tela. Eu instalei aqui a extensão <b>EverBee</b> — é grátis, vai na Chrome Web Store e instala. Abri o Etsy, pesquisei 'plant pot 3d printed'. Olha essa tabela que o EverBee jogou embaixo: cada anúncio mostra vendas estimadas por mês, receita, idade do anúncio, número de avaliações. Esse aqui vende 400 unidades/mês a 18 dólares. Esse outro vende 1200. Soma tudo, dá umas 8 mil vendas/mês nesse nicho. Agora abro o <b>Alura</b> — esse é pago mas tem trial — e vejo o volume da keyword e a concorrência. Regra de ouro: nicho bom tem entre 300 e 3000 vendas por mês somadas, e menos de 500 anúncios. Menos que 300, não tem demanda. Mais que 3000 com 2000 anúncios, tá saturado. Vocês vão fazer isso no exercício agora."
+</div>
+</div>
+
+<!-- Tópico 4: eRank e palavras-chave -->
+<div class="topico" data-block="a2-erank" data-speaker="ambos">
+<span class="speaker-badge">Guilherme + Arthur</span>
+<h4>eRank: palavras-chave (pincelando plataformas)</h4>
+<p>Gui mostra eRank rápido. Arthur conecta com a lógica de keyword que vai usar no Facebook Marketplace na Aula 3.</p>
+<ul>
+<li><b>eRank:</b> ferramenta focada em Etsy. Mostra keyword volume, concorrência, trending. Versão grátis limitada, paga ~US$ 6/mês.</li>
+<li><b>Lógica universal:</b> título = keyword principal + benefício + uso. Tags = 13 no Etsy, sinônimos e variações.</li>
+<li><b>Arthur conecta:</b> "No Facebook Marketplace a lógica é parecida — título com keyword que o americano pesquisa, descrição curta, foto clara. A gente deep-dive na Aula 3."</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Rápido: <b>eRank</b>. É tipo o Alura mas focado só em Etsy. Tu digita a keyword, ele mostra volume de busca, concorrência, e o que tá em alta. Versão grátis dá pra começar. A lógica de palavra-chave é universal: título tem a keyword principal + benefício + uso. Exemplo: 'Modern Geometric Plant Pot 3D Printed — Minimalist Home Decor'. Tags são 13 no Etsy, usa sinônimo e variação."
+<span class="troca">↳ Gui passa pro Arthur</span>
+<span class="a">Arthur:</span> "Só pra conectar: no Facebook Marketplace a lógica é a mesma. Título com a keyword que o americano digita, descrição curta, foto clara. A diferença é que no FB tu não tem 13 tags, tu tem o título e a descrição. A gente entra fundo nisso na Aula 3, quando eu assumir a parte de FB Marketplace. Por enquanto, grava: keyword é o que faz o cliente te achar."
+</div>
+</div>
+
+<!-- Tópico 5: O que evitar -->
+<div class="topico" data-block="a2-evitar" data-speaker="arthur">
+<span class="speaker-badge">Arthur</span>
+<h4>O que evitar — armadilhas clássicas</h4>
+<p>Arthur lista os 3 erros que matam loja nova: produto saturado, personagem protegido, peça difícil de imprimir.</p>
+<ul>
+<li><b>Saturado:</b> "dragon egg", "flexi dragon", "articulated animal" — já tem 50 mil anúncios. Margem zero.</li>
+<li><b>Personagem protegido:</b> já falado, mas reforça — Disney, Marvel, anime, marca registrada.</li>
+<li><b>Peça difícil de imprimir:</b> muita sustentação, mais de 4h de impressão, tolerância apertada. Tu perde peça, perde tempo, perde dinheiro.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Três armadilhas que matam loja nova. Primeira: <b>produto saturado</b>. 'Flexi dragon', 'dragon egg', 'articulated lizard' — tem 50 mil anúncios no Etsy. Tu entra ali e some. Margem zero. Segunda: <b>personagem protegido</b> — o Gui já falou, mas eu reforço porque é o erro número 1 do iniciante brasileiro. Disney, Marvel, Naruto, Pokémon. Não faz. Terceira: <b>peça difícil de imprimir</b>. Muita sustentação, mais de 4 horas, tolerância apertada. Tu vai perder peça, perder tempo, perder dinheiro. Começa com peça simples, plana, até 2 horas. Escala depois."
+</div>
+</div>
+
+<!-- Exercício A -->
+<div class="exercicio">
+<div class="badge">✏️ Exercício A · Entregar até a Aula 3</div>
+<h4>Cada aluno escolhe 3 produtos e justifica com dados</h4>
+<p>Usando EverBee + Alura (ou eRank), cada aluno pesquisa e escolhe 3 produtos candidatos. Pra cada um, preenche:</p>
+<ul>
+<li>Nome do produto e categoria</li>
+<li>Vendas/mês estimadas no nicho (soma dos top 10 anúncios)</li>
+<li>Número de anúncios ativos no nicho</li>
+<li>Peso estimado em gramas e tempo de impressão</li>
+<li>Por que é um produto campeão (ou por que NÃO é)</li>
+<li>Print da tela do EverBee/Alura mostrando os dados</li>
+</ul>
+<p style="margin-top:0.8rem"><b style="color:var(--warn)">Entrega:</b> manda no grupo da turma até 24h antes da Aula 3. Arthur e Gui vão analisar ao vivo na abertura da Aula 3.</p>
+</div>
+
+</div>
+</section>
+
+<!-- =============== AULA 3 =============== -->
+<section id="aula3">
+<h2 class="section-title">Aula 3 · Vendas e Plataformas</h2>
+<p class="section-sub">Análise do Exercício A, Facebook Marketplace (Arthur), Etsy (Gui), precificação em dólar. O aluno sai com 3 anúncios prontos.</p>
+<div class="aula">
+<div class="aula-header">
+<div><div class="aula-num">Aula 03 / 04</div><h3>Anúncios, plataformas e precificação</h3></div>
+<div class="meta"><span><strong>2h–2h30</strong></span><span><strong>Arthur abre · Gui entra no meio · Arthur fecha</strong></span></div>
+</div>
+
+<!-- Tópico 1: Resposta do Exercício A -->
+<div class="topico" data-block="a3-exercicio-a-resp" data-speaker="ambos">
+<span class="speaker-badge">Arthur + Guilherme</span>
+<h4>Exercício A — Resposta: analisar os produtos escolhidos</h4>
+<p>Arthur e Gui abrem os produtos enviados pelos alunos no grupo, analisam 3–4 ao vivo, apontam acertos e erros.</p>
+<ul>
+<li>Chama 3 alunos pelo nome, abre o print deles na tela.</li>
+<li>Valida: demanda real? concorrência baixa? impressão viável?</li>
+<li>Corrige: "esse aqui tá saturado, troca por X", "esse aqui é personagem protegido, corta".</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Boa noite galera, Aula 3. Antes de entrar em plataforma, a gente vai analisar os exercícios que vocês mandaram. Vou chamar 3 pessoas. <b>[Nome 1]</b>, manda teu print no chat agora. Gui, abre aí."
+<span class="troca">↳ Arthur passa pro Gui analisar os dados</span>
+<span class="g">Guilherme:</span> "Beleza, vendo aqui. <b>[Nome 1]</b>, tu escolheu 'geometric planter'. Nicho tem 1200 vendas/mês, 380 anúncios. Peso 25g, impressão 1h40. <b>Produto campeão aprovado</b>. Boa escolha. Próximo."
+<span class="troca">↳ Volta pro Arthur</span>
+<span class="a">Arthur:</span> "Perfeito. Próximo aluno, <b>[Nome 2]</b>... [repete análise]. Galera, padrão que a gente quer ver: demanda entre 300 e 3000, menos de 500 anúncios, até 30g, até 2h. Quem acertou, bora anunciar. Quem errou, ajusta agora com a gente."
+</div>
+</div>
+
+<!-- Tópico 2: Conta americana (FB bloqueia BR) -->
+<div class="topico" data-block="a3-conta-americana" data-speaker="arthur">
+<span class="speaker-badge">Arthur</span>
+<h4>Facebook criado no Brasil não serve — precisa de conta EUA</h4>
+<p>Arthur explica por que o FB bloqueia/anuncia mal contas brasileiras nos EUA, e como estruturar conta americana.</p>
+<ul>
+<li><b>Problema:</b> conta BR tentando vender nos EUA = alcance zerado, bloqueio em dias, shadowban.</li>
+<li><b>Solução:</b> conta americana com número EUA, IP EUA (VPN fixa ou máquina remota), histórico limpo.</li>
+<li><b>Estrutura mínima:</b> perfil pessoal americano + página + Marketplace liberado. Arthur ensina o passo a passo.</li>
+<li><b>Tempo:</b> 7–14 dias pra conta "esquentar" antes de anunciar pesado.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Agora a parte que 90% dos brasileiros erra. Tua conta do Facebook criada no Brasil <b>não serve pra vender nos EUA</b>. O algoritmo do FB vê IP brasileiro, número +55, histórico em português, e simplesmente não entrega teu anúncio pro americano. Pior: em poucos dias tu toma bloqueio ou shadowban. A solução é criar uma <b>conta americana</b>: número dos EUA (tu consegue com app tipo TextNow ou chip virtual), IP fixo dos EUA (VPN dedicada ou máquina remota), perfil em inglês, histórico limpo. Estrutura mínima: perfil pessoal americano + página + Marketplace liberado. Eu vou mandar no grupo um PDF com o passo a passo completo. Tempo pra conta esquentar: 7 a 14 dias interagindo normal antes de anunciar pesado. Não adianta criar hoje e anunciar amanhã — o FB te mata."
+</div>
+</div>
+
+<!-- Tópico 3: Facebook Marketplace (Arthur deep-dive) -->
+<div class="topico" data-block="a3-fb-marketplace" data-speaker="arthur">
+<span class="speaker-badge">Arthur</span>
+<h4>Facebook Marketplace — operação completa</h4>
+<p>Arthur compartilha tela e mostra AO VIVO: conta americana, anúncio real, grupo local, resposta a cliente.</p>
+<ul>
+<li><b>Anúncio:</b> título com keyword, 5–8 fotos (1ª foto é a que vende), descrição curta com benefícios, preço em dólar.</li>
+<li><b>Grupos locais:</b> além do Marketplace, posta em grupos de cidade/bairro ("Miami Buy Sell", "Orlando 3D Printing"). Alcance 3x maior.</li>
+<li><b>Resposta rápida:</b> americano desiste se demorar 1h. Template de resposta pronta.</li>
+<li><b>Pagamento:</b> Zelle, Cash App, Venmo, PayPal. Evita chargeback usando "friends and family" quando possível (com cuidado).</li>
+</ul>
+<div class="mostra">
+<span class="label">📦 COMPARTILHAR TELA</span>
+Arthur abre sua conta americana do FB → Marketplace → cria anúncio de demonstração com um dos produtos do exercício → mostra os grupos locais onde replica o anúncio.
+</div>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Compartilhando minha tela. Essa aqui é minha conta americana. Vou criar um anúncio agora com o 'geometric planter' que o <b>[Nome 1]</b> escolheu. Título: 'Modern Geometric Plant Pot — 3D Printed Home Decor'. Cinco fotos — a primeira é a que vende, tem que ser clara, fundo neutro, peça em destaque. Descrição curta: tamanho, material (PLA), cores disponíveis, prazo. Preço: 18 dólares. Publica no Marketplace. Agora o pulo do gato: eu entro nos grupos locais — 'Miami Buy Sell', 'Orlando 3D Printing', 'Tampa Handmade' — e posto o mesmo anúncio lá. Alcance triplica. Resposta ao cliente tem que ser rápida, americano desiste em 1 hora. Tenho template pronto: 'Hi! Yes, available. I can ship in 2 days via USPS. Payment via Zelle or PayPal. Let me know your zip for shipping quote.' Pagamento: Zelle, Cash App, Venmo, PayPal. Evita chargeback usando friends and family quando o cliente confiar — mas nunca força isso."
+</div>
+</div>
+
+<!-- Tópico 4: Etsy (Gui deep-dive) -->
+<div class="topico" data-block="a3-etsy" data-speaker="gui">
+<span class="speaker-badge">Guilherme</span>
+<h4>Etsy — operação completa com os produtos escolhidos</h4>
+<p>Gui compartilha tela e mostra AO VIVO: loja, anúncio real com os produtos do exercício, SEO, tags, fotos.</p>
+<ul>
+<li><b>Loja:</b> nome curto, banner, política de envio clara, seção "About" preenchida (Etsy rankeia melhor).</li>
+<li><b>Anúncio:</b> título 140 chars com keywords, 10 fotos (1ª branca, resto lifestyle), 13 tags, descrição com FAQ.</li>
+<li><b>SEO:</b> keyword principal no início do título, repetida nas tags e na descrição. Alura/eRank ajudam.</li>
+<li><b>Fotos:</b> fundo branco na 1ª, depois peça em uso (vaso com planta, suporte com fone). Luz natural.</li>
+</ul>
+<div class="mostra">
+<span class="label">📦 COMPARTILHAR TELA</span>
+Gui abre seu Etsy Seller Dashboard → cria anúncio de demonstração com um dos produtos do exercício → preenche título, tags, descrição, sobe fotos.
+</div>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Agora eu. Compartilhando tela. Meu Etsy Seller Dashboard. Vou criar o anúncio do mesmo 'geometric planter'. Título tem 140 caracteres — eu uso todos: 'Geometric Planter Pot 3D Printed Modern Minimalist Plant Holder Home Office Desk Decor Gift'. Keyword principal no começo, resto é sinônimo e uso. Dez fotos: primeira fundo branco, resto lifestyle — vaso com suculenta, na mesa de escritório, na estante. Luz natural, sem flash. Treze tags: 'geometric planter', '3d printed pot', 'modern planter', 'minimalist decor', etc. Descrição com FAQ: tamanho, material, prazo, política de devolução. Etsy rankeia loja que tem 'About' preenchido e política clara — não pula isso. Salva como rascunho, não publica ainda — a gente publica junto no exercício."
+</div>
+</div>
+
+<!-- Tópico 5: Precificação em dólar -->
+<div class="topico" data-block="a3-precificacao" data-speaker="ambos">
+<span class="speaker-badge">Arthur + Guilherme</span>
+<h4>Precificação em dólar — fórmula simples</h4>
+<p>Arthur e Gui ensinam a fórmula de preço: custo filamento + tempo máquina + embalagem + taxa plataforma + margem.</p>
+<ul>
+<li><b>Fórmula:</b> (filamento + tempo máquina + embalagem) × 3 = preço mínimo. Plataforma tira ~10–15%.</li>
+<li><b>Exemplo:</b> peça 25g PLA = US$ 0,50. Tempo 1h40 máquina = US$ 0,30. Embalagem = US$ 0,40. Custo total US$ 1,20. × 3 = US$ 3,60 mínimo. Venda por US$ 15–18.</li>
+<li><b>Frete:</b> cobra separado no FB Marketplace; no Etsy oferece "free shipping" embutido no preço (cliente prefere).</li>
+<li><b>Psicologia:</b> US$ 17 vende mais que US$ 15,99 em 3D (parece mais premium). Testa.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Precificação. Fórmula simples: custo do filamento + tempo de máquina + embalagem, tudo multiplicado por 3. Esse é teu preço mínimo. A plataforma tira 10 a 15% ainda."
+<span class="troca">↳ Arthur passa pro Gui fazer o exemplo</span>
+<span class="g">Guilherme:</span> "Exemplo real. Peça de 25 gramas de PLA: 50 centavos de dólar. Tempo 1h40 de P1S: 30 centavos de eletricidade e desgaste. Embalagem (caixinha + bubble): 40 centavos. Custo total: 1 dólar e 20. Multiplica por 3: 3 dólares e 60 é teu mínimo. Tu vende por 15 a 18 dólares. Margem linda."
+<span class="troca">↳ Volta pro Arthur</span>
+<span class="a">Arthur:</span> "Frete: no FB Marketplace cobra separado. No Etsy, embute no preço e coloca 'free shipping' — cliente americano prefere, converte mais. Psicologia: 17 dólares vende mais que 15,99 em 3D, porque parece mais premium. Testa os dois."
+</div>
+</div>
+
+<!-- Exercício B -->
+<div class="exercicio">
+<div class="badge">✏️ Exercício B · Entregar até a Aula 4</div>
+<h4>Criar no mínimo 3 anúncios (FB + Etsy)</h4>
+<p>Cada aluno cria, até a próxima aula:</p>
+<ul>
+<li><b>1 anúncio no Facebook Marketplace</b> (na conta americana) com um dos 3 produtos do Exercício A.</li>
+<li><b>1 anúncio no Etsy</b> (rascunho ou publicado) com outro produto.</li>
+<li><b>1 anúncio extra</b> em qualquer uma das plataformas, à escolha.</li>
+<li>Print de cada anúncio + link (se publicado).</li>
+<li>Preço definido usando a fórmula da aula.</li>
+</ul>
+<p style="margin-top:0.8rem"><b style="color:var(--warn)">Entrega:</b> manda no grupo até 24h antes da Aula 4. Arthur e Gui analisam ao vivo e já conectam com GoShipoo pra quem vendeu.</p>
+</div>
+
+</div>
+</section>
+
+<!-- =============== AULA 4 =============== -->
+<section id="aula4">
+<h2 class="section-title">Aula 4 · Logística e Envios</h2>
+<p class="section-sub">GoShipoo, análise dos anúncios criados, plataforma de envios, tira-dúvidas final. O aluno sai pronto pra operar sozinho.</p>
+<div class="aula">
+<div class="aula-header">
+<div><div class="aula-num">Aula 04 / 04</div><h3>Envios, GoShipoo e fechamento</h3></div>
+<div class="meta"><span><strong>2h–2h30</strong></span><span><strong>Arthur abre · Gui entra no meio · Ambos fecham</strong></span></div>
+</div>
+
+<!-- Tópico 1: GoShipoo -->
+<div class="topico" data-block="a4-goshipoo" data-speaker="arthur">
+<span class="speaker-badge">Arthur</span>
+<h4>GoShipoo — plataforma de envios</h4>
+<p>Arthur compartilha tela e mostra AO VIVO o GoShipoo: cadastro, cotação, etiqueta, rastreio.</p>
+<ul>
+<li><b>O que é:</b> agregador de frete. Tu compara USPS, UPS, FedEx num lugar só, com desconto de volume.</li>
+<li><b>Cadastro:</b> conta grátis, conecta com Etsy/FB se quiser importar pedido automaticamente.</li>
+<li><b>Cotação:</b> peso + dimensão + CEP destino → mostra opções em segundos.</li>
+<li><b>Etiqueta:</b> gera PDF, imprime em casa, cola no pacote. Rastreio automático pro cliente.</li>
+<li><b>Economia:</b> 20–40% mais barato que balcão do correio americano.</li>
+</ul>
+<div class="mostra">
+<span class="label">📦 COMPARTILHAR TELA</span>
+Arthur abre GoShipoo → faz cotação de demonstração (pacote 200g, 15×10×8cm, Miami → New York) → mostra as opções USPS/UPS/FedEx → gera etiqueta de exemplo.
+</div>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "GoShipoo. É um agregador de frete — tu compara USPS, UPS e FedEx num lugar só, com desconto de volume. Cadastro grátis. Tu pode conectar com Etsy e FB Marketplace pra importar o pedido automaticamente, mas no começo faz manual tranquilo. Cotação: peso, dimensão, CEP destino. Exemplo: pacote 200 gramas, 15 por 10 por 8 cm, saindo de Miami pra New York. Olha as opções: USPS Ground Advantage 6 dólares, chega em 3 dias. UPS Ground 9 dólares, 2 dias. FedEx 11. Eu escolho USPS, gero a etiqueta em PDF, imprimo em casa, colo no pacote. Rastreio vai automático pro cliente. Economia real: 20 a 40% mais barato que ir no balcão do correio americano. Pra quem tá enviando 10, 20 pacotes por mês, isso é margem pura."
+</div>
+</div>
+
+<!-- Tópico 2: Análise dos anúncios criados -->
+<div class="topico" data-block="a4-analise-anuncios" data-speaker="ambos">
+<span class="speaker-badge">Arthur + Guilherme</span>
+<h4>Análise dos anúncios criados (Exercício B)</h4>
+<p>Arthur e Gui abrem os anúncios dos alunos, analisam 3–4 ao vivo, corrigem título, foto, preço, tags.</p>
+<ul>
+<li>Chama 3 alunos, abre o print/link na tela.</li>
+<li>Arthur analisa os de FB Marketplace (título, foto, grupo).</li>
+<li>Gui analisa os de Etsy (título, tags, SEO, foto).</li>
+<li>Corrige ao vivo: "essa foto tá escura, troca", "falta keyword no título", "preço baixo demais".</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Aula 4. Bora analisar os anúncios que vocês criaram. <b>[Nome 1]</b>, manda o link do teu FB Marketplace no chat. Eu abro aqui."
+<span class="troca">↳ Arthur analisa FB, depois passa pro Gui analisar Etsy</span>
+<span class="g">Guilherme:</span> "<b>[Nome 2]</b>, teu Etsy. Vendo aqui. Título bom, mas falta a keyword 'gift' no final — americano pesquisa muito 'gift for mom', 'gift for dad'. Adiciona. Foto 1 tá ótima. Tags: tu usou só 8, tem 13 disponíveis — preenche todas. Preço 16 dólares, ok pela fórmula. Aprovado com ajuste."
+<span class="troca">↳ Volta pro Arthur</span>
+<span class="a">Arthur:</span> "Padrão que a gente quer ver: foto clara, título com keyword, preço pela fórmula, tags preenchidas. Quem ajustou, tá pronto pra vender de verdade."
+</div>
+</div>
+
+<!-- Tópico 3: Plataforma de envios (fluxo completo) -->
+<div class="topico" data-block="a4-plataforma-envios" data-speaker="ambos">
+<span class="speaker-badge">Arthur + Guilherme</span>
+<h4>Plataforma de envios — fluxo completo</h4>
+<p>Arthur e Gui montam o fluxo ponta a ponta, do clique do cliente até o pacote na porta dele.</p>
+<ul>
+<li><b>1. Venda:</b> cliente compra no Etsy ou chama no FB.</li>
+<li><b>2. Confirmação:</b> tu confirma pagamento e endereço.</li>
+<li><b>3. Impressão:</b> Gui imprime na P1S (1–2 dias).</li>
+<li><b>4. Embalagem:</b> caixinha + bubble wrap + cartão de agradecimento.</li>
+<li><b>5. Etiqueta:</b> Arthur gera no GoShipoo, imprime, cola.</li>
+<li><b>6. Postagem:</b> leva no drop-off USPS/UPS perto de casa.</li>
+<li><b>7. Rastreio:</b> cliente recebe automático, tu acompanha.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="g">Guilherme:</span> "Fluxo completo. Cliente comprou. Eu confirmo pagamento e endereço. Imprimo na P1S — 1 a 2 dias. Embalo: caixinha, bubble wrap, cartãozinho de agradecimento escrito à mão — americano ama isso, vira avaliação 5 estrelas."
+<span class="troca">↳ Gui passa pro Arthur</span>
+<span class="a">Arthur:</span> "Aí eu entro. Gero a etiqueta no GoShipoo, imprimo, colo. Levo no drop-off do USPS perto de casa — tem em todo bairro americano. Cliente recebe rastreio automático. Eu acompanho até entregar. Fluxo inteiro: 3 a 5 dias da venda até a porta do cliente. Tu faz isso sozinho, sem funcionário, de casa."
+</div>
+</div>
+
+<!-- Tópico 4: Tira-dúvidas -->
+<div class="topico" data-block="a4-tira-duvidas" data-speaker="ambos">
+<span class="speaker-badge">Arthur + Guilherme</span>
+<h4>Tira-dúvidas final e próximos passos</h4>
+<p>Bloco aberto. Alunos perguntam, Arthur e Gui respondem. Fecha com próximos passos e comunidade.</p>
+<ul>
+<li>Abre 20–30 min pra perguntas livres.</li>
+<li>Arthur responde dúvidas de FB, conta, logística.</li>
+<li>Gui responde dúvidas de Etsy, impressão, produto.</li>
+<li>Fecha: grupo continua ativo, dúvida futura manda lá, próxima turma, upsell se houver.</li>
+</ul>
+<div class="roteiro">
+<span class="label">🎤 ROTEIRO DE FALA</span>
+<span class="a">Arthur:</span> "Último bloco. Tira-dúvidas. Manda no chat, a gente responde ao vivo. Pode ser qualquer coisa — conta, anúncio, impressão, frete, preço, imposto."
+<span class="troca">↳ 20–30 min de perguntas livres</span>
+<span class="g">Guilherme:</span> "[responde dúvidas de Etsy/impressão]"
+<span class="a">Arthur:</span> "[responde dúvidas de FB/logística]"
+<span class="troca">↳ Fechamento conjunto</span>
+<span class="a">Arthur:</span> "Galera, 4 aulas, do zero ao anúncio pronto. Daqui pra frente é execução. O grupo continua ativo — dúvida futura manda lá, a gente responde. Quem vender primeiro, manda print no grupo que a gente comemora junto. Obrigado pela confiança, bora fazer dólar."
+<span class="g">Guilherme:</span> "Valeu galera, tamo junto. Qualquer coisa na impressão, me chama. Sucesso pra todo mundo."
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- =============== FERRAMENTAS =============== -->
+<section id="ferramentas">
+<h2 class="section-title">Ferramentas usadas na mentoria</h2>
+<p class="section-sub">Tudo que a gente citou nas 4 aulas, numa tabela só. Link, custo, quem usa, pra quê.</p>
+<table class="tool-table">
+<thead><tr><th>Ferramenta</th><th>Pra quê</th><th>Custo</th><th>Quem usa</th><th>Aula</th></tr></thead>
+<tbody>
+<tr><td>Bambu Lab P1S</td><td>Impressora 3D principal</td><td>~US$ 600–700</td><td class="s-gui">Guilherme</td><td>1</td></tr>
+<tr><td>Snapmaker U1</td><td>Impressora 3D + laser + CNC</td><td>~US$ 800–1200</td><td class="s-gui">Guilherme</td><td>1</td></tr>
+<tr><td>Sunlu PLA / PLA Silk</td><td>Filamento padrão</td><td>~US$ 20/kg</td><td class="s-gui">Guilherme</td><td>1</td></tr>
+<tr><td>EverBee</td><td>Extensão Chrome — vendas/receita no Etsy</td><td>Grátis (plano pago opcional)</td><td class="s-gui">Guilherme + alunos</td><td>2</td></tr>
+<tr><td>Alura</td><td>Keyword volume, concorrência, sugestão de título/tag</td><td>Trial grátis / ~US$ 10/mês</td><td class="s-gui">Guilherme + alunos</td><td>2</td></tr>
+<tr><td>eRank</td><td>Keyword e trending focado em Etsy</td><td>Grátis limitado / ~US$ 6/mês</td><td class="s-ambos">Ambos + alunos</td><td>2</td></tr>
+<tr><td>Facebook Marketplace</td><td>Plataforma de venda (conta americana)</td><td>Grátis</td><td class="s-arthur">Arthur + alunos</td><td>3</td></tr>
+<tr><td>Etsy Seller</td><td>Plataforma de venda handmade/3D</td><td>US$ 0,20/listagem + 6,5% venda</td><td class="s-gui">Guilherme + alunos</td><td>3</td></tr>
+<tr><td>TextNow / chip virtual EUA</td><td>Número americano pra conta FB</td><td>Grátis / ~US$ 5/mês</td><td class="s-arthur">Arthur + alunos</td><td>3</td></tr>
+<tr><td>VPN dedicada EUA</td><td>IP fixo americano pra conta FB</td><td>~US$ 10–20/mês</td><td class="s-arthur">Arthur + alunos</td><td>3</td></tr>
+<tr><td>Zelle / Cash App / Venmo / PayPal</td><td>Recebimento em dólar</td><td>Grátis (taxa em alguns)</td><td class="s-arthur">Arthur + alunos</td><td>3</td></tr>
+<tr><td>GoShipoo</td><td>Agregador de frete (USPS/UPS/FedEx)</td><td>Grátis (paga pelo frete)</td><td class="s-arthur">Arthur + alunos</td><td>4</td></tr>
+<tr><td>Google Meet</td><td>Aulas ao vivo + troca de tela</td><td>Grátis</td><td class="s-ambos">Ambos</td><td>todas</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- =============== CRONOGRAMA =============== -->
+<section id="cronograma">
+<h2 class="section-title">Cronograma das 4 aulas</h2>
+<p class="section-sub">Linha do tempo com quem fala em cada bloco. <b>Sincroniza automaticamente com o Painel de Troca acima</b> — muda lá, muda aqui.</p>
+<div class="timeline" id="timeline"></div>
+</section>
+
+<footer>
+Sala de Controle · Mentoria Impressão 3D → EUA · Guilherme (FL) + Arthur (BR)<br>
+Material interno de apresentação · abra em tela cheia no Google Meet
+</footer>
+
+</main>
+
+<script>
+// ============================================================
+// PAINEL DE CONTROLE — troca de apresentador por bloco
+// ============================================================
+
+// Configuração padrão (Gui inicia a Aula 1 já que montou a mentoria)
+const DEFAULT_SPEAKERS = {
+  'a1-quem-somos': 'ambos',
+  'a1-por-que-eua': 'arthur',
+  'a1-maquinas': 'gui',
+  'a1-filamentos': 'gui',
+  'a2-produto-campeao': 'gui',
+  'a2-categorias': 'gui',
+  'a2-everbee-alura': 'gui',
+  'a2-erank': 'ambos',
+  'a2-evitar': 'arthur',
+  'a3-exercicio-a-resp': 'ambos',
+  'a3-conta-americana': 'arthur',
+  'a3-fb-marketplace': 'arthur',
+  'a3-etsy': 'gui',
+  'a3-precificacao': 'ambos',
+  'a4-goshipoo': 'arthur',
+  'a4-analise-anuncios': 'ambos',
+  'a4-plataforma-envios': 'ambos',
+  'a4-tira-duvidas': 'ambos'
+};
+
+// Labels legíveis pra cada bloco (mostra no painel e no cronograma)
+const BLOCK_LABELS = {
+  'a1-quem-somos': { aula: 'Aula 1', titulo: 'Quem somos nós (visão geral)' },
+  'a1-por-que-eua': { aula: 'Aula 1', titulo: 'Por que 3D nos EUA' },
+  'a1-maquinas': { aula: 'Aula 1', titulo: 'Máquinas iniciais' },
+  'a1-filamentos': { aula: 'Aula 1', titulo: 'Tipos de filamento' },
+  'a2-produto-campeao': { aula: 'Aula 2', titulo: 'O que é produto campeão' },
+  'a2-categorias': { aula: 'Aula 2', titulo: 'Categorias que mais vendem' },
+  'a2-everbee-alura': { aula: 'Aula 2', titulo: 'Validar com EverBee e Alura' },
+  'a2-erank': { aula: 'Aula 2', titulo: 'eRank e palavras-chave' },
+  'a2-evitar': { aula: 'Aula 2', titulo: 'O que evitar' },
+  'a3-exercicio-a-resp': { aula: 'Aula 3', titulo: 'Exercício A — Resposta' },
+  'a3-conta-americana': { aula: 'Aula 3', titulo: 'Conta americana (FB bloqueia BR)' },
+  'a3-fb-marketplace': { aula: 'Aula 3', titulo: 'Facebook Marketplace (Arthur)' },
+  'a3-etsy': { aula: 'Aula 3', titulo: 'Etsy (Gui)' },
+  'a3-precificacao': { aula: 'Aula 3', titulo: 'Precificação em dólar' },
+  'a4-goshipoo': { aula: 'Aula 4', titulo: 'GoShipoo' },
+  'a4-analise-anuncios': { aula: 'Aula 4', titulo: 'Análise dos anúncios criados' },
+  'a4-plataforma-envios': { aula: 'Aula 4', titulo: 'Plataforma de envios (fluxo)' },
+  'a4-tira-duvidas': { aula: 'Aula 4', titulo: 'Tira-dúvidas final' }
+};
+
+const SPEAKER_LABELS = { arthur: 'Arthur', gui: 'Guilherme', ambos: 'Arthur + Gui' };
+const STORAGE_KEY = 'mentoria-3d-speakers-v1';
+
+// Carrega configuração (localStorage > padrão)
+function loadSpeakers() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Mescla com padrão pra cobrir blocos novos
+      return { ...DEFAULT_SPEAKERS, ...parsed };
+    }
+  } catch (e) {}
+  return { ...DEFAULT_SPEAKERS };
+}
+
+function saveSpeakers(cfg) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg)); } catch (e) {}
+}
+
+let speakers = loadSpeakers();
+
+// Aplica a configuração em todos os blocos, badges, painel e cronograma
+function applySpeakers() {
+  // 1) Atualiza cada .topico
+  document.querySelectorAll('.topico[data-block]').forEach(el => {
+    const block = el.dataset.block;
+    const sp = speakers[block] || 'ambos';
+    el.dataset.speaker = sp;
+    const badge = el.querySelector('.speaker-badge');
+    if (badge) badge.textContent = SPEAKER_LABELS[sp];
+  });
+
+  // 2) Reconstrói o cronograma
+  buildTimeline();
+
+  // 3) Sincroniza os selects do painel E colore as linhas
+  document.querySelectorAll('.cp-row').forEach(row => {
+    const sel = row.querySelector('.cp-select');
+    if (!sel) return;
+    const block = sel.dataset.block;
+    const sp = speakers[block] || 'ambos';
+    sel.value = sp;
+    row.classList.remove('sp-arthur', 'sp-gui', 'sp-ambos');
+    row.classList.add('sp-' + sp);
+  });
+}
+
+// Constrói o painel de controle (uma linha por bloco)
+function buildControlPanel() {
+  const grid = document.getElementById('cpGrid');
+  grid.innerHTML = '';
+  Object.keys(BLOCK_LABELS).forEach(block => {
+    const info = BLOCK_LABELS[block];
+    const row = document.createElement('div');
+    row.className = 'cp-row';
+    row.innerHTML = `
+      <div class="cp-label">
+        <b>${info.aula}</b>
+        ${info.titulo}
+      </div>
+      <select class="cp-select" data-block="${block}">
+        <option value="arthur">Arthur</option>
+        <option value="gui">Guilherme</option>
+        <option value="ambos">Ambos</option>
+      </select>
+    `;
+    grid.appendChild(row);
+  });
+
+  // Listener: muda o speaker e reaplica
+  grid.querySelectorAll('.cp-select').forEach(sel => {
+    sel.addEventListener('change', e => {
+      speakers[e.target.dataset.block] = e.target.value;
+      saveSpeakers(speakers);
+      applySpeakers();
+    });
+  });
+}
+
+// Constrói a timeline do cronograma a partir da configuração atual
+function buildTimeline() {
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  Object.keys(BLOCK_LABELS).forEach((block, idx) => {
+    const info = BLOCK_LABELS[block];
+    const sp = speakers[block] || 'ambos';
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.dataset.speaker = sp;
+    item.innerHTML = `
+      <span class="t">${info.aula} · bloco ${String(idx + 1).padStart(2, '0')}</span>
+      <span class="who">${SPEAKER_LABELS[sp]}</span>
+      <div class="desc">${info.titulo}</div>
+    `;
+    tl.appendChild(item);
+  });
+}
+
+// Botões do painel
+document.getElementById('btnReset').addEventListener('click', () => {
+  if (confirm('Voltar todos os blocos ao padrão original (Gui inicia Aula 1)?')) {
+    speakers = { ...DEFAULT_SPEAKERS };
+    saveSpeakers(speakers);
+    applySpeakers();
+  }
+});
+
+document.getElementById('btnExport').addEventListener('click', () => {
+  const data = JSON.stringify(speakers);
+  navigator.clipboard.writeText(data).then(() => {
+    alert('Configuração copiada! Manda pro Arthur/Gui no WhatsApp e ele cola com "Colar config".');
+  }).catch(() => {
+    prompt('Copie manualmente:', data);
+  });
+});
+
+document.getElementById('btnImport').addEventListener('click', () => {
+  const data = prompt('Cole a configuração recebida:');
+  if (!data) return;
+  try {
+    const parsed = JSON.parse(data);
+    speakers = { ...DEFAULT_SPEAKERS, ...parsed };
+    saveSpeakers(speakers);
+    applySpeakers();
+    alert('Configuração aplicada!');
+  } catch (e) {
+    alert('Erro: configuração inválida.');
+  }
+});
+
+document.getElementById('cpToggle').addEventListener('click', (e) => {
+  const panel = document.getElementById('controlPanel');
+  panel.classList.toggle('cp-collapsed');
+  e.target.textContent = panel.classList.contains('cp-collapsed') ? '[ mostrar lista ]' : '[ ocultar lista ]';
+});
+
+// Nav ativa conforme scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+function onScroll() {
+  const y = window.scrollY + 140;
+  let current = '';
+  sections.forEach(s => { if (s.offsetTop <= y) current = s.id; });
+  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// Inicializa
+buildControlPanel();
+applySpeakers();
+onScroll();
+</script>
+</body>
+</html>
