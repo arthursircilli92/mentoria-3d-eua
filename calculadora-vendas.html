@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora 3D — Precificação</title>
+<title>Calculadora 3D - Precificação</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -45,126 +45,296 @@
     --danger-bg: #450a0a;
   }
 
-  /* ===== THEME: NEON ===== */
-  [data-skin="neon"] {
-    --bg: #0a0a0f;
-    --surface: #12121a;
-    --surface-2: #1a1a26;
-    --border: #2a2a3a;
-    --border-strong: #3a3a50;
-    --text: #e8e8f0;
-    --text-dim: #9898b0;
-    --text-muted: #6868808a;
-    --accent: #a855f7;
-    --accent-2: #c084fc;
-    --success: #22d3ee;
-    --success-bg: rgba(34,211,238,0.1);
-    --warning: #facc15;
-    --warning-bg: rgba(250,204,21,0.1);
-    --danger: #fb7185;
-    --danger-bg: rgba(251,113,133,0.1);
+  /* ===== STYLE: GLASSMORPHISM ===== */
+  [data-skin="glass"] {
+    --bg: #0c0c1d;
+    --surface: rgba(255,255,255,0.06);
+    --surface-2: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.1);
+    --border-strong: rgba(255,255,255,0.18);
+    --text: #f0f0ff;
+    --text-dim: #a0a0c0;
+    --text-muted: #606080;
+    --accent: #818cf8;
+    --accent-2: #a78bfa;
+    --success: #34d399;
+    --success-bg: rgba(52,211,153,0.12);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251,191,36,0.12);
+    --danger: #f87171;
+    --danger-bg: rgba(248,113,113,0.12);
   }
-  [data-skin="neon"] body { background-image: radial-gradient(ellipse at 20% 0%, rgba(168,85,247,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(34,211,238,0.06) 0%, transparent 60%); }
-  [data-skin="neon"] .brand-mark { background: linear-gradient(135deg, #a855f7, #22d3ee); box-shadow: 0 0 12px rgba(168,85,247,0.4); }
-  [data-skin="neon"] .panel { border-color: #2a2a3a; box-shadow: 0 0 20px rgba(168,85,247,0.04); }
-  [data-skin="neon"] input:focus, [data-skin="neon"] select:focus { border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168,85,247,0.15); }
-  [data-skin="neon"] .score-fill { box-shadow: 0 0 8px currentColor; }
-
-  /* ===== THEME: SUNSET ===== */
-  [data-skin="sunset"] {
-    --bg: #1a0f0a;
-    --surface: #241610;
-    --surface-2: #2e1c14;
-    --border: #3d2a1e;
-    --border-strong: #52382a;
-    --text: #fce8d8;
-    --text-dim: #c4a08a;
-    --text-muted: #8a6a55;
-    --accent: #f97316;
-    --accent-2: #fb923c;
-    --success: #fbbf24;
-    --success-bg: rgba(251,191,36,0.12);
-    --warning: #f59e0b;
-    --warning-bg: rgba(245,158,11,0.12);
-    --danger: #ef4444;
-    --danger-bg: rgba(239,68,68,0.12);
+  [data-skin="glass"] body {
+    background: #0c0c1d;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(129,140,248,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(167,139,250,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(52,211,153,0.06) 0%, transparent 60%);
   }
-  [data-skin="sunset"] body { background-image: radial-gradient(ellipse at 30% 0%, rgba(249,115,22,0.1) 0%, transparent 60%), radial-gradient(ellipse at 70% 100%, rgba(251,191,36,0.06) 0%, transparent 60%); }
-  [data-skin="sunset"] .brand-mark { background: linear-gradient(135deg, #f97316, #fbbf24); }
-  [data-skin="sunset"] .panel { border-color: #3d2a1e; }
-  [data-skin="sunset"] input:focus, [data-skin="sunset"] select:focus { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.15); }
+  [data-skin="glass"] .panel {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  [data-skin="glass"] .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; }
+  [data-skin="glass"] input, [data-skin="glass"] select {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+  }
+  [data-skin="glass"] input:focus, [data-skin="glass"] select:focus {
+    border-color: rgba(129,140,248,0.6);
+    box-shadow: 0 0 0 3px rgba(129,140,248,0.15), 0 0 20px rgba(129,140,248,0.1);
+  }
+  [data-skin="glass"] .brand-mark { background: linear-gradient(135deg, #818cf8, #a78bfa); border-radius: 10px; box-shadow: 0 4px 16px rgba(129,140,248,0.3); }
+  [data-skin="glass"] .hero { background: linear-gradient(135deg, rgba(129,140,248,0.1), rgba(167,139,250,0.05)); border: 1px solid rgba(129,140,248,0.2); border-radius: 14px; }
+  [data-skin="glass"] .breakdown { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
+  [data-skin="glass"] .compare-col { background: rgba(255,255,255,0.03); }
+  [data-skin="glass"] .compare-grid { background: rgba(255,255,255,0.08); border-radius: 0 0 16px 16px; overflow: hidden; }
+  [data-skin="glass"] .analysis { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
+  [data-skin="glass"] .score-bar { background: rgba(255,255,255,0.08); border-radius: 4px; }
+  [data-skin="glass"] .section-num { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+  [data-skin="glass"] header { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  [data-skin="glass"] .custom-fields { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; }
 
-  /* ===== THEME: OCEAN ===== */
-  [data-skin="ocean"] {
-    --bg: #0a1628;
-    --surface: #0f1f38;
-    --surface-2: #142848;
-    --border: #1e3a5f;
-    --border-strong: #2a4a70;
-    --text: #d8e8f8;
-    --text-dim: #8aacc8;
-    --text-muted: #5a7a98;
-    --accent: #38bdf8;
-    --accent-2: #7dd3fc;
-    --success: #2dd4bf;
-    --success-bg: rgba(45,212,191,0.1);
+  /* ===== STYLE: BRUTALIST ===== */
+  [data-skin="brutal"] {
+    --bg: #f5f0e8;
+    --surface: #ffffff;
+    --surface-2: #f0ebe3;
+    --border: #000000;
+    --border-strong: #000000;
+    --text: #000000;
+    --text-dim: #333333;
+    --text-muted: #666666;
+    --accent: #000000;
+    --accent-2: #cc0000;
+    --success: #006600;
+    --success-bg: #e6f5e6;
+    --warning: #cc6600;
+    --warning-bg: #fff5e6;
+    --danger: #cc0000;
+    --danger-bg: #ffe6e6;
+  }
+  [data-skin="brutal"] body { background: #f5f0e8; background-image: none; }
+  [data-skin="brutal"] * { font-family: 'Courier New', Courier, monospace !important; }
+  [data-skin="brutal"] .panel {
+    background: #fff;
+    border: 3px solid #000;
+    border-radius: 0;
+    box-shadow: 6px 6px 0 #000;
+  }
+  [data-skin="brutal"] .card { background: #f5f0e8; border: 2px solid #000; border-radius: 0; }
+  [data-skin="brutal"] input, [data-skin="brutal"] select {
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 0;
+    font-weight: 700;
+  }
+  [data-skin="brutal"] input:focus, [data-skin="brutal"] select:focus {
+    border-color: #cc0000;
+    box-shadow: 4px 4px 0 #cc0000;
+    outline: none;
+  }
+  [data-skin="brutal"] .brand-mark { background: #000; color: #fff; border-radius: 0; font-size: 14px; }
+  [data-skin="brutal"] .hero { background: #f5f0e8; border: 3px solid #000; border-radius: 0; box-shadow: 4px 4px 0 #000; }
+  [data-skin="brutal"] .panel-head { border-bottom: 3px solid #000; }
+  [data-skin="brutal"] .breakdown { background: #f5f0e8; border: 2px solid #000; border-radius: 0; }
+  [data-skin="brutal"] .compare-grid { background: #000; }
+  [data-skin="brutal"] .compare-col { background: #fff; }
+  [data-skin="brutal"] .compare-col.best::before { background: #cc0000; border-radius: 0; }
+  [data-skin="brutal"] .analysis { background: #fff; border: 3px solid #000; border-radius: 0; box-shadow: 6px 6px 0 #000; }
+  [data-skin="brutal"] .score-bar { background: #e0dbd3; border: 2px solid #000; border-radius: 0; height: 8px; }
+  [data-skin="brutal"] .score-fill { border-radius: 0; }
+  [data-skin="brutal"] .section-num { background: #000; color: #fff; border: none; border-radius: 0; }
+  [data-skin="brutal"] header { border-bottom: 3px solid #000; }
+  [data-skin="brutal"] .custom-fields { background: #f5f0e8; border: 2px dashed #000; border-radius: 0; }
+  [data-skin="brutal"] .chip { border-radius: 0; border: 2px solid currentColor; font-weight: 800; }
+  [data-skin="brutal"] footer { border-top: 3px solid #000; }
+
+  /* ===== STYLE: BLUEPRINT ===== */
+  [data-skin="blueprint"] {
+    --bg: #1a2744;
+    --surface: #1e2d4d;
+    --surface-2: #162240;
+    --border: rgba(255,255,255,0.15);
+    --border-strong: rgba(255,255,255,0.25);
+    --text: #c8d8f0;
+    --text-dim: #8aa0c0;
+    --text-muted: #5a7090;
+    --accent: #ffffff;
+    --accent-2: #90b0d0;
+    --success: #4ade80;
+    --success-bg: rgba(74,222,128,0.1);
     --warning: #fbbf24;
     --warning-bg: rgba(251,191,36,0.1);
     --danger: #f87171;
     --danger-bg: rgba(248,113,113,0.1);
   }
-  [data-skin="ocean"] body { background-image: radial-gradient(ellipse at 20% 10%, rgba(56,189,248,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 90%, rgba(45,212,191,0.06) 0%, transparent 60%); }
-  [data-skin="ocean"] .brand-mark { background: linear-gradient(135deg, #38bdf8, #2dd4bf); }
-  [data-skin="ocean"] .panel { border-color: #1e3a5f; }
-  [data-skin="ocean"] input:focus, [data-skin="ocean"] select:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.15); }
-
-  /* ===== THEME: FOREST ===== */
-  [data-skin="forest"] {
-    --bg: #0a1a0f;
-    --surface: #10241a;
-    --surface-2: #162e22;
-    --border: #1e4030;
-    --border-strong: #2a5540;
-    --text: #d8f0e0;
-    --text-dim: #8ab898;
-    --text-muted: #5a8868;
-    --accent: #4ade80;
-    --accent-2: #86efac;
-    --success: #22c55e;
-    --success-bg: rgba(34,197,94,0.12);
-    --warning: #eab308;
-    --warning-bg: rgba(234,179,8,0.12);
-    --danger: #f87171;
-    --danger-bg: rgba(248,113,113,0.12);
+  [data-skin="blueprint"] body {
+    background: #1a2744;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
-  [data-skin="forest"] body { background-image: radial-gradient(ellipse at 25% 5%, rgba(74,222,128,0.08) 0%, transparent 60%), radial-gradient(ellipse at 75% 95%, rgba(34,197,94,0.05) 0%, transparent 60%); }
-  [data-skin="forest"] .brand-mark { background: linear-gradient(135deg, #4ade80, #22c55e); }
-  [data-skin="forest"] .panel { border-color: #1e4030; }
-  [data-skin="forest"] input:focus, [data-skin="forest"] select:focus { border-color: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,0.15); }
-
-  /* ===== THEME: ROSE ===== */
-  [data-skin="rose"] {
-    --bg: #1a0a14;
-    --surface: #24101c;
-    --surface-2: #2e1624;
-    --border: #3d1e30;
-    --border-strong: #522a42;
-    --text: #f8d8ec;
-    --text-dim: #c88aaa;
-    --text-muted: #985a78;
-    --accent: #f472b6;
-    --accent-2: #f9a8d4;
-    --success: #a78bfa;
-    --success-bg: rgba(167,139,250,0.12);
-    --warning: #fbbf24;
-    --warning-bg: rgba(251,191,36,0.12);
-    --danger: #fb7185;
-    --danger-bg: rgba(251,113,133,0.12);
+  [data-skin="blueprint"] * { font-family: 'JetBrains Mono', monospace !important; }
+  [data-skin="blueprint"] .panel {
+    background: rgba(30,45,77,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    box-shadow: none;
   }
-  [data-skin="rose"] body { background-image: radial-gradient(ellipse at 20% 5%, rgba(244,114,182,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 95%, rgba(167,139,250,0.06) 0%, transparent 60%); }
-  [data-skin="rose"] .brand-mark { background: linear-gradient(135deg, #f472b6, #a78bfa); }
-  [data-skin="rose"] .panel { border-color: #3d1e30; }
-  [data-skin="rose"] input:focus, [data-skin="rose"] select:focus { border-color: #f472b6; box-shadow: 0 0 0 3px rgba(244,114,182,0.15); }
+  [data-skin="blueprint"] .card { background: rgba(22,34,64,0.8); border: 1px dashed rgba(255,255,255,0.15); border-radius: 2px; }
+  [data-skin="blueprint"] input, [data-skin="blueprint"] select {
+    background: rgba(22,34,64,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    letter-spacing: 0.02em;
+  }
+  [data-skin="blueprint"] input:focus, [data-skin="blueprint"] select:focus {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
+  }
+  [data-skin="blueprint"] .brand-mark { background: transparent; border: 2px solid #fff; color: #fff; border-radius: 2px; }
+  [data-skin="blueprint"] .hero { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; }
+  [data-skin="blueprint"] .breakdown { background: rgba(22,34,64,0.6); border: 1px dashed rgba(255,255,255,0.12); border-radius: 2px; }
+  [data-skin="blueprint"] .compare-grid { background: rgba(255,255,255,0.15); }
+  [data-skin="blueprint"] .compare-col { background: rgba(30,45,77,0.9); }
+  [data-skin="blueprint"] .compare-col.best::before { background: #4ade80; border-radius: 2px; }
+  [data-skin="blueprint"] .analysis { background: rgba(30,45,77,0.9); border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; }
+  [data-skin="blueprint"] .score-bar { background: rgba(255,255,255,0.08); border-radius: 1px; }
+  [data-skin="blueprint"] .section-num { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); border-radius: 2px; }
+  [data-skin="blueprint"] header { border-bottom: 1px solid rgba(255,255,255,0.2); }
+  [data-skin="blueprint"] .custom-fields { background: rgba(22,34,64,0.6); border: 1px dashed rgba(255,255,255,0.2); border-radius: 2px; }
+  [data-skin="blueprint"] .chip { border-radius: 2px; border: 1px solid currentColor; }
+  [data-skin="blueprint"] .panel-title { letter-spacing: 0.1em; }
+  [data-skin="blueprint"] footer { border-top: 1px solid rgba(255,255,255,0.2); }
+
+  /* ===== STYLE: RETRO ===== */
+  [data-skin="retro"] {
+    --bg: #2b1d0e;
+    --surface: #3d2b1a;
+    --surface-2: #342414;
+    --border: #6b4c2a;
+    --border-strong: #8a6340;
+    --text: #f0e0c8;
+    --text-dim: #c0a880;
+    --text-muted: #8a7050;
+    --accent: #e8a040;
+    --accent-2: #f0c060;
+    --success: #80c040;
+    --success-bg: rgba(128,192,64,0.12);
+    --warning: #e8a040;
+    --warning-bg: rgba(232,160,64,0.12);
+    --danger: #d05030;
+    --danger-bg: rgba(208,80,48,0.12);
+  }
+  [data-skin="retro"] body {
+    background: #2b1d0e;
+    background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E");
+  }
+  [data-skin="retro"] * { font-family: 'Courier New', Courier, monospace !important; }
+  [data-skin="retro"] .panel {
+    background: #3d2b1a;
+    border: 2px solid #6b4c2a;
+    border-radius: 8px;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+  }
+  [data-skin="retro"] .card { background: #342414; border: 1px solid #6b4c2a; border-radius: 6px; }
+  [data-skin="retro"] input, [data-skin="retro"] select {
+    background: #2b1d0e;
+    border: 2px inset #6b4c2a;
+    border-radius: 4px;
+    color: #e8a040;
+  }
+  [data-skin="retro"] input:focus, [data-skin="retro"] select:focus {
+    border-color: #e8a040;
+    box-shadow: 0 0 8px rgba(232,160,64,0.3);
+  }
+  [data-skin="retro"] .brand-mark { background: #e8a040; color: #2b1d0e; border-radius: 4px; font-weight: 800; }
+  [data-skin="retro"] .hero { background: #342414; border: 2px solid #6b4c2a; border-radius: 8px; }
+  [data-skin="retro"] .hero-value { color: #e8a040; text-shadow: 0 0 10px rgba(232,160,64,0.3); }
+  [data-skin="retro"] .breakdown { background: #2b1d0e; border: 1px solid #6b4c2a; border-radius: 6px; }
+  [data-skin="retro"] .compare-grid { background: #6b4c2a; }
+  [data-skin="retro"] .compare-col { background: #3d2b1a; }
+  [data-skin="retro"] .compare-col.best::before { background: #80c040; border-radius: 3px; }
+  [data-skin="retro"] .analysis { background: #3d2b1a; border: 2px solid #6b4c2a; border-radius: 8px; }
+  [data-skin="retro"] .score-bar { background: #2b1d0e; border: 1px solid #6b4c2a; border-radius: 3px; height: 6px; }
+  [data-skin="retro"] .section-num { background: #6b4c2a; color: #f0e0c8; border: none; border-radius: 4px; }
+  [data-skin="retro"] header { border-bottom: 2px solid #6b4c2a; }
+  [data-skin="retro"] .custom-fields { background: #2b1d0e; border: 2px dashed #6b4c2a; border-radius: 6px; }
+  [data-skin="retro"] .chip { border-radius: 4px; border: 1px solid currentColor; }
+  [data-skin="retro"] footer { border-top: 2px solid #6b4c2a; }
+
+  /* ===== STYLE: TERMINAL ===== */
+  [data-skin="terminal"] {
+    --bg: #0a0a0a;
+    --surface: #0f0f0f;
+    --surface-2: #141414;
+    --border: #1a3a1a;
+    --border-strong: #2a5a2a;
+    --text: #33ff33;
+    --text-dim: #22aa22;
+    --text-muted: #116611;
+    --accent: #33ff33;
+    --accent-2: #66ff66;
+    --success: #33ff33;
+    --success-bg: rgba(51,255,51,0.08);
+    --warning: #ffff33;
+    --warning-bg: rgba(255,255,51,0.08);
+    --danger: #ff3333;
+    --danger-bg: rgba(255,51,51,0.08);
+  }
+  [data-skin="terminal"] body {
+    background: #0a0a0a;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(51,255,51,0.02) 2px, rgba(51,255,51,0.02) 4px);
+  }
+  [data-skin="terminal"] * { font-family: 'JetBrains Mono', 'Courier New', monospace !important; }
+  [data-skin="terminal"] .app { max-width: 900px; }
+  [data-skin="terminal"] .panel {
+    background: #0f0f0f;
+    border: 1px solid #1a3a1a;
+    border-radius: 0;
+    box-shadow: 0 0 20px rgba(51,255,51,0.05);
+  }
+  [data-skin="terminal"] .card { background: #0a0a0a; border: 1px solid #1a3a1a; border-radius: 0; }
+  [data-skin="terminal"] input, [data-skin="terminal"] select {
+    background: #0a0a0a;
+    border: 1px solid #1a3a1a;
+    border-radius: 0;
+    color: #33ff33;
+    text-shadow: 0 0 4px rgba(51,255,51,0.3);
+  }
+  [data-skin="terminal"] input:focus, [data-skin="terminal"] select:focus {
+    border-color: #33ff33;
+    box-shadow: 0 0 8px rgba(51,255,51,0.2);
+  }
+  [data-skin="terminal"] .brand-mark { background: #33ff33; color: #0a0a0a; border-radius: 0; font-weight: 800; text-shadow: none; }
+  [data-skin="terminal"] .brand-name { color: #33ff33; text-shadow: 0 0 6px rgba(51,255,51,0.3); }
+  [data-skin="terminal"] .brand-tag { border-color: #1a3a1a; color: #22aa22; }
+  [data-skin="terminal"] .hero { background: #0a0a0a; border: 1px solid #1a3a1a; border-radius: 0; }
+  [data-skin="terminal"] .hero-value { color: #33ff33; text-shadow: 0 0 12px rgba(51,255,51,0.4); }
+  [data-skin="terminal"] .breakdown { background: #0a0a0a; border: 1px solid #1a3a1a; border-radius: 0; }
+  [data-skin="terminal"] .compare-grid { background: #1a3a1a; }
+  [data-skin="terminal"] .compare-col { background: #0f0f0f; }
+  [data-skin="terminal"] .compare-col.best::before { background: #33ff33; color: #0a0a0a; border-radius: 0; }
+  [data-skin="terminal"] .analysis { background: #0f0f0f; border: 1px solid #1a3a1a; border-radius: 0; }
+  [data-skin="terminal"] .score-bar { background: #1a3a1a; border-radius: 0; height: 4px; }
+  [data-skin="terminal"] .score-fill { border-radius: 0; box-shadow: 0 0 6px currentColor; }
+  [data-skin="terminal"] .section-num { background: #1a3a1a; color: #33ff33; border: none; border-radius: 0; }
+  [data-skin="terminal"] header { border-bottom: 1px solid #1a3a1a; }
+  [data-skin="terminal"] .custom-fields { background: #0a0a0a; border: 1px dashed #1a3a1a; border-radius: 0; }
+  [data-skin="terminal"] .chip { border-radius: 0; border: 1px solid currentColor; text-shadow: 0 0 4px currentColor; }
+  [data-skin="terminal"] .panel-title { color: #22aa22; }
+  [data-skin="terminal"] .metric-label { color: #116611; }
+  [data-skin="terminal"] .breakdown-title { color: #116611; }
+  [data-skin="terminal"] footer { border-top: 1px solid #1a3a1a; color: #116611; }
+  [data-skin="terminal"] ::-webkit-scrollbar-thumb { background: #1a3a1a; border-radius: 0; }
 
   /* SKIN SELECTOR */
   .skin-selector {
@@ -188,11 +358,11 @@
   .skin-dot:hover { transform: scale(1.15); }
   .skin-dot.active { border-color: var(--text); box-shadow: 0 0 0 2px var(--bg); }
   .skin-dot[data-skin="minimal"] { background: linear-gradient(135deg, #fafafa, #09090b); }
-  .skin-dot[data-skin="neon"] { background: linear-gradient(135deg, #a855f7, #22d3ee); }
-  .skin-dot[data-skin="sunset"] { background: linear-gradient(135deg, #f97316, #fbbf24); }
-  .skin-dot[data-skin="ocean"] { background: linear-gradient(135deg, #38bdf8, #2dd4bf); }
-  .skin-dot[data-skin="forest"] { background: linear-gradient(135deg, #4ade80, #22c55e); }
-  .skin-dot[data-skin="rose"] { background: linear-gradient(135deg, #f472b6, #a78bfa); }
+  .skin-dot[data-skin="glass"] { background: linear-gradient(135deg, #818cf8, #0c0c1d); }
+  .skin-dot[data-skin="brutal"] { background: linear-gradient(135deg, #f5f0e8, #000); }
+  .skin-dot[data-skin="blueprint"] { background: linear-gradient(135deg, #1a2744, #fff); }
+  .skin-dot[data-skin="retro"] { background: linear-gradient(135deg, #e8a040, #2b1d0e); }
+  .skin-dot[data-skin="terminal"] { background: linear-gradient(135deg, #33ff33, #0a0a0a); }
   .skin-dot[title]:hover::after {
     content: attr(title);
     position: absolute;
@@ -731,11 +901,11 @@
     <div class="header-actions">
       <div class="skin-selector" id="skin-selector">
         <div class="skin-dot active" data-skin="minimal" title="Minimal" onclick="setSkin('minimal')"></div>
-        <div class="skin-dot" data-skin="neon" title="Neon" onclick="setSkin('neon')"></div>
-        <div class="skin-dot" data-skin="sunset" title="Sunset" onclick="setSkin('sunset')"></div>
-        <div class="skin-dot" data-skin="ocean" title="Ocean" onclick="setSkin('ocean')"></div>
-        <div class="skin-dot" data-skin="forest" title="Forest" onclick="setSkin('forest')"></div>
-        <div class="skin-dot" data-skin="rose" title="Rose" onclick="setSkin('rose')"></div>
+        <div class="skin-dot" data-skin="glass" title="Glass" onclick="setSkin('glass')"></div>
+        <div class="skin-dot" data-skin="brutal" title="Brutal" onclick="setSkin('brutal')"></div>
+        <div class="skin-dot" data-skin="blueprint" title="Blueprint" onclick="setSkin('blueprint')"></div>
+        <div class="skin-dot" data-skin="retro" title="Retro" onclick="setSkin('retro')"></div>
+        <div class="skin-dot" data-skin="terminal" title="Terminal" onclick="setSkin('terminal')"></div>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" title="Alternar claro/escuro">
         <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1139,14 +1309,14 @@
     if (res.inviavel || res.lucro <= 0) {
       linhas.push(`<p>No <strong>${canal.nome}</strong>, a margem alvo de ${(margemPct*100).toFixed(0)}% torna o produto inviável. As taxas consomem ${((res.taxas/(res.preco||1))*100).toFixed(1)}% do preço final. Considere reduzir custos de produção, aumentar a margem alvo ou migrar para um canal com taxas menores.</p>`);
     } else {
-      linhas.push(`<p>Via <strong>${canal.nome}</strong>, o preço sugerido de <strong>${brl(res.preco)}</strong> gera lucro líquido de <strong>${brl(res.lucro)}</strong> (${res.margemReal.toFixed(1)}% de margem real). O lucro por hora é de <strong>${brl(lph)}</strong>${lph < 15 ? ', abaixo do mínimo recomendado de R$ 15/h — avalie se o tempo investido compensa.' : ', dentro de uma faixa saudável.'}</p>`);
+      linhas.push(`<p>Via <strong>${canal.nome}</strong>, o preço sugerido de <strong>${brl(res.preco)}</strong> gera lucro líquido de <strong>${brl(res.lucro)}</strong> (${res.margemReal.toFixed(1)}% de margem real). O lucro por hora é de <strong>${brl(lph)}</strong>${lph < 15 ? ', abaixo do mínimo recomendado de R$ 15/h - avalie se o tempo investido compensa.' : ', dentro de uma faixa saudável.'}</p>`);
     }
 
     if (comparados.length > 1) {
       const melhor = comparados[0];
       const atual = comparados.find(c => c.id === canal.id);
       if (atual && melhor.id !== canal.id) {
-        linhas.push(`<p>O canal mais lucrativo para esta peça é o <strong>${melhor.nome}</strong>, com lucro de <strong>${brl(melhor.lucro)}</strong> — ${brl(melhor.lucro - res.lucro)} a mais que o ${canal.nome}. Vale avaliar a migração.</p>`);
+        linhas.push(`<p>O canal mais lucrativo para esta peça é o <strong>${melhor.nome}</strong>, com lucro de <strong>${brl(melhor.lucro)}</strong> - ${brl(melhor.lucro - res.lucro)} a mais que o ${canal.nome}. Vale avaliar a migração.</p>`);
       }
     }
 

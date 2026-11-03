@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia ROAS - Mentoria 3D EUA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+
+:root {
+  --bg: #ffffff;
+  --text: #1a1a2e;
+  --text-dim: #555;
+  --accent: #00b894;
+  --warn: #fdcb6e;
+  --danger: #e17055;
+  --ok: #00b894;
+  --border: #e0e0e0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 3rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-dim);
+  margin-bottom: 3rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+p { margin-bottom: 1rem; color: var(--text); }
+
+.formula-box {
+  background: #f8f9fa;
+  border-left: 4px solid var(--accent);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.formula {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.example-box {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.example-box.good {
+  background: #d4edda;
+  border-color: #28a745;
+}
+
+.example-box.bad {
+  background: #f8d7da;
+  border-color: #dc3545;
+}
+
+.example-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+th {
+  background: #f8f9fa;
+  font-weight: 700;
+}
+
+.highlight {
+  background: #fff3cd;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.tip-box {
+  background: #e8f5e9;
+  border-left: 4px solid var(--ok);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.warning-box {
+  background: #fff3e0;
+  border-left: 4px solid var(--warn);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.danger-box {
+  background: #ffebee;
+  border-left: 4px solid var(--danger);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+@media print {
+  body { padding: 1rem; }
+  .formula-box, .example-box, .tip-box, .warning-box, .danger-box {
+    break-inside: avoid;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>📊 Guia ROAS</h1>
+<p class="subtitle">Return on Ad Spend - Explicado de forma simples<br>Mentoria 3D EUA · Arthur + Guilherme</p>
+
+<h2>O que é ROAS?</h2>
+<p>ROAS significa <strong>Return on Ad Spend</strong>, ou seja, <em>Retorno sobre o Gasto em Anúncios</em>.</p>
+<p>Pense assim: se você coloca dinheiro numa máquina de vender, quanto volta pra você? O ROAS mede exatamente isso - <strong>quantos dólares voltam pra cada dólar que você gastou em anúncio</strong>.</p>
+
+<div class="formula-box">
+  <p style="text-align: center; margin-bottom: 0.5rem; color: var(--text-dim);">A fórmula é simples:</p>
+  <div class="formula">ROAS = Receita dos Ads ÷ Gasto em Ads</div>
+</div>
+
+<h2>Exemplo Prático (como se fosse uma história)</h2>
+
+<div class="example-box good">
+  <div class="example-title">✅ Exemplo BOM</div>
+  <p>Você gastou <strong>$100</strong> em anúncios no Facebook.<br>
+  Esses anúncios geraram <strong>$500</strong> em vendas.</p>
+  <p><strong>ROAS = $500 ÷ $100 = <span class="highlight">5.0</span></strong></p>
+  <p>Significa: pra cada $1 que você colocou na máquina, voltaram $5. 🎉</p>
+</div>
+
+<div class="example-box bad">
+  <div class="example-title">❌ Exemplo RUIM</div>
+  <p>Você gastou <strong>$100</strong> em anúncios.<br>
+  Esses anúncios geraram apenas <strong>$150</strong> em vendas.</p>
+  <p><strong>ROAS = $150 ÷ $100 = <span class="highlight">1.5</span></strong></p>
+  <p>Significa: pra cada $1 que você colocou, voltaram só $1,50. Mas espera... você ainda tem custo de produto, taxas da plataforma, etc. Na prática, <strong>você tá perdendo dinheiro</strong>. 🚨</p>
+</div>
+
+<h2>📋 A Tabela do ROAS (seu GPS do dinheiro)</h2>
+
+<p>Pense na tabela do ROAS como um <strong>semáforo do seu dinheiro</strong>. Cada cor te diz o que fazer com a campanha de ads que você tá rodando. Vamos entender cada linha:</p>
+
+<h3>🔴 ROAS menor que 1.0 - "Tô perdendo dinheiro direto!"</h3>
+<p>Imagine que você coloca $100 numa máquina e volta só $80. <strong>Você perdeu $20 na hora.</strong> Não tem conversa, não tem "talvez melhore": pausar a campanha agora.</p>
+<p><em>Exemplo: gastei $100 em ads e vendi $80 → ROAS 0.8 → prejuízo imediato.</em></p>
+
+<h3>🟠 ROAS entre 1.0 e 1.9 - "Parece que tá vendendo, mas é ilusão"</h3>
+<p>É a pegadinha mais perigosa! Você olha as vendas e pensa "uhul, tô vendendo!". Mas depois de descontar o custo do produto, as taxas da plataforma e o próprio gasto em ads... <strong>tá no prejuízo</strong>.</p>
+<p><em>Exemplo: gastei $100 em ads, vendi $150. ROAS 1.5. Mas o produto custou $60 pra fazer + $10 de taxa = $70 de custo. Lucro: $150 - $100 - $70 = -$20. Prejuízo de $20 mesmo vendendo!</em></p>
+
+<h3>🟡 ROAS entre 2.0 e 3.0 - "Tô no limite, cuidado"</h3>
+<p>Aqui é o <strong>ponto de equilíbrio</strong>. Você não tá perdendo dinheiro, mas também não tá lucrando quase nada. Depende muito da sua margem de lucro. Se seu produto tem margem alta (tipo 60%), um ROAS 2.5 tá ok. Se a margem é baixa (tipo 30%), ROAS 2.5 ainda pode ser prejuízo.</p>
+<p><em>Dica: calcule sua margem antes de decidir. Na dúvida, otimiza o anúncio ou aumenta o preço.</em></p>
+
+<h3>🟢 ROAS entre 3.0 e 5.0 - "Tô lucrando de verdade!"</h3>
+<p>Esse é o <strong>ROAS saudável</strong>. Cada $1 que você coloca em ads volta $3 a $5. Mesmo descontando todos os custos, sobra um lucro gostoso. Mantém a campanha rodando e vai aumentando aos poucos.</p>
+<p><em>Exemplo: gastei $100, vendi $400 (ROAS 4.0). Produto custou $120 + taxa $26. Lucro: $400 - $100 - $120 - $26 = $154 no bolso! 💰</em></p>
+
+<h3>🚀 ROAS maior que 5.0 - "Achei a mina de ouro!"</h3>
+<p>A campanha tá funcionando demais! Cada $1 volta $5 ou mais. <strong>É hora de escalar</strong>: aumenta o orçamento, testa mais produtos parecidos, multiplica o que tá dando certo.</p>
+<p><em>Exemplo: gastei $100, vendi $700 (ROAS 7.0). Isso é dinheiro entrando forte. Bota mais $200 na campanha e vê se mantém.</em></p>
+
+<h3>⚡ Resumo visual da tabela</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>ROAS</th>
+      <th>O que significa</th>
+      <th>O que fazer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>&lt; 1.0</strong></td>
+      <td>Tá perdendo dinheiro direto. Cada $1 gasto volta menos de $1.</td>
+      <td>🛑 <strong>PAUSAR</strong> imediatamente</td>
+    </tr>
+    <tr>
+      <td><strong>1.0 – 1.9</strong></td>
+      <td>Parece que tá vendendo, mas depois de descontar custos, tá no prejuízo.</td>
+      <td>⚠️ <strong>Otimizar ou pausar</strong></td>
+    </tr>
+    <tr>
+      <td><strong>2.0 – 3.0</strong></td>
+      <td>Tá no limite. Depende da sua margem de lucro pra saber se vale.</td>
+      <td>🔍 <strong>Analisar custos</strong> com cuidado</td>
+    </tr>
+    <tr>
+      <td><strong>3.0 – 5.0</strong></td>
+      <td>Saudável! Tá lucrando de verdade.</td>
+      <td>✅ <strong>Manter e escalar</strong></td>
+    </tr>
+    <tr>
+      <td><strong>&gt; 5.0</strong></td>
+      <td>Excelente! A máquina tá funcionando demais.</td>
+      <td>🚀 <strong>Escalar agressivamente</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="warning-box">
+  <strong>⚠️ Por que ROAS abaixo de 2 é ruim?</strong><br>
+  Porque seu produto tem custos além do anúncio: filamento, energia, tempo de impressão, taxas da plataforma (Etsy cobra ~6,5%), embalagem, envio... Se o ROAS é 2, significa que pra cada $1 gasto em ads, voltou $2. Mas desses $2, tira o custo do produto (~$0,60-$0,80), tira as taxas (~$0,13), tira o gasto com ads ($1)... sobra quase nada ou até negativo. <strong>ROAS 2 é o ponto de equilíbrio, não é lucro!</strong>
+</div>
+
+<h2>Exemplo Real Completo (pra entender de vez)</h2>
+
+<div class="example-box good">
+  <div class="example-title">📦 Semana BOA - Produto: Suporte de Fone Personalizado</div>
+  <p><strong>Gasto em ads:</strong> $150<br>
+  <strong>Vendas geradas:</strong> 12 unidades × $50 = <strong>$600</strong></p>
+  <p><strong>ROAS = $600 ÷ $150 = <span class="highlight">4.0</span> ✅</strong></p>
+  <hr style="margin: 1rem 0; border: none; border-top: 1px dashed #ccc;">
+  <p><strong>Mas qual foi o LUCRO REAL?</strong></p>
+  <p>Custo do produto (filamento + energia): 12 × $18 = $216<br>
+  Taxas Etsy (6,5%): $600 × 0,065 = $39<br>
+  Gasto em ads: $150</p>
+  <p><strong>Lucro líquido = $600 - $216 - $39 - $150 = <span class="highlight">$195 💰</span></strong></p>
+</div>
+
+<div class="example-box bad">
+  <div class="example-title">📦 Semana RUIM - Mesma campanha, performance caiu</div>
+  <p><strong>Gasto em ads:</strong> $200<br>
+  <strong>Vendas geradas:</strong> 7 unidades × $40 = <strong>$280</strong></p>
+  <p><strong>ROAS = $280 ÷ $200 = <span class="highlight">1.4</span> ❌</strong></p>
+  <hr style="margin: 1rem 0; border: none; border-top: 1px dashed #ccc;">
+  <p><strong>E o lucro?</strong></p>
+  <p>Custo do produto: 7 × $18 = $126<br>
+  Taxas Etsy: $280 × 0,065 = $18<br>
+  Gasto em ads: $200</p>
+  <p><strong>Lucro líquido = $280 - $126 - $18 - $200 = <span class="highlight">-$64 🚨 PREJUÍZO</span></strong></p>
+  <p style="margin-top: 0.5rem; color: #dc3545; font-weight: 600;">Mesmo vendendo 7 produtos, perdeu $64! Por isso ROAS baixo é perigoso.</p>
+</div>
+
+<h2>Benchmarks por Plataforma</h2>
+<p>Cada plataforma tem um "ROAS mínimo aceitável" diferente:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Plataforma</th>
+      <th>Mínimo Aceitável</th>
+      <th>Bom</th>
+      <th>Excelente</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Facebook / Instagram Ads</td>
+      <td>2.0</td>
+      <td>3.0 – 5.0</td>
+      <td>&gt; 5.0</td>
+    </tr>
+    <tr>
+      <td>Etsy Ads</td>
+      <td>2.5</td>
+      <td>4.0 – 6.0</td>
+      <td>&gt; 6.0</td>
+    </tr>
+    <tr>
+      <td>Google Shopping</td>
+      <td>3.0</td>
+      <td>5.0 – 8.0</td>
+      <td>&gt; 8.0</td>
+    </tr>
+    <tr>
+      <td>TikTok Ads</td>
+      <td>1.5</td>
+      <td>3.0 – 4.0</td>
+      <td>&gt; 4.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="tip-box">
+  <strong>💡 Dica importante:</strong> Produtos personalizados de impressão 3D tendem a ter ROAS melhor que dropshipping, porque têm menos concorrência direta e ticket médio mais alto. Use isso a seu favor!
+</div>
+
+<h2>Quando Pausar, Otimizar ou Escalar?</h2>
+
+<div class="danger-box">
+  <strong>🛑 PAUSAR quando:</strong>
+  <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+    <li>ROAS &lt; 1.0 por mais de 3 dias seguidos</li>
+    <li>CTR (taxa de clique) &lt; 0,5%</li>
+    <li>CPC (custo por clique) subiu mais de 50% sem aumentar vendas</li>
+    <li>Produto com margem baixa + ROAS &lt; 2.0</li>
+  </ul>
+</div>
+
+<div class="warning-box">
+  <strong>🔧 OTIMIZAR quando:</strong>
+  <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+    <li>ROAS entre 1.5 e 2.5 (tá perto do limite)</li>
+    <li>CTR bom (&gt; 1%) mas poucas vendas → problema no listing/preço</li>
+    <li>Muitos cliques mas poucas vendas → descrição ou fotos fracas</li>
+    <li>Muito alcance mas poucos cliques → criativo do anúncio fraco</li>
+  </ul>
+</div>
+
+<div class="tip-box">
+  <strong>🚀 ESCALAR quando:</strong>
+  <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+    <li>ROAS &gt; 3.0 consistente por 7+ dias</li>
+    <li>Margem líquida positiva após todos os custos</li>
+    <li>Estoque/capacidade de produção suporta aumento</li>
+  </ul>
+</div>
+
+<h2>Checklist Rápido</h2>
+<table>
+  <tbody>
+    <tr><td>☐</td><td>Sei calcular ROAS (Receita ÷ Gasto)</td></tr>
+    <tr><td>☐</td><td>Sei que ROAS &lt; 2 = sinal de alerta</td></tr>
+    <tr><td>☐</td><td>Sei diferenciar ROAS de lucro líquido</td></tr>
+    <tr><td>☐</td><td>Sei quando pausar, otimizar ou escalar</td></tr>
+    <tr><td>☐</td><td>Conheço os benchmarks da minha plataforma</td></tr>
+    <tr><td>☐</td><td>Estou monitorando ROAS semanalmente</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  <p>Material exclusivo da Mentoria 3D EUA · Não distribuir fora da turma</p>
+  <p>Arthur Sircilli + Guilherme (@3dmagiclabs) · 2026</p>
+</footer>
+
+</body>
+</html>
+    <tr>
+      <td>TikTok Ads</td>
+      <td>1.5</td>
+      <td>3.0 – 4.0</td>
+      <td>&gt; 4.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="tip-box">
+  <strong>💡 Dica importante:</strong> Produtos personalizados de impressão 3D tendem a ter ROAS melhor que dropshipping, porque têm menos concorrência direta e ticket médio mais alto. Use isso a seu favor!
+</div>
+
+<h2>Quando Pausar, Otimizar ou Escalar?</h2>
+
+<div class="danger-box">
+  <strong>🛑 PAUSAR quando:</strong>
+  <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+    <li>ROAS &lt; 1.0 por mais de 3 dias seguidos</li>
+    <li>CTR (taxa de clique) &lt; 0,5%</li>
+    <li>CPC (custo por clique) subiu mais de 50% sem aumentar vendas</li>
+    <li>Produto com margem baixa + ROAS &lt; 2.0</li>
+  </ul>
+</div>
+
+<div class="warning-box">
+  <strong>🔧 OTIMIZAR quando:</strong>
+  <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+    <li>ROAS entre 1.5 e 2.5 (tá perto do limite)</li>
+    <li>CTR bom (&gt; 1%) mas poucas vendas → problema no listing/preço</li>
+    <li>Muitos cliques mas poucas vendas → descrição ou fotos fracas</li>
+    <li>Muito alcance mas poucos cliques → criativo do anúncio fraco</li>
+  </ul>
+</div>
+
+<div class="tip-box">
+  <strong>🚀 ESCALAR quando:</strong>
+  <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
