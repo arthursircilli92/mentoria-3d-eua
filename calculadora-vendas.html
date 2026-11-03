@@ -93,9 +93,7 @@
   [data-theme="dark"] .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; }
   [data-theme="dark"] input, [data-theme="dark"] select {
     background: #1a1a30; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: #f0f0ff;
-  }
-  [data-theme="dark"] select {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0c0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
   }
   [data-theme="dark"] select option {
     background: #1a1a30; color: #f0f0ff;
@@ -382,11 +380,17 @@
     font-family: 'Inter', sans-serif;
     font-weight: 500;
     appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     cursor: pointer;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 30px;
+    background-position: right 12px center;
+    background-size: 10px;
+    padding-right: 32px;
+  }
+  [data-theme="dark"] select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a0a0c0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
   }
 
   .time-row {
@@ -825,28 +829,28 @@
           <div class="section-label"><span class="section-num">4</span> Ads & ROAS</div>
           <div class="field-grid">
             <div class="field">
-              <label>CPC médio <span class="hint">$/clique</span></label>
+              <label>CPC médio <span class="hint" title="Cost Per Click: custo médio pago por cada clique no anúncio">$/clique ⓘ</span></label>
               <div class="input-wrap">
                 <span class="input-affix pre">$</span>
                 <input type="number" id="cpc" class="with-pre" value="0.45" min="0.01" step="0.05" oninput="calcular()">
               </div>
             </div>
             <div class="field">
-              <label>CTR <span class="hint">taxa de clique %</span></label>
+              <label>CTR <span class="hint" title="Click-Through Rate: % de pessoas que clicam no anúncio após vê-lo">taxa de clique ⓘ</span></label>
               <div class="input-wrap">
                 <input type="number" id="ctr" class="with-suf" value="2.5" min="0.1" max="20" step="0.1" oninput="calcular()">
                 <span class="input-affix suf">%</span>
               </div>
             </div>
             <div class="field">
-              <label>CVR <span class="hint">conversão %</span></label>
+              <label>CVR <span class="hint" title="Conversion Rate: % de cliques que resultam em venda efetiva">conversão ⓘ</span></label>
               <div class="input-wrap">
                 <input type="number" id="cvr" class="with-suf" value="3.0" min="0.1" max="30" step="0.1" oninput="calcular()">
                 <span class="input-affix suf">%</span>
               </div>
             </div>
             <div class="field">
-              <label>Vendas/mês <span class="hint">estimativa</span></label>
+              <label>Vendas/mês <span class="hint" title="Estimativa de vendas mensais para projeção de lucro">estimativa ⓘ</span></label>
               <div class="input-wrap">
                 <input type="number" id="vendas_mes" class="with-suf" value="30" min="1" step="5" oninput="calcular()">
                 <span class="input-affix suf">/mês</span>
