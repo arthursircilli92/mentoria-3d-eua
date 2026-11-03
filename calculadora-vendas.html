@@ -28,6 +28,12 @@
     --danger: #dc2626;
     --danger-bg: rgba(220,38,38,0.1);
   }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
   body {
     background: #eef0f8;
     background-image:
@@ -188,7 +194,7 @@
   .projection-value { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { font-size: 14px; }
+  html { font-size: 14px; overflow-x: hidden; width: 100%; }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
@@ -196,6 +202,9 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -466,11 +475,15 @@
   }
   .hero-value {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 42px;
+    font-size: clamp(28px, 4vw, 42px);
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1;
     margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
   }
   .hero-sub {
     font-size: 12.5px;
