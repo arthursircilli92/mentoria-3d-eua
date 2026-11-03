@@ -8,43 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #fafafa;
-    --surface: #ffffff;
-    --surface-2: #f4f4f5;
-    --border: #e4e4e7;
-    --border-strong: #d4d4d8;
-    --text: #09090b;
-    --text-dim: #52525b;
-    --text-muted: #a1a1aa;
-    --accent: #09090b;
-    --accent-2: #2563eb;
-    --success: #059669;
-    --success-bg: #ecfdf5;
-    --warning: #d97706;
-    --warning-bg: #fffbeb;
-    --danger: #dc2626;
-    --danger-bg: #fef2f2;
-  }
-  [data-theme="dark"] {
-    --bg: #09090b;
-    --surface: #0a0a0a;
-    --surface-2: #18181b;
-    --border: #27272a;
-    --border-strong: #3f3f46;
-    --text: #fafafa;
-    --text-dim: #a1a1aa;
-    --text-muted: #71717a;
-    --accent: #fafafa;
-    --accent-2: #60a5fa;
-    --success: #34d399;
-    --success-bg: #052e16;
-    --warning: #fbbf24;
-    --warning-bg: #422006;
-    --danger: #f87171;
-    --danger-bg: #450a0a;
-  }
-
   /* ===== GLASS THEME ===== */
   /* Light */
   :root {
@@ -129,7 +92,13 @@
   }
   [data-theme="dark"] .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; }
   [data-theme="dark"] input, [data-theme="dark"] select {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; backdrop-filter: blur(8px);
+    background: #1a1a30; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: #f0f0ff;
+  }
+  [data-theme="dark"] select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0c0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  }
+  [data-theme="dark"] select option {
+    background: #1a1a30; color: #f0f0ff;
   }
   [data-theme="dark"] input:focus, [data-theme="dark"] select:focus {
     border-color: rgba(129,140,248,0.6); box-shadow: 0 0 0 3px rgba(129,140,248,0.15), 0 0 20px rgba(129,140,248,0.1);
@@ -156,8 +125,48 @@
   [data-theme="dark"] .panel-title { color: #c0c0e0; }
   [data-theme="dark"] .label { color: #a0a0c0; }
   [data-theme="dark"] footer { color: #808098; }
-    z-index: 10;
-  }
+
+  /* ===== ROAS PANEL ===== */
+  .roas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+  .roas-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-align: center; transition: transform 0.15s, box-shadow 0.15s; }
+  .roas-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(99,102,241,0.1); }
+  [data-theme="dark"] .roas-card { background: #16162e; border-color: rgba(255,255,255,0.08); }
+  [data-theme="dark"] .roas-card:hover { box-shadow: 0 4px 16px rgba(129,140,248,0.15); }
+  .roas-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  .roas-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; }
+  .roas-value.success { color: var(--success); }
+  .roas-value.warning { color: var(--warning); }
+  .roas-value.danger { color: var(--danger); }
+  .roas-verdict { padding: 14px 16px; border-radius: 10px; font-size: 12px; line-height: 1.6; font-weight: 500; }
+  .roas-verdict.success { background: var(--success-bg); color: var(--success); border: 1px solid rgba(5,150,105,0.15); }
+  .roas-verdict.warning { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(217,119,6,0.15); }
+  .roas-verdict.danger { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(220,38,38,0.15); }
+  [data-theme="dark"] .roas-verdict.success { border-color: rgba(52,211,153,0.2); }
+  [data-theme="dark"] .roas-verdict.warning { border-color: rgba(251,191,36,0.2); }
+  [data-theme="dark"] .roas-verdict.danger { border-color: rgba(248,113,113,0.2); }
+
+  /* ===== ADVANCED MODE TOGGLE ===== */
+  .mode-toggle { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 8px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; }
+  [data-theme="dark"] .mode-toggle { background: #16162e; border-color: rgba(255,255,255,0.08); }
+  .mode-toggle label { font-size: 12px; color: var(--text-dim); cursor: pointer; user-select: none; font-weight: 500; }
+  .toggle-switch { position: relative; width: 38px; height: 20px; background: var(--border-strong); border-radius: 10px; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+  .toggle-switch.active { background: var(--accent); }
+  .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .toggle-switch.active::after { transform: translateX(18px); }
+  .advanced-fields { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); animation: fadeIn 0.2s ease; }
+  .advanced-fields.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== PROFIT GOAL BADGE ===== */
+  .profit-goal-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-left: 8px; letter-spacing: 0.02em; }
+  .profit-goal-badge.met { background: var(--success-bg); color: var(--success); }
+  .profit-goal-badge.missed { background: var(--danger-bg); color: var(--danger); }
+
+  /* ===== MONTHLY PROJECTION HIGHLIGHT ===== */
+  .projection-highlight { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(129,140,248,0.03)); border: 1px solid rgba(99,102,241,0.12); border-radius: 10px; margin-top: 12px; }
+  [data-theme="dark"] .projection-highlight { background: linear-gradient(135deg, rgba(129,140,248,0.08), rgba(167,139,250,0.04)); border-color: rgba(129,140,248,0.15); }
+  .projection-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .projection-value { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 14px; }
@@ -796,16 +805,52 @@
               <label>Canal principal</label>
               <select id="canal" onchange="calcular()">
                 <option value="etsy" data-taxa="0.065" data-fixa="1.10" data-nome="Etsy">Etsy</option>
-                <option value="ml" data-taxa="0.14" data-fixa="6.75" data-nome="Mercado Livre">Mercado Livre</option>
-                <option value="shopee" data-taxa="0.20" data-fixa="0" data-nome="Shopee">Shopee</option>
-                <option value="fb" data-taxa="0.05" data-fixa="0" data-nome="Facebook">Facebook Marketplace</option>
-                <option value="amz" data-taxa="0.15" data-fixa="0" data-nome="Amazon">Amazon (handmade)</option>
-                <option value="direta" data-taxa="0.0499" data-fixa="0" data-nome="Venda Direta">Venda Direta (Pix/Boleto)</option>
+                <option value="amz" data-taxa="0.15" data-fixa="0" data-nome="Amazon Handmade">Amazon Handmade</option>
+                <option value="ebay" data-taxa="0.13" data-fixa="0.30" data-nome="eBay">eBay</option>
+                <option value="tiktok" data-taxa="0.08" data-fixa="0" data-nome="TikTok Shop">TikTok Shop</option>
+                <option value="fb" data-taxa="0.05" data-fixa="0" data-nome="Facebook Marketplace">Facebook Marketplace</option>
+                <option value="temu" data-taxa="0.10" data-fixa="0" data-nome="Temu">Temu</option>
+                <option value="shopify" data-taxa="0.029" data-fixa="0.30" data-nome="Shopify (own store)">Shopify (own store)</option>
+                <option value="direta" data-taxa="0.03" data-fixa="0" data-nome="Direct Sale">Direct Sale (Zelle/CashApp)</option>
               </select>
             </div>
             <div class="field">
               <label>Margem alvo <span class="hint" id="margem-hint">50%</span></label>
               <input type="number" id="margem" value="50" min="10" max="80" step="5" oninput="document.getElementById('margem-hint').textContent=this.value+'%'; calcular()">
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-label"><span class="section-num">4</span> Ads & ROAS</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>CPC médio <span class="hint">$/clique</span></label>
+              <div class="input-wrap">
+                <span class="input-affix pre">$</span>
+                <input type="number" id="cpc" class="with-pre" value="0.45" min="0.01" step="0.05" oninput="calcular()">
+              </div>
+            </div>
+            <div class="field">
+              <label>CTR <span class="hint">taxa de clique %</span></label>
+              <div class="input-wrap">
+                <input type="number" id="ctr" class="with-suf" value="2.5" min="0.1" max="20" step="0.1" oninput="calcular()">
+                <span class="input-affix suf">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>CVR <span class="hint">conversão %</span></label>
+              <div class="input-wrap">
+                <input type="number" id="cvr" class="with-suf" value="3.0" min="0.1" max="30" step="0.1" oninput="calcular()">
+                <span class="input-affix suf">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Vendas/mês <span class="hint">estimativa</span></label>
+              <div class="input-wrap">
+                <input type="number" id="vendas_mes" class="with-suf" value="30" min="1" step="5" oninput="calcular()">
+                <span class="input-affix suf">/mês</span>
+              </div>
             </div>
           </div>
         </div>
@@ -869,6 +914,38 @@
         <div class="compare-grid" id="compare-grid">
           <!-- populado por JS -->
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">📊 Ads & ROAS Simulator</div>
+        </div>
+        <div class="roas-grid">
+          <div class="roas-card">
+            <div class="roas-label">CPA (Custo/Aquisição)</div>
+            <div class="roas-value" id="r-cpa">—</div>
+          </div>
+          <div class="roas-card">
+            <div class="roas-label">ROAS Mínimo</div>
+            <div class="roas-value" id="r-roas-min">—</div>
+          </div>
+          <div class="roas-card">
+            <div class="roas-label">ROAS Alvo</div>
+            <div class="roas-value" id="r-roas-alvo">—</div>
+          </div>
+          <div class="roas-card">
+            <div class="roas-label">Lucro/Venda (pós-ads)</div>
+            <div class="roas-value" id="r-lucro-ads">—</div>
+          </div>
+        </div>
+        <div class="projection-highlight">
+          <div>
+            <div class="projection-label">Projeção Mensal</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;"><span id="r-vendas-mes-label">30</span> vendas estimadas</div>
+          </div>
+          <div class="projection-value" id="r-lucro-mes">—</div>
+        </div>
+        <div id="roas-verdict" class="roas-verdict" style="display:none;margin-top:14px;"></div>
       </div>
 
     </div>
@@ -1022,6 +1099,71 @@
     } else {
       scoreFill.style.background = 'var(--danger)';
       scoreNum.style.color = 'var(--danger)';
+    }
+
+    // ===== ADS & ROAS ANALYSIS =====
+    const cpc = num('cpc');
+    const ctr = num('ctr') / 100;
+    const cvr = num('cvr') / 100;
+    const vendasMes = num('vendas_mes');
+
+    // CPA = CPC / (CTR * CVR) — cost per acquisition via ads
+    const cpa = (ctr > 0 && cvr > 0) ? cpc / (ctr * cvr) : 0;
+
+    // ROAS mínimo (breakeven): preço / lucro_antes_ads
+    // Se lucro antes de ads <= 0, ROAS é infinito (inviável com ads)
+    const lucroAntesAds = res.lucro; // lucro já descontando taxas do canal
+    const roasMin = (lucroAntesAds > 0 && res.preco > 0) ? res.preco / lucroAntesAds : Infinity;
+
+    // ROAS alvo: preço / (lucro - CPA), garantindo margem após ads
+    const lucroPosAds = lucroAntesAds - cpa;
+    const roasAlvo = (lucroPosAds > 0 && res.preco > 0) ? res.preco / lucroPosAds : Infinity;
+
+    // Lucro mensal projetado
+    const lucroMensal = lucroPosAds * vendasMes;
+
+    // Render ROAS panel com classes de design aprimorado
+    const cpaEl = document.getElementById('r-cpa');
+    cpaEl.textContent = cpa > 0 ? usd(cpa) : '—';
+    cpaEl.className = 'roas-value' + (cpa > 0 && cpa < lucroAntesAds * 0.3 ? ' success' : cpa > 0 ? ' warning' : '');
+
+    const roasMinEl = document.getElementById('r-roas-min');
+    roasMinEl.textContent = isFinite(roasMin) ? roasMin.toFixed(2) + 'x' : 'Inviável';
+    roasMinEl.className = 'roas-value' + (!isFinite(roasMin) ? ' danger' : roasMin <= 2 ? ' success' : roasMin <= 4 ? ' warning' : ' danger');
+
+    const roasAlvoEl = document.getElementById('r-roas-alvo');
+    roasAlvoEl.textContent = isFinite(roasAlvo) ? roasAlvo.toFixed(2) + 'x' : 'Inviável';
+    roasAlvoEl.className = 'roas-value' + (!isFinite(roasAlvo) ? ' danger' : roasAlvo <= 3 ? ' success' : roasAlvo <= 5 ? ' warning' : ' danger');
+
+    const lucroAdsEl = document.getElementById('r-lucro-ads');
+    lucroAdsEl.textContent = isFinite(lucroPosAds) ? usd(lucroPosAds) : '—';
+    lucroAdsEl.className = 'roas-value ' + (lucroPosAds >= 0 ? 'success' : 'danger');
+
+    document.getElementById('r-vendas-mes-label').textContent = vendasMes;
+    const lucroMesEl = document.getElementById('r-lucro-mes');
+    lucroMesEl.textContent = isFinite(lucroMensal) ? usd(lucroMensal) : '—';
+    lucroMesEl.className = 'projection-value ' + (lucroMensal >= 0 ? 'success' : 'danger');
+    lucroMesEl.style.color = lucroMensal >= 0 ? 'var(--success)' : 'var(--danger)';
+
+    // ROAS verdict com classes CSS de design
+    const verdictEl = document.getElementById('roas-verdict');
+    verdictEl.style.display = 'block';
+    verdictEl.className = 'roas-verdict';
+    if (!isFinite(roasMin) || res.inviavel) {
+      verdictEl.classList.add('danger');
+      verdictEl.innerHTML = '<strong>⚠️ Inviável com ads.</strong> O produto não gera margem suficiente para pagar tráfego pago. Reduza custos ou aumente o preço antes de investir em ads.';
+    } else if (!isFinite(roasAlvo) || lucroPosAds <= 0) {
+      verdictEl.classList.add('warning');
+      verdictEl.innerHTML = `<strong>⚡ ROAS breakeven: ${roasMin.toFixed(2)}x</strong> — qualquer ROAS abaixo disso dá prejuízo. Com CPA de ${usd(cpa)}, não sobra margem. Otimize criativos e segmentação.`;
+    } else if (roasAlvo <= 3) {
+      verdictEl.classList.add('success');
+      verdictEl.innerHTML = `<strong>✅ Saudável!</strong> ROAS alvo de ${roasAlvo.toFixed(2)}x é atingível. Projeção: <strong>${usd(lucroMensal)}/mês</strong> com ${vendasMes} vendas. CPA de ${usd(cpa)} deixa margem de ${((lucroPosAds/res.preco)*100).toFixed(1)}% após ads.`;
+    } else if (roasAlvo <= 5) {
+      verdictEl.classList.add('warning');
+      verdictEl.innerHTML = `<strong>Apertado.</strong> ROAS alvo de ${roasAlvo.toFixed(2)}x exige campanha bem otimizada. Projeção: <strong>${usd(lucroMensal)}/mês</strong>. Considere aumentar ticket médio ou reduzir CPA.`;
+    } else {
+      verdictEl.classList.add('danger');
+      verdictEl.innerHTML = `<strong>🔴 Difícil.</strong> ROAS alvo de ${roasAlvo.toFixed(2)}x é alto demais para a maioria dos nichos. Projeção: <strong>${usd(lucroMensal)}/mês</strong>. Reavalie custos ou canal de venda.`;
     }
 
     // Comparativo de canais (top 3 melhores)
