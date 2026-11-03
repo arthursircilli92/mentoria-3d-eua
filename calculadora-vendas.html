@@ -136,7 +136,8 @@
   }
   [data-theme="dark"] .brand-mark { background: linear-gradient(135deg, #818cf8, #a78bfa); border-radius: 10px; box-shadow: 0 4px 16px rgba(129,140,248,0.3); }
   [data-theme="dark"] .hero { background: linear-gradient(135deg, rgba(129,140,248,0.1), rgba(167,139,250,0.05)); border: 1px solid rgba(129,140,248,0.2); border-radius: 14px; }
-  [data-theme="dark"] .breakdown { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
+  [data-theme="dark"] { --compare-bg: #12122a; }
+ [data-theme="dark"] .breakdown { background: #14142a; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
   [data-theme="dark"] .compare-col { background: #12122a !important; }
   [data-theme="dark"] .compare-name { color: #c0c0e0 !important; }
   [data-theme="dark"] .compare-price { color: #f0f0ff !important; }
@@ -144,11 +145,17 @@
   [data-theme="dark"] .compare-profit.negative { color: #f87171 !important; }
   [data-theme="dark"] .compare-meta { color: #9090b0 !important; }
   [data-theme="dark"] .compare-grid { background: #1e1e3a !important; border-radius: 0 0 16px 16px; overflow: hidden; }
-  [data-theme="dark"] .analysis { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
+  [data-theme="dark"] .analysis { background: #14142a; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
   [data-theme="dark"] .score-bar { background: rgba(255,255,255,0.08); border-radius: 4px; }
   [data-theme="dark"] .section-num { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
   [data-theme="dark"] header { border-bottom: 1px solid rgba(255,255,255,0.08); }
-  [data-theme="dark"] .custom-fields { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; }
+  [data-theme="dark"] .custom-fields { background: #14142a; border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; }
+  [data-theme="dark"] .breakdown-row { color: #d0d0e8; }
+  [data-theme="dark"] .metric-value { color: #f0f0ff; }
+  [data-theme="dark"] .metric-label { color: #a0a0c0; }
+  [data-theme="dark"] .panel-title { color: #c0c0e0; }
+  [data-theme="dark"] .label { color: #a0a0c0; }
+  [data-theme="dark"] footer { color: #808098; }
     z-index: 10;
   }
 
@@ -532,7 +539,7 @@
     border-top: 1px solid var(--border);
   }
   .compare-col {
-    background: var(--surface);
+    background: var(--compare-bg, var(--surface));
     padding: 16px;
     position: relative;
   }
