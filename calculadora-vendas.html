@@ -125,22 +125,42 @@
   [data-theme="dark"] .label { color: #a0a0c0; }
   [data-theme="dark"] footer { color: #808098; }
 
-  /* ===== ROAS PANEL ===== */
-  .roas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
-  .roas-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-align: center; transition: transform 0.15s, box-shadow 0.15s; }
-  .roas-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(99,102,241,0.1); }
-  [data-theme="dark"] .roas-card { background: #16162e; border-color: rgba(255,255,255,0.08); }
-  [data-theme="dark"] .roas-card:hover { box-shadow: 0 4px 16px rgba(129,140,248,0.15); }
-  .roas-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-  .roas-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; }
-  .roas-value.success { color: var(--success); }
-  .roas-value.warning { color: var(--warning); }
-  .roas-value.danger { color: var(--danger); }
-  .roas-verdict { padding: 14px 16px; border-radius: 10px; font-size: 12px; line-height: 1.6; font-weight: 500; }
-  .roas-verdict.success { background: var(--success-bg); color: var(--success); border: 1px solid rgba(5,150,105,0.15); }
+  /* ===== ROAS TABLE (ZiemCalc style) ===== */
+  .roas-table-wrap { overflow-x: auto; margin-top: 8px; }
+  .roas-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+  .roas-table th { text-align: left; padding: 8px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); border-bottom: 2px solid var(--border); font-weight: 600; white-space: nowrap; }
+  .roas-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; font-weight: 500; }
+  [data-theme="dark"] .roas-table th { border-bottom-color: rgba(255,255,255,0.1); color: #a0a0c0; }
+  [data-theme="dark"] .roas-table td { border-bottom-color: rgba(255,255,255,0.06); }
+  .roas-table tr.active-row { font-weight: 700; }
+  .roas-table tr.active-row td { border-bottom: 2px solid var(--accent); }
+  /* Faixas de cor — azul em vez de verde para "Excelente" */
+  .roas-band { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .band-blue { background: #3b82f6; }
+  .band-green { background: #22c55e; }
+  .band-yellow { background: #eab308; }
+  .band-orange { background: #f97316; }
+  .band-red { background: #ef4444; }
+  .roas-row-blue td { background: rgba(59,130,246,0.06); }
+  .roas-row-green td { background: rgba(34,197,94,0.06); }
+  .roas-row-yellow td { background: rgba(234,179,8,0.06); }
+  .roas-row-orange td { background: rgba(249,115,22,0.06); }
+  .roas-row-red td { background: rgba(239,68,68,0.06); }
+  [data-theme="dark"] .roas-row-blue td { background: rgba(59,130,246,0.1); }
+  [data-theme="dark"] .roas-row-green td { background: rgba(34,197,94,0.1); }
+  [data-theme="dark"] .roas-row-yellow td { background: rgba(234,179,8,0.1); }
+  [data-theme="dark"] .roas-row-orange td { background: rgba(249,115,22,0.1); }
+  [data-theme="dark"] .roas-row-red td { background: rgba(239,68,68,0.1); }
+  .roas-kpi-row { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .roas-kpi { flex: 1; min-width: 100px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; text-align: center; }
+  [data-theme="dark"] .roas-kpi { background: #16162e; border-color: rgba(255,255,255,0.08); }
+  .roas-kpi-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; }
+  .roas-kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: var(--text); }
+  .roas-verdict { padding: 14px 16px; border-radius: 10px; font-size: 12px; line-height: 1.6; font-weight: 500; margin-top: 14px; }
+  .roas-verdict.success { background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.2); }
   .roas-verdict.warning { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(217,119,6,0.15); }
   .roas-verdict.danger { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(220,38,38,0.15); }
-  [data-theme="dark"] .roas-verdict.success { border-color: rgba(52,211,153,0.2); }
+  [data-theme="dark"] .roas-verdict.success { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); }
   [data-theme="dark"] .roas-verdict.warning { border-color: rgba(251,191,36,0.2); }
   [data-theme="dark"] .roas-verdict.danger { border-color: rgba(248,113,113,0.2); }
 
@@ -703,36 +723,38 @@
 
   <div class="main-grid">
 
-    <!-- INPUT PANEL -->
+    <!-- ETAPA 1: PEÇA -->
     <div class="panel">
       <div class="panel-head">
-        <div class="panel-title">Parâmetros</div>
+        <div class="panel-title"><span class="section-num">1</span> Peça</div>
       </div>
       <div class="panel-body">
-
-        <div class="section">
-          <div class="section-label"><span class="section-num">1</span> Peça</div>
-          <div class="field-grid">
-            <div class="field">
-              <label>Peso <span class="hint">gramas</span></label>
-              <div class="input-wrap">
-                <input type="number" id="peso" class="with-suf" value="80" min="1" step="1" oninput="calcular()">
-                <span class="input-affix suf">g</span>
-              </div>
+        <div class="field-grid">
+          <div class="field">
+            <label>Peso <span class="hint">gramas</span></label>
+            <div class="input-wrap">
+              <input type="number" id="peso" class="with-suf" value="80" min="1" step="1" oninput="calcular()">
+              <span class="input-affix suf">g</span>
             </div>
-            <div class="field">
-              <label>Tempo de impressão</label>
-              <div class="time-row">
-                <input type="number" id="tempo_h" value="2" min="0" step="1" oninput="calcular()">
-                <span class="time-sep">:</span>
-                <input type="number" id="tempo_m" value="30" min="0" max="59" step="1" oninput="calcular()">
-              </div>
+          </div>
+          <div class="field">
+            <label>Tempo de impressão</label>
+            <div class="time-row">
+              <input type="number" id="tempo_h" value="2" min="0" step="1" oninput="calcular()">
+              <span class="time-sep">:</span>
+              <input type="number" id="tempo_m" value="30" min="0" max="59" step="1" oninput="calcular()">
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="section">
-          <div class="section-label"><span class="section-num">2</span> Produção</div>
+    <!-- ETAPA 2: PRODUÇÃO -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="section-num">2</span> Produção</div>
+      </div>
+      <div class="panel-body">
           <div class="field-grid">
             <div class="field">
               <label>Filamento <span class="hint">$/kg</span></label>
@@ -801,9 +823,15 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="section">
-          <div class="section-label"><span class="section-num">3</span> Estratégia</div>
+    <!-- ETAPA 3: ESTRATÉGIA -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="section-num">3</span> Estratégia</div>
+      </div>
+      <div class="panel-body">
           <div class="field-grid">
             <div class="field">
               <label>Canal principal</label>
@@ -824,9 +852,15 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="section">
-          <div class="section-label"><span class="section-num">4</span> Ads & ROAS</div>
+    <!-- ETAPA 4: ADS & ROAS -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="section-num">4</span> Ads & ROAS</div>
+      </div>
+      <div class="panel-body">
           <div class="field-grid">
             <div class="field">
               <label>CPC médio <span class="hint" title="Cost Per Click: custo médio pago por cada clique no anúncio">$/clique ⓘ</span></label>
@@ -858,7 +892,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -922,32 +955,68 @@
 
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title">📊 Ads & ROAS Simulator</div>
+          <div class="panel-title">📊 Simulador de ROAS & Ads</div>
         </div>
-        <div class="roas-grid">
-          <div class="roas-card">
-            <div class="roas-label">CPA (Custo/Aquisição)</div>
-            <div class="roas-value" id="r-cpa">—</div>
+        <!-- KPIs resumidos -->
+        <div class="roas-kpi-row">
+          <div class="roas-kpi">
+            <div class="roas-kpi-label">CPA Estimado</div>
+            <div class="roas-kpi-value" id="r-cpa">—</div>
           </div>
-          <div class="roas-card">
-            <div class="roas-label">ROAS Mínimo</div>
-            <div class="roas-value" id="r-roas-min">—</div>
+          <div class="roas-kpi">
+            <div class="roas-kpi-label">ROAS Breakeven</div>
+            <div class="roas-kpi-value" id="r-roas-min">—</div>
           </div>
-          <div class="roas-card">
-            <div class="roas-label">ROAS Alvo</div>
-            <div class="roas-value" id="r-roas-alvo">—</div>
-          </div>
-          <div class="roas-card">
-            <div class="roas-label">Lucro/Venda (pós-ads)</div>
-            <div class="roas-value" id="r-lucro-ads">—</div>
+          <div class="roas-kpi">
+            <div class="roas-kpi-label">Lucro/Venda (Ads)</div>
+            <div class="roas-kpi-value" id="r-lucro-ads">—</div>
           </div>
         </div>
+        <!-- Tabela dinâmica de faixas de ROAS -->
+        <div class="roas-table-wrap">
+          <table class="roas-table">
+            <thead>
+              <tr>
+                <th>Faixa ROAS</th>
+                <th>Classificação</th>
+                <th>Lucro/Venda</th>
+                <th>Margem Líq.</th>
+                <th>Lucro/Mês</th>
+              </tr>
+            </thead>
+            <tbody id="roas-table-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px;">Aguardando parâmetros...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Projeção mensal -->
         <div class="projection-highlight">
           <div>
             <div class="projection-label">Projeção Mensal</div>
             <div style="font-size:11px;color:var(--text-muted);margin-top:2px;"><span id="r-vendas-mes-label">30</span> vendas estimadas</div>
           </div>
           <div class="projection-value" id="r-lucro-mes">—</div>
+        </div>
+        <!-- Veredito -->
+        <!-- Simulador de Escala -->
+        <div style="margin-top:18px;">
+          <div class="panel-title" style="font-size:13px;margin-bottom:10px;">📈 Simulador de Escala</div>
+          <div class="roas-table-wrap">
+            <table class="roas-table">
+              <thead>
+                <tr>
+                  <th>Cenário</th>
+                  <th>Vendas/Mês</th>
+                  <th>Receita</th>
+                  <th>Custo Ads</th>
+                  <th>Lucro Líq.</th>
+                </tr>
+              </thead>
+              <tbody id="escala-table-body">
+                <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:16px;">Aguardando parâmetros...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div id="roas-verdict" class="roas-verdict danger" style="margin-top:14px;">Preencha os campos de Ads para ver a simulação de ROAS.</div>
       </div>
@@ -1126,30 +1195,78 @@
     // Lucro mensal projetado
     const lucroMensal = lucroPosAds * vendasMes;
 
-    // Render ROAS panel com classes de design aprimorado
-    const cpaEl = document.getElementById('r-cpa');
-    cpaEl.textContent = cpa > 0 ? usd(cpa) : '—';
-    cpaEl.className = 'roas-value' + (cpa > 0 && cpa < lucroAntesAds * 0.3 ? ' success' : cpa > 0 ? ' warning' : '');
-
-    const roasMinEl = document.getElementById('r-roas-min');
-    roasMinEl.textContent = isFinite(roasMin) ? roasMin.toFixed(2) + 'x' : 'Inviável';
-    roasMinEl.className = 'roas-value' + (!isFinite(roasMin) ? ' danger' : roasMin <= 2 ? ' success' : roasMin <= 4 ? ' warning' : ' danger');
-
-    const roasAlvoEl = document.getElementById('r-roas-alvo');
-    roasAlvoEl.textContent = isFinite(roasAlvo) ? roasAlvo.toFixed(2) + 'x' : 'Inviável';
-    roasAlvoEl.className = 'roas-value' + (!isFinite(roasAlvo) ? ' danger' : roasAlvo <= 3 ? ' success' : roasAlvo <= 5 ? ' warning' : ' danger');
-
-    const lucroAdsEl = document.getElementById('r-lucro-ads');
-    lucroAdsEl.textContent = isFinite(lucroPosAds) ? usd(lucroPosAds) : '—';
-    lucroAdsEl.className = 'roas-value ' + (lucroPosAds >= 0 ? 'success' : 'danger');
+    // ===== RENDER KPIs =====
+    document.getElementById('r-cpa').textContent = cpa > 0 ? usd(cpa) : '—';
+    document.getElementById('r-roas-min').textContent = isFinite(roasMin) ? roasMin.toFixed(2) + 'x' : '∞';
+    const lucroAdsKpi = document.getElementById('r-lucro-ads');
+    lucroAdsKpi.textContent = isFinite(lucroPosAds) ? usd(lucroPosAds) : '—';
+    lucroAdsKpi.style.color = lucroPosAds >= 0 ? '#3b82f6' : 'var(--danger)';
 
     document.getElementById('r-vendas-mes-label').textContent = vendasMes;
     const lucroMesEl = document.getElementById('r-lucro-mes');
     lucroMesEl.textContent = isFinite(lucroMensal) ? usd(lucroMensal) : '—';
-    lucroMesEl.className = 'projection-value ' + (lucroMensal >= 0 ? 'success' : 'danger');
-    lucroMesEl.style.color = lucroMensal >= 0 ? 'var(--success)' : 'var(--danger)';
+    lucroMesEl.style.color = lucroMensal >= 0 ? '#3b82f6' : 'var(--danger)';
 
-    // ROAS verdict com classes CSS de design
+    // ===== TABELA DINÂMICA DE FAIXAS DE ROAS =====
+    // Faixas baseadas na margem alvo selecionada pelo usuário
+    const faixas = [
+      { min: 1, max: 2, label: '1x – 2x', cls: 'red', band: 'band-red', desc: 'Prejuízo / Breakeven' },
+      { min: 2, max: 3, label: '2x – 3x', cls: 'orange', band: 'band-orange', desc: 'Margem baixa' },
+      { min: 3, max: 4, label: '3x – 4x', cls: 'yellow', band: 'band-yellow', desc: 'Aceitável' },
+      { min: 4, max: 6, label: '4x – 6x', cls: 'green', band: 'band-green', desc: 'Bom' },
+      { min: 6, max: Infinity, label: '6x+', cls: 'blue', band: 'band-blue', desc: 'Excelente' }
+    ];
+
+    const tbody = document.getElementById('roas-table-body');
+    if (!isFinite(roasMin) || res.inviavel || lucroAntesAds <= 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger);padding:16px;font-weight:600;">Produto inviável com ads — margem insuficiente para cobrir CPA.</td></tr>';
+    } else {
+      tbody.innerHTML = faixas.map(f => {
+        // Para cada faixa, calcula o lucro no ponto médio do ROAS
+        const roasMid = f.max === Infinity ? f.min + 2 : (f.min + f.max) / 2;
+        const cpaFaixa = res.preco / roasMid;
+        const lucroFaixa = lucroAntesAds - cpaFaixa;
+        const margemFaixa = res.preco > 0 ? (lucroFaixa / res.preco) * 100 : 0;
+        const lucroMesFaixa = lucroFaixa * vendasMes;
+        const isActive = isFinite(roasAlvo) && roasAlvo >= f.min && roasAlvo < f.max;
+        const rowCls = `roas-row-${f.cls}${isActive ? ' active-row' : ''}`;
+        return `<tr class="${rowCls}">
+          <td><span class="roas-band ${f.band}"></span>${f.label}</td>
+          <td>${f.desc}</td>
+          <td style="color:${lucroFaixa >= 0 ? 'var(--text)' : 'var(--danger)'}">${usd(lucroFaixa)}</td>
+          <td>${margemFaixa.toFixed(1)}%</td>
+          <td style="font-weight:700;color:${lucroMesFaixa >= 0 ? '#3b82f6' : 'var(--danger)'}">${usd(lucroMesFaixa)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ===== SIMULADOR DE ESCALA =====
+    const escalaBody = document.getElementById('escala-table-body');
+    if (escalaBody && !res.inviavel && lucroAntesAds > 0) {
+      const cenarios = [
+        { label: 'Atual', mult: 1 },
+        { label: '2× vendas', mult: 2 },
+        { label: '5× vendas', mult: 5 },
+        { label: '10× vendas', mult: 10 }
+      ];
+      escalaBody.innerHTML = cenarios.map(c => {
+        const vMes = vendasMes * c.mult;
+        const lMes = lucroPosAds * vMes;
+        const receita = res.preco * vMes;
+        const custoAds = cpa * vMes;
+        return `<tr>
+          <td style="font-weight:600;">${c.label}</td>
+          <td>${vMes}</td>
+          <td>${usd(receita)}</td>
+          <td style="color:var(--danger)">-${usd(custoAds)}</td>
+          <td style="font-weight:700;color:${lMes >= 0 ? '#3b82f6' : 'var(--danger)'}">${usd(lMes)}</td>
+        </tr>`;
+      }).join('');
+    } else if (escalaBody) {
+      escalaBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:12px;">Ajuste os parâmetros para ver projeções de escala.</td></tr>';
+    }
+
+    // ===== VEREDITO =====
     const verdictEl = document.getElementById('roas-verdict');
     verdictEl.style.display = 'block';
     verdictEl.className = 'roas-verdict';
