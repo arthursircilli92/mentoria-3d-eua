@@ -45,9 +45,9 @@
     --danger-bg: #450a0a;
   }
 
-  /* ===== STYLE: GLASS (DEFAULT — no data-skin needed) ===== */
-  /* Glass Light */
-  :root[data-skin="glass"], :root:not([data-skin]) {
+  /* ===== GLASS THEME ===== */
+  /* Light */
+  :root {
     --bg: #eef0f8;
     --surface: rgba(255,255,255,0.65);
     --surface-2: rgba(255,255,255,0.4);
@@ -65,41 +65,39 @@
     --danger: #dc2626;
     --danger-bg: rgba(220,38,38,0.1);
   }
-  :root[data-skin="glass"] body, :root:not([data-skin]) body {
+  body {
     background: #eef0f8;
     background-image:
       radial-gradient(circle at 15% 20%, rgba(99,102,241,0.1) 0%, transparent 50%),
       radial-gradient(circle at 85% 80%, rgba(129,140,248,0.08) 0%, transparent 50%);
   }
-  :root[data-skin="glass"] .panel, :root:not([data-skin]) .panel {
+  .panel {
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(100,100,140,0.1);
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
   }
-  :root[data-skin="glass"] .card, :root:not([data-skin]) .card { background: rgba(255,255,255,0.5); border: 1px solid rgba(100,100,140,0.08); border-radius: 12px; }
-  :root[data-skin="glass"] input, :root[data-skin="glass"] select,
-  :root:not([data-skin]) input, :root:not([data-skin]) select {
+  .card { background: rgba(255,255,255,0.5); border: 1px solid rgba(100,100,140,0.08); border-radius: 12px; }
+  input, select {
     background: rgba(255,255,255,0.7); border: 1px solid rgba(100,100,140,0.15); border-radius: 10px; backdrop-filter: blur(8px);
   }
-  :root[data-skin="glass"] input:focus, :root[data-skin="glass"] select:focus,
-  :root:not([data-skin]) input:focus, :root:not([data-skin]) select:focus {
+  input:focus, select:focus {
     border-color: rgba(99,102,241,0.5); box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
   }
-  :root[data-skin="glass"] .brand-mark, :root:not([data-skin]) .brand-mark { background: linear-gradient(135deg, #6366f1, #818cf8); border-radius: 10px; box-shadow: 0 4px 16px rgba(99,102,241,0.25); }
-  :root[data-skin="glass"] .hero, :root:not([data-skin]) .hero { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(129,140,248,0.04)); border: 1px solid rgba(99,102,241,0.15); border-radius: 14px; }
-  :root[data-skin="glass"] .breakdown, :root:not([data-skin]) .breakdown { background: rgba(255,255,255,0.4); border: 1px solid rgba(100,100,140,0.08); border-radius: 10px; }
-  :root[data-skin="glass"] .compare-col, :root:not([data-skin]) .compare-col { background: rgba(255,255,255,0.4); }
-  :root[data-skin="glass"] .compare-grid, :root:not([data-skin]) .compare-grid { background: rgba(99,102,241,0.08); border-radius: 0 0 16px 16px; overflow: hidden; }
-  :root[data-skin="glass"] .analysis, :root:not([data-skin]) .analysis { background: rgba(255,255,255,0.5); border: 1px solid rgba(100,100,140,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
-  :root[data-skin="glass"] .score-bar, :root:not([data-skin]) .score-bar { background: rgba(100,100,140,0.1); border-radius: 4px; }
-  :root[data-skin="glass"] .section-num, :root:not([data-skin]) .section-num { background: rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.12); }
-  :root[data-skin="glass"] header, :root:not([data-skin]) header { border-bottom: 1px solid rgba(100,100,140,0.1); }
-  :root[data-skin="glass"] .custom-fields, :root:not([data-skin]) .custom-fields { background: rgba(255,255,255,0.3); border: 1px dashed rgba(100,100,140,0.15); border-radius: 10px; }
+  .brand-mark { background: linear-gradient(135deg, #6366f1, #818cf8); border-radius: 10px; box-shadow: 0 4px 16px rgba(99,102,241,0.25); }
+  .hero { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(129,140,248,0.04)); border: 1px solid rgba(99,102,241,0.15); border-radius: 14px; }
+  .breakdown { background: rgba(255,255,255,0.4); border: 1px solid rgba(100,100,140,0.08); border-radius: 10px; }
+  .compare-col { background: rgba(255,255,255,0.4); }
+  .compare-grid { background: rgba(99,102,241,0.08); border-radius: 0 0 16px 16px; overflow: hidden; }
+  .analysis { background: rgba(255,255,255,0.5); border: 1px solid rgba(100,100,140,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
+  .score-bar { background: rgba(100,100,140,0.1); border-radius: 4px; }
+  .section-num { background: rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.12); }
+  header { border-bottom: 1px solid rgba(100,100,140,0.1); }
+  .custom-fields { background: rgba(255,255,255,0.3); border: 1px dashed rgba(100,100,140,0.15); border-radius: 10px; }
 
-  /* Glass Dark */
-  [data-theme="dark"][data-skin="glass"], [data-theme="dark"]:not([data-skin]) {
+  /* Dark */
+  [data-theme="dark"] {
     --bg: #0c0c1d;
     --surface: rgba(255,255,255,0.06);
     --surface-2: rgba(255,255,255,0.03);
@@ -117,286 +115,35 @@
     --danger: #f87171;
     --danger-bg: rgba(248,113,113,0.12);
   }
-  [data-theme="dark"][data-skin="glass"] body, [data-theme="dark"]:not([data-skin]) body {
+  [data-theme="dark"] body {
     background: #0c0c1d;
     background-image:
       radial-gradient(circle at 15% 20%, rgba(129,140,248,0.15) 0%, transparent 50%),
       radial-gradient(circle at 85% 80%, rgba(167,139,250,0.12) 0%, transparent 50%),
       radial-gradient(circle at 50% 50%, rgba(52,211,153,0.06) 0%, transparent 60%);
   }
-  [data-theme="dark"][data-skin="glass"] .panel, [data-theme="dark"]:not([data-skin]) .panel {
+  [data-theme="dark"] .panel {
     background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
   }
-  [data-theme="dark"][data-skin="glass"] .card, [data-theme="dark"]:not([data-skin]) .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; }
-  [data-theme="dark"][data-skin="glass"] input, [data-theme="dark"][data-skin="glass"] select,
-  [data-theme="dark"]:not([data-skin]) input, [data-theme="dark"]:not([data-skin]) select {
+  [data-theme="dark"] .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; }
+  [data-theme="dark"] input, [data-theme="dark"] select {
     background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; backdrop-filter: blur(8px);
   }
-  [data-theme="dark"][data-skin="glass"] input:focus, [data-theme="dark"][data-skin="glass"] select:focus,
-  [data-theme="dark"]:not([data-skin]) input:focus, [data-theme="dark"]:not([data-skin]) select:focus {
+  [data-theme="dark"] input:focus, [data-theme="dark"] select:focus {
     border-color: rgba(129,140,248,0.6); box-shadow: 0 0 0 3px rgba(129,140,248,0.15), 0 0 20px rgba(129,140,248,0.1);
   }
-  [data-theme="dark"][data-skin="glass"] .brand-mark, [data-theme="dark"]:not([data-skin]) .brand-mark { background: linear-gradient(135deg, #818cf8, #a78bfa); border-radius: 10px; box-shadow: 0 4px 16px rgba(129,140,248,0.3); }
-  [data-theme="dark"][data-skin="glass"] .hero, [data-theme="dark"]:not([data-skin]) .hero { background: linear-gradient(135deg, rgba(129,140,248,0.1), rgba(167,139,250,0.05)); border: 1px solid rgba(129,140,248,0.2); border-radius: 14px; }
-  [data-theme="dark"][data-skin="glass"] .breakdown, [data-theme="dark"]:not([data-skin]) .breakdown { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
-  [data-theme="dark"][data-skin="glass"] .compare-col, [data-theme="dark"]:not([data-skin]) .compare-col { background: rgba(255,255,255,0.03); }
-  [data-theme="dark"][data-skin="glass"] .compare-grid, [data-theme="dark"]:not([data-skin]) .compare-grid { background: rgba(255,255,255,0.08); border-radius: 0 0 16px 16px; overflow: hidden; }
-  [data-theme="dark"][data-skin="glass"] .analysis, [data-theme="dark"]:not([data-skin]) .analysis { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
-  [data-theme="dark"][data-skin="glass"] .score-bar, [data-theme="dark"]:not([data-skin]) .score-bar { background: rgba(255,255,255,0.08); border-radius: 4px; }
-  [data-theme="dark"][data-skin="glass"] .section-num, [data-theme="dark"]:not([data-skin]) .section-num { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
-  [data-theme="dark"][data-skin="glass"] header, [data-theme="dark"]:not([data-skin]) header { border-bottom: 1px solid rgba(255,255,255,0.08); }
-  [data-theme="dark"][data-skin="glass"] .custom-fields, [data-theme="dark"]:not([data-skin]) .custom-fields { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; }
-
-  /* ===== STYLE: BRUTALIST ===== */
-  /* Brutal Light (default) */
-  [data-skin="brutal"] {
-    --bg: #f5f0e8; --surface: #ffffff; --surface-2: #f0ebe3;
-    --border: #000; --border-strong: #000;
-    --text: #000; --text-dim: #333; --text-muted: #666;
-    --accent: #000; --accent-2: #cc0000;
-    --success: #006600; --success-bg: #e6f5e6;
-    --warning: #cc6600; --warning-bg: #fff5e6;
-    --danger: #cc0000; --danger-bg: #ffe6e6;
-  }
-  /* Brutal Dark */
-  [data-theme="dark"][data-skin="brutal"] {
-    --bg: #1a1a1a; --surface: #222; --surface-2: #2a2a2a;
-    --border: #fff; --border-strong: #fff;
-    --text: #fff; --text-dim: #ccc; --text-muted: #999;
-    --accent: #fff; --accent-2: #ff4444;
-    --success: #4ade80; --success-bg: rgba(74,222,128,0.15);
-    --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.15);
-    --danger: #f87171; --danger-bg: rgba(248,113,113,0.15);
-  }
-  [data-skin="brutal"] body { background: var(--bg); background-image: none; }
-  [data-skin="brutal"] * { font-family: 'Courier New', Courier, monospace !important; }
-  [data-skin="brutal"] .panel { background: var(--surface); border: 3px solid var(--border); border-radius: 0; box-shadow: 6px 6px 0 var(--border); }
-  [data-skin="brutal"] .card { background: var(--surface-2); border: 2px solid var(--border); border-radius: 0; }
-  [data-skin="brutal"] input, [data-skin="brutal"] select { background: var(--surface); border: 2px solid var(--border); border-radius: 0; font-weight: 700; }
-  [data-skin="brutal"] input:focus, [data-skin="brutal"] select:focus { border-color: var(--accent-2); box-shadow: 4px 4px 0 var(--accent-2); outline: none; }
-  [data-skin="brutal"] .brand-mark { background: var(--border); color: var(--surface); border-radius: 0; font-size: 14px; }
-  [data-skin="brutal"] .hero { background: var(--surface-2); border: 3px solid var(--border); border-radius: 0; box-shadow: 4px 4px 0 var(--border); }
-  [data-skin="brutal"] .panel-head { border-bottom: 3px solid var(--border); }
-  [data-skin="brutal"] .breakdown { background: var(--surface-2); border: 2px solid var(--border); border-radius: 0; }
-  [data-skin="brutal"] .compare-grid { background: var(--border); }
-  [data-skin="brutal"] .compare-col { background: var(--surface); }
-  [data-skin="brutal"] .compare-col.best::before { background: var(--accent-2); border-radius: 0; }
-  [data-skin="brutal"] .analysis { background: var(--surface); border: 3px solid var(--border); border-radius: 0; box-shadow: 6px 6px 0 var(--border); }
-  [data-skin="brutal"] .score-bar { background: var(--surface-2); border: 2px solid var(--border); border-radius: 0; height: 8px; }
-  [data-skin="brutal"] .score-fill { border-radius: 0; }
-  [data-skin="brutal"] .section-num { background: var(--border); color: var(--surface); border: none; border-radius: 0; }
-  [data-skin="brutal"] header { border-bottom: 3px solid var(--border); }
-  [data-skin="brutal"] .custom-fields { background: var(--surface-2); border: 2px dashed var(--border); border-radius: 0; }
-  [data-skin="brutal"] .chip { border-radius: 0; border: 2px solid currentColor; font-weight: 800; }
-  [data-skin="brutal"] footer { border-top: 3px solid var(--border); }
-
-  /* ===== STYLE: BLUEPRINT ===== */
-  /* Blueprint Light */
-  [data-skin="blueprint"] {
-    --bg: #e8eef6; --surface: #f0f4fa; --surface-2: #dce4f0;
-    --border: rgba(30,60,120,0.2); --border-strong: rgba(30,60,120,0.35);
-    --text: #1a2744; --text-dim: #3a5070; --text-muted: #6a80a0;
-    --accent: #1a2744; --accent-2: #2563eb;
-    --success: #059669; --success-bg: rgba(5,150,105,0.1);
-    --warning: #d97706; --warning-bg: rgba(217,119,6,0.1);
-    --danger: #dc2626; --danger-bg: rgba(220,38,38,0.1);
-  }
-  /* Blueprint Dark */
-  [data-theme="dark"][data-skin="blueprint"] {
-    --bg: #1a2744; --surface: #1e2d4d; --surface-2: #162240;
-    --border: rgba(255,255,255,0.15); --border-strong: rgba(255,255,255,0.25);
-    --text: #c8d8f0; --text-dim: #8aa0c0; --text-muted: #5a7090;
-    --accent: #fff; --accent-2: #90b0d0;
-    --success: #4ade80; --success-bg: rgba(74,222,128,0.1);
-    --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.1);
-    --danger: #f87171; --danger-bg: rgba(248,113,113,0.1);
-  }
-  [data-skin="blueprint"] body {
-    background: var(--bg);
-    background-image:
-      linear-gradient(rgba(100,140,200,0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(100,140,200,0.08) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
-  [data-theme="dark"][data-skin="blueprint"] body {
-    background: var(--bg);
-    background-image:
-      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
-  [data-skin="blueprint"] * { font-family: 'JetBrains Mono', monospace !important; }
-  [data-skin="blueprint"] .panel { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 2px; box-shadow: none; }
-  [data-skin="blueprint"] .card { background: var(--surface-2); border: 1px dashed var(--border); border-radius: 2px; }
-  [data-skin="blueprint"] input, [data-skin="blueprint"] select { background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 2px; letter-spacing: 0.02em; }
-  [data-skin="blueprint"] input:focus, [data-skin="blueprint"] select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
-  [data-skin="blueprint"] .brand-mark { background: transparent; border: 2px solid var(--accent); color: var(--accent); border-radius: 2px; }
-  [data-skin="blueprint"] .hero { background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 2px; }
-  [data-skin="blueprint"] .breakdown { background: var(--surface-2); border: 1px dashed var(--border); border-radius: 2px; }
-  [data-skin="blueprint"] .compare-grid { background: var(--border-strong); }
-  [data-skin="blueprint"] .compare-col { background: var(--surface); }
-  [data-skin="blueprint"] .compare-col.best::before { background: var(--success); border-radius: 2px; }
-  [data-skin="blueprint"] .analysis { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 2px; }
-  [data-skin="blueprint"] .score-bar { background: var(--surface-2); border-radius: 1px; }
-  [data-skin="blueprint"] .section-num { background: var(--surface-2); border-color: var(--border-strong); border-radius: 2px; }
-  [data-skin="blueprint"] header { border-bottom: 1px solid var(--border-strong); }
-  [data-skin="blueprint"] .custom-fields { background: var(--surface-2); border: 1px dashed var(--border-strong); border-radius: 2px; }
-  [data-skin="blueprint"] .chip { border-radius: 2px; border: 1px solid currentColor; }
-  [data-skin="blueprint"] .panel-title { letter-spacing: 0.1em; }
-  [data-skin="blueprint"] footer { border-top: 1px solid var(--border-strong); }
-
-  /* ===== STYLE: RETRO ===== */
-  /* Retro Light */
-  [data-skin="retro"] {
-    --bg: #f5ead0; --surface: #faf3e0; --surface-2: #efe5cc;
-    --border: #c4a060; --border-strong: #a08040;
-    --text: #3d2b1a; --text-dim: #6b4c2a; --text-muted: #8a7050;
-    --accent: #b07020; --accent-2: #d09030;
-    --success: #4a8020; --success-bg: rgba(74,128,32,0.12);
-    --warning: #c08010; --warning-bg: rgba(192,128,16,0.12);
-    --danger: #b03020; --danger-bg: rgba(176,48,32,0.12);
-  }
-  /* Retro Dark */
-  [data-theme="dark"][data-skin="retro"] {
-    --bg: #2b1d0e; --surface: #3d2b1a; --surface-2: #342414;
-    --border: #6b4c2a; --border-strong: #8a6340;
-    --text: #f0e0c8; --text-dim: #c0a880; --text-muted: #8a7050;
-    --accent: #e8a040; --accent-2: #f0c060;
-    --success: #80c040; --success-bg: rgba(128,192,64,0.12);
-    --warning: #e8a040; --warning-bg: rgba(232,160,64,0.12);
-    --danger: #d05030; --danger-bg: rgba(208,80,48,0.12);
-  }
-  [data-skin="retro"] body {
-    background: var(--bg);
-    background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(0,0,0,0.04)'/%3E%3C/svg%3E");
-  }
-  [data-theme="dark"][data-skin="retro"] body {
-    background: var(--bg);
-    background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E");
-  }
-  [data-skin="retro"] * { font-family: 'Courier New', Courier, monospace !important; }
-  [data-skin="retro"] .panel { background: var(--surface); border: 2px solid var(--border); border-radius: 8px; box-shadow: inset 0 0 30px rgba(0,0,0,0.08); }
-  [data-theme="dark"][data-skin="retro"] .panel { box-shadow: inset 0 0 30px rgba(0,0,0,0.3); }
-  [data-skin="retro"] .card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; }
-  [data-skin="retro"] input, [data-skin="retro"] select { background: var(--bg); border: 2px inset var(--border); border-radius: 4px; color: var(--accent); }
-  [data-skin="retro"] input:focus, [data-skin="retro"] select:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(176,112,32,0.3); }
-  [data-skin="retro"] .brand-mark { background: var(--accent); color: var(--bg); border-radius: 4px; font-weight: 800; }
-  [data-skin="retro"] .hero { background: var(--surface-2); border: 2px solid var(--border); border-radius: 8px; }
-  [data-skin="retro"] .hero-value { color: var(--accent); text-shadow: 0 0 10px rgba(176,112,32,0.2); }
-  [data-theme="dark"][data-skin="retro"] .hero-value { text-shadow: 0 0 10px rgba(232,160,64,0.3); }
-  [data-skin="retro"] .breakdown { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; }
-  [data-skin="retro"] .compare-grid { background: var(--border); }
-  [data-skin="retro"] .compare-col { background: var(--surface); }
-  [data-skin="retro"] .compare-col.best::before { background: var(--success); border-radius: 3px; }
-  [data-skin="retro"] .analysis { background: var(--surface); border: 2px solid var(--border); border-radius: 8px; }
-  [data-skin="retro"] .score-bar { background: var(--bg); border: 1px solid var(--border); border-radius: 3px; height: 6px; }
-  [data-skin="retro"] .section-num { background: var(--border); color: var(--surface); border: none; border-radius: 4px; }
-  [data-skin="retro"] header { border-bottom: 2px solid var(--border); }
-  [data-skin="retro"] .custom-fields { background: var(--bg); border: 2px dashed var(--border); border-radius: 6px; }
-  [data-skin="retro"] .chip { border-radius: 4px; border: 1px solid currentColor; }
-  [data-skin="retro"] footer { border-top: 2px solid var(--border); }
-
-  /* ===== STYLE: TERMINAL ===== */
-  /* Terminal is always dark by nature — light variant uses green-on-white paper style */
-  [data-skin="terminal"] {
-    --bg: #f0f5f0; --surface: #f8faf8; --surface-2: #e8ede8;
-    --border: #a0c0a0; --border-strong: #80a080;
-    --text: #1a3a1a; --text-dim: #2a5a2a; --text-muted: #5a8a5a;
-    --accent: #1a6a1a; --accent-2: #2a8a2a;
-    --success: #059669; --success-bg: rgba(5,150,105,0.1);
-    --warning: #b08000; --warning-bg: rgba(176,128,0,0.1);
-    --danger: #cc0000; --danger-bg: rgba(204,0,0,0.1);
-  }
-  [data-theme="dark"][data-skin="terminal"] {
-    --bg: #0a0a0a; --surface: #0f0f0f; --surface-2: #141414;
-    --border: #1a3a1a; --border-strong: #2a5a2a;
-    --text: #33ff33; --text-dim: #22aa22; --text-muted: #116611;
-    --accent: #33ff33; --accent-2: #66ff66;
-    --success: #33ff33; --success-bg: rgba(51,255,51,0.08);
-    --warning: #ffff33; --warning-bg: rgba(255,255,51,0.08);
-    --danger: #ff3333; --danger-bg: rgba(255,51,51,0.08);
-  }
-  [data-skin="terminal"] body { background: var(--bg); }
-  [data-theme="dark"][data-skin="terminal"] body {
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(51,255,51,0.02) 2px, rgba(51,255,51,0.02) 4px);
-  }
-  [data-skin="terminal"] * { font-family: 'JetBrains Mono', 'Courier New', monospace !important; }
-  [data-skin="terminal"] .app { max-width: 900px; }
-  [data-skin="terminal"] .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 0; }
-  [data-theme="dark"][data-skin="terminal"] .panel { box-shadow: 0 0 20px rgba(51,255,51,0.05); }
-  [data-skin="terminal"] .card { background: var(--bg); border: 1px solid var(--border); border-radius: 0; }
-  [data-skin="terminal"] input, [data-skin="terminal"] select { background: var(--bg); border: 1px solid var(--border); border-radius: 0; color: var(--accent); }
-  [data-theme="dark"][data-skin="terminal"] input, [data-theme="dark"][data-skin="terminal"] select { text-shadow: 0 0 4px rgba(51,255,51,0.3); }
-  [data-skin="terminal"] input:focus, [data-skin="terminal"] select:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(26,106,26,0.2); }
-  [data-theme="dark"][data-skin="terminal"] input:focus, [data-theme="dark"][data-skin="terminal"] select:focus { box-shadow: 0 0 8px rgba(51,255,51,0.2); }
-  [data-skin="terminal"] .brand-mark { background: var(--accent); color: var(--bg); border-radius: 0; font-weight: 800; }
-  [data-skin="terminal"] .brand-name { color: var(--accent); }
-  [data-theme="dark"][data-skin="terminal"] .brand-name { text-shadow: 0 0 6px rgba(51,255,51,0.3); }
-  [data-skin="terminal"] .brand-tag { border-color: var(--border); color: var(--text-dim); }
-  [data-skin="terminal"] .hero { background: var(--bg); border: 1px solid var(--border); border-radius: 0; }
-  [data-skin="terminal"] .hero-value { color: var(--accent); }
-  [data-theme="dark"][data-skin="terminal"] .hero-value { text-shadow: 0 0 12px rgba(51,255,51,0.4); }
-  [data-skin="terminal"] .breakdown { background: var(--bg); border: 1px solid var(--border); border-radius: 0; }
-  [data-skin="terminal"] .compare-grid { background: var(--border); }
-  [data-skin="terminal"] .compare-col { background: var(--surface); }
-  [data-skin="terminal"] .compare-col.best::before { background: var(--accent); color: var(--bg); border-radius: 0; }
-  [data-skin="terminal"] .analysis { background: var(--surface); border: 1px solid var(--border); border-radius: 0; }
-  [data-skin="terminal"] .score-bar { background: var(--surface-2); border-radius: 0; height: 4px; }
-  [data-theme="dark"][data-skin="terminal"] .score-fill { border-radius: 0; box-shadow: 0 0 6px currentColor; }
-  [data-skin="terminal"] .section-num { background: var(--border); color: var(--accent); border: none; border-radius: 0; }
-  [data-skin="terminal"] header { border-bottom: 1px solid var(--border); }
-  [data-skin="terminal"] .custom-fields { background: var(--bg); border: 1px dashed var(--border); border-radius: 0; }
-  [data-skin="terminal"] .chip { border-radius: 0; border: 1px solid currentColor; }
-  [data-theme="dark"][data-skin="terminal"] .chip { text-shadow: 0 0 4px currentColor; }
-  [data-skin="terminal"] .panel-title { color: var(--text-dim); }
-  [data-skin="terminal"] .metric-label { color: var(--text-muted); }
-  [data-skin="terminal"] .breakdown-title { color: var(--text-muted); }
-  [data-skin="terminal"] footer { border-top: 1px solid var(--border); color: var(--text-muted); }
-  [data-theme="dark"][data-skin="terminal"] ::-webkit-scrollbar-thumb { background: #1a3a1a; border-radius: 0; }
-
-  /* SKIN SELECTOR */
-  .skin-selector {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-  }
-  .skin-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 5px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-  }
-  .skin-dot:hover { transform: scale(1.15); }
-  .skin-dot.active { border-color: var(--text); box-shadow: 0 0 0 2px var(--bg); }
-  .skin-dot[data-skin="minimal"] { background: linear-gradient(135deg, #fafafa, #09090b); }
-  .skin-dot[data-skin="glass"] { background: linear-gradient(135deg, #818cf8, #0c0c1d); }
-  .skin-dot[data-skin="brutal"] { background: linear-gradient(135deg, #f5f0e8, #000); }
-  .skin-dot[data-skin="blueprint"] { background: linear-gradient(135deg, #1a2744, #fff); }
-  .skin-dot[data-skin="retro"] { background: linear-gradient(135deg, #e8a040, #2b1d0e); }
-  .skin-dot[data-skin="terminal"] { background: linear-gradient(135deg, #33ff33, #0a0a0a); }
-  .skin-dot[title]:hover::after {
-    content: attr(title);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-    pointer-events: none;
+  [data-theme="dark"] .brand-mark { background: linear-gradient(135deg, #818cf8, #a78bfa); border-radius: 10px; box-shadow: 0 4px 16px rgba(129,140,248,0.3); }
+  [data-theme="dark"] .hero { background: linear-gradient(135deg, rgba(129,140,248,0.1), rgba(167,139,250,0.05)); border: 1px solid rgba(129,140,248,0.2); border-radius: 14px; }
+  [data-theme="dark"] .breakdown { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
+  [data-theme="dark"] .compare-col { background: rgba(255,255,255,0.03); }
+  [data-theme="dark"] .compare-grid { background: rgba(255,255,255,0.08); border-radius: 0 0 16px 16px; overflow: hidden; }
+  [data-theme="dark"] .analysis { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
+  [data-theme="dark"] .score-bar { background: rgba(255,255,255,0.08); border-radius: 4px; }
+  [data-theme="dark"] .section-num { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+  [data-theme="dark"] header { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  [data-theme="dark"] .custom-fields { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; }
     z-index: 10;
   }
 
@@ -920,15 +667,7 @@
     </div>
     <div class="header-actions">
       <a href="https://3dnagringa.vercel.app/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-dim);font-size:12px;font-weight:500;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">← Site Principal</a>
-      <div class="skin-selector" id="skin-selector">
-        <div class="skin-dot" data-skin="minimal" title="Minimal" onclick="setSkin('minimal')"></div>
-        <div class="skin-dot active" data-skin="glass" title="Glass" onclick="setSkin('glass')"></div>
-        <div class="skin-dot" data-skin="brutal" title="Brutal" onclick="setSkin('brutal')"></div>
-        <div class="skin-dot" data-skin="blueprint" title="Blueprint" onclick="setSkin('blueprint')"></div>
-        <div class="skin-dot" data-skin="retro" title="Retro" onclick="setSkin('retro')"></div>
-        <div class="skin-dot" data-skin="terminal" title="Terminal" onclick="setSkin('terminal')"></div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()" title="Alternar claro/escuro">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Alternar claro/escuro">
         <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="4"/>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
@@ -971,9 +710,9 @@
           <div class="section-label"><span class="section-num">2</span> Produção</div>
           <div class="field-grid">
             <div class="field">
-              <label>Filamento <span class="hint">R$/kg</span></label>
+              <label>Filamento <span class="hint">$/kg</span></label>
               <div class="input-wrap">
-                <span class="input-affix pre">R$</span>
+                <span class="input-affix pre">$</span>
                 <input type="number" id="preco_kg" class="with-pre" value="75" min="1" step="1" oninput="calcular()">
               </div>
             </div>
@@ -998,9 +737,9 @@
               </div>
             </div>
             <div class="field">
-              <label>Amortização <span class="hint">R$/h</span></label>
+              <label>Amortização <span class="hint">$/h</span></label>
               <div class="input-wrap">
-                <span class="input-affix pre">R$</span>
+                <span class="input-affix pre">$</span>
                 <input type="number" id="am_custom" class="with-pre" value="0.50" min="0" step="0.05" oninput="calcular()">
               </div>
             </div>
@@ -1008,16 +747,16 @@
 
           <div class="field-grid" style="margin-top:12px;">
             <div class="field">
-              <label>Energia <span class="hint">R$/kWh</span></label>
+              <label>Energia <span class="hint">$/kWh</span></label>
               <div class="input-wrap">
-                <span class="input-affix pre">R$</span>
+                <span class="input-affix pre">$</span>
                 <input type="number" id="kwh" class="with-pre" value="0.84" min="0" step="0.01" oninput="calcular()">
               </div>
             </div>
             <div class="field">
               <label>Embalagem <span class="hint">unidade</span></label>
               <div class="input-wrap">
-                <span class="input-affix pre">R$</span>
+                <span class="input-affix pre">$</span>
                 <input type="number" id="embalagem" class="with-pre" value="3.50" min="0" step="0.10" oninput="calcular()">
               </div>
             </div>
@@ -1068,7 +807,7 @@
       <div class="panel">
         <div class="hero">
           <div class="hero-label">Preço sugerido</div>
-          <div class="hero-value" id="r-preco">R$ 0,00</div>
+          <div class="hero-value" id="r-preco">$ 0,00</div>
           <div class="hero-sub">
             <span id="r-canal-nome">—</span>
             <span class="sep">·</span>
@@ -1079,27 +818,27 @@
         <div class="metrics">
           <div class="metric">
             <div class="metric-label">Custo unitário</div>
-            <div class="metric-value" id="r-custo">R$ 0,00</div>
+            <div class="metric-value" id="r-custo">$ 0,00</div>
           </div>
           <div class="metric">
             <div class="metric-label">Lucro líquido</div>
-            <div class="metric-value positive" id="r-lucro">R$ 0,00</div>
+            <div class="metric-value positive" id="r-lucro">$ 0,00</div>
           </div>
           <div class="metric">
             <div class="metric-label">Lucro / hora</div>
-            <div class="metric-value" id="r-lph">R$ 0,00</div>
+            <div class="metric-value" id="r-lph">$ 0,00</div>
           </div>
         </div>
 
         <div class="breakdown">
           <div class="breakdown-title">Composição do custo</div>
-          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Filamento</span><span class="vl" id="r-fil">R$ 0,00</span></div>
-          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Energia elétrica</span><span class="vl" id="r-ener">R$ 0,00</span></div>
-          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Depreciação da máquina</span><span class="vl" id="r-maq">R$ 0,00</span></div>
-          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Embalagem</span><span class="vl" id="r-emb">R$ 0,00</span></div>
-          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Reserva de falhas</span><span class="vl" id="r-falha">R$ 0,00</span></div>
-          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Taxas do canal</span><span class="vl" id="r-taxas">R$ 0,00</span></div>
-          <div class="breakdown-row breakdown-total"><span class="lb">Total deduzido</span><span class="vl" id="r-total-ded">R$ 0,00</span></div>
+          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Filamento</span><span class="vl" id="r-fil">$ 0,00</span></div>
+          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Energia elétrica</span><span class="vl" id="r-ener">$ 0,00</span></div>
+          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Depreciação da máquina</span><span class="vl" id="r-maq">$ 0,00</span></div>
+          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Embalagem</span><span class="vl" id="r-emb">$ 0,00</span></div>
+          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Reserva de falhas</span><span class="vl" id="r-falha">$ 0,00</span></div>
+          <div class="breakdown-row"><span class="lb"><span class="dot"></span>Taxas do canal</span><span class="vl" id="r-taxas">$ 0,00</span></div>
+          <div class="breakdown-row breakdown-total"><span class="lb">Total deduzido</span><span class="vl" id="r-total-ded">$ 0,00</span></div>
         </div>
 
         <div class="score-wrap">
@@ -1150,31 +889,6 @@
     html.setAttribute('data-theme', cur === 'light' ? 'dark' : 'light');
   }
 
-  // ===== SKIN SELECTOR =====
-  function setSkin(skin) {
-    const html = document.documentElement;
-    if (skin === 'minimal') {
-      html.removeAttribute('data-skin');
-    } else {
-      html.setAttribute('data-skin', skin);
-    }
-    localStorage.setItem('calc3d_skin', skin);
-    // Atualizar indicador visual
-    document.querySelectorAll('.skin-dot').forEach(dot => {
-      dot.classList.toggle('active', dot.dataset.skin === skin);
-    });
-  }
-
-  // Restaurar skin salva ao carregar
-  (function initSkin() {
-    const saved = localStorage.getItem('calc3d_skin');
-    if (saved) {
-      setSkin(saved);
-    } else {
-      setSkin('glass');
-    }
-  })();
-
   function toggleCustom() {
     const sel = document.getElementById('impressora');
     document.getElementById('custom-fields').classList.toggle('visible', sel.value === 'custom');
@@ -1182,7 +896,7 @@
 
   // ===== HELPERS =====
   function num(id) { return parseFloat(document.getElementById(id).value) || 0; }
-  function brl(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+  function usd(v) { return '$' + v.toFixed(2); }
   function getImp() {
     const sel = document.getElementById('impressora');
     if (sel.value === 'custom') {
@@ -1244,23 +958,23 @@
     const lph = tempoTotalH > 0 ? res.lucro / tempoTotalH : 0;
 
     // Render principal
-    document.getElementById('r-preco').textContent = res.inviavel ? '—' : brl(res.preco);
+    document.getElementById('r-preco').textContent = res.inviavel ? '—' : usd(res.preco);
     document.getElementById('r-canal-nome').textContent = 'via ' + canal.nome;
-    document.getElementById('r-custo').textContent = brl(custoBase);
+    document.getElementById('r-custo').textContent = usd(custoBase);
     const lucroEl = document.getElementById('r-lucro');
-    lucroEl.textContent = brl(res.lucro);
+    lucroEl.textContent = usd(res.lucro);
     lucroEl.classList.toggle('positive', res.lucro >= 0);
     lucroEl.classList.toggle('negative', res.lucro < 0);
-    document.getElementById('r-lph').textContent = brl(lph) + '/h';
+    document.getElementById('r-lph').textContent = usd(lph) + '/h';
 
     // Breakdown
-    document.getElementById('r-fil').textContent = brl(cFil);
-    document.getElementById('r-ener').textContent = brl(cEner);
-    document.getElementById('r-maq').textContent = brl(cMaq);
-    document.getElementById('r-emb').textContent = brl(cEmb);
-    document.getElementById('r-falha').textContent = brl(cFalha);
-    document.getElementById('r-taxas').textContent = brl(res.taxas);
-    document.getElementById('r-total-ded').textContent = brl(custoBase + res.taxas);
+    document.getElementById('r-fil').textContent = usd(cFil);
+    document.getElementById('r-ener').textContent = usd(cEner);
+    document.getElementById('r-maq').textContent = usd(cMaq);
+    document.getElementById('r-emb').textContent = usd(cEmb);
+    document.getElementById('r-falha').textContent = usd(cFalha);
+    document.getElementById('r-taxas').textContent = usd(res.taxas);
+    document.getElementById('r-total-ded').textContent = usd(custoBase + res.taxas);
 
     // Chip de status
     const chip = document.getElementById('r-chip');
@@ -1279,7 +993,7 @@
     let score = 0;
     if (!res.inviavel && res.lucro > 0) {
       const sMargem = Math.min(res.margemReal / 60, 1) * 40;     // até 60% = 40pts
-      const sLph = Math.min(Math.max(lph, 0) / 50, 1) * 35;     // até R$50/h = 35pts
+      const sLph = Math.min(Math.max(lph, 0) / 50, 1) * 35;     // até $50/h = 35pts
       const sTempo = tempoH <= 4 ? 25 : Math.max(0, 25 - (tempoH - 4) * 5); // ≤4h = 25pts
       score = Math.round(sMargem + sLph + sTempo);
     }
@@ -1317,9 +1031,9 @@
       compareGrid.innerHTML = comparados.map((c, i) => `
         <div class="compare-col${i === 0 ? ' best' : ''}">
           <div class="compare-name">${c.nome}</div>
-          <div class="compare-price">${brl(c.preco)}</div>
-          <div class="compare-profit${c.lucro < 0 ? ' negative' : ''}">${brl(c.lucro)} líquido</div>
-          <div class="compare-meta">${brl(c.lph)}/h · ${c.margemReal.toFixed(1)}%</div>
+          <div class="compare-price">${usd(c.preco)}</div>
+          <div class="compare-profit${c.lucro < 0 ? ' negative' : ''}">${usd(c.lucro)} líquido</div>
+          <div class="compare-meta">${usd(c.lph)}/h · ${c.margemReal.toFixed(1)}%</div>
         </div>
       `).join('');
     }
@@ -1327,19 +1041,19 @@
     // Análise textual automática
     const analysisBody = document.getElementById('analysis-body');
     const linhas = [];
-    linhas.push(`<p>O custo unitário desta peça é <strong>${brl(custoBase)}</strong>, composto por ${((cFil/custoBase)*100).toFixed(0)}% de filamento, ${((cEner/custoBase)*100).toFixed(0)}% de energia, ${((cMaq/custoBase)*100).toFixed(0)}% de máquina e ${((cEmb/custoBase)*100).toFixed(0)}% de embalagem. A reserva de falhas de ${(falhasPct*100).toFixed(0)}% adiciona <strong>${brl(cFalha)}</strong> ao custo.</p>`);
+    linhas.push(`<p>O custo unitário desta peça é <strong>${usd(custoBase)}</strong>, composto por ${((cFil/custoBase)*100).toFixed(0)}% de filamento, ${((cEner/custoBase)*100).toFixed(0)}% de energia, ${((cMaq/custoBase)*100).toFixed(0)}% de máquina e ${((cEmb/custoBase)*100).toFixed(0)}% de embalagem. A reserva de falhas de ${(falhasPct*100).toFixed(0)}% adiciona <strong>${usd(cFalha)}</strong> ao custo.</p>`);
 
     if (res.inviavel || res.lucro <= 0) {
       linhas.push(`<p>No <strong>${canal.nome}</strong>, a margem alvo de ${(margemPct*100).toFixed(0)}% torna o produto inviável. As taxas consomem ${((res.taxas/(res.preco||1))*100).toFixed(1)}% do preço final. Considere reduzir custos de produção, aumentar a margem alvo ou migrar para um canal com taxas menores.</p>`);
     } else {
-      linhas.push(`<p>Via <strong>${canal.nome}</strong>, o preço sugerido de <strong>${brl(res.preco)}</strong> gera lucro líquido de <strong>${brl(res.lucro)}</strong> (${res.margemReal.toFixed(1)}% de margem real). O lucro por hora é de <strong>${brl(lph)}</strong>${lph < 15 ? ', abaixo do mínimo recomendado de R$ 15/h - avalie se o tempo investido compensa.' : ', dentro de uma faixa saudável.'}</p>`);
+      linhas.push(`<p>Via <strong>${canal.nome}</strong>, o preço sugerido de <strong>${usd(res.preco)}</strong> gera lucro líquido de <strong>${usd(res.lucro)}</strong> (${res.margemReal.toFixed(1)}% de margem real). O lucro por hora é de <strong>${usd(lph)}</strong>${lph < 15 ? ', abaixo do mínimo recomendado de $ 15/h - avalie se o tempo investido compensa.' : ', dentro de uma faixa saudável.'}</p>`);
     }
 
     if (comparados.length > 1) {
       const melhor = comparados[0];
       const atual = comparados.find(c => c.id === canal.id);
       if (atual && melhor.id !== canal.id) {
-        linhas.push(`<p>O canal mais lucrativo para esta peça é o <strong>${melhor.nome}</strong>, com lucro de <strong>${brl(melhor.lucro)}</strong> - ${brl(melhor.lucro - res.lucro)} a mais que o ${canal.nome}. Vale avaliar a migração.</p>`);
+        linhas.push(`<p>O canal mais lucrativo para esta peça é o <strong>${melhor.nome}</strong>, com lucro de <strong>${usd(melhor.lucro)}</strong> - ${usd(melhor.lucro - res.lucro)} a mais que o ${canal.nome}. Vale avaliar a migração.</p>`);
       }
     }
 
