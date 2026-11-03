@@ -808,10 +808,10 @@
             <div class="field">
               <label>Canal principal</label>
               <select id="canal" onchange="calcular()">
-                <option value="etsy" data-taxa="0.065" data-fixa="1.10" data-nome="Etsy">Etsy</option>
-                <option value="amz" data-taxa="0.15" data-fixa="0" data-nome="Amazon Handmade">Amazon Handmade</option>
-                <option value="ebay" data-taxa="0.13" data-fixa="0.30" data-nome="eBay">eBay</option>
-                <option value="tiktok" data-taxa="0.08" data-fixa="0" data-nome="TikTok Shop">TikTok Shop</option>
+                <option value="etsy" data-taxa="0.095" data-fixa="0.45" data-nome="Etsy">Etsy (6.5% + $0.20 listing + $0.25 pay)</option>
+                <option value="amz" data-taxa="0.12" data-fixa="0" data-nome="Amazon Handmade">Amazon Handmade (12% referral)</option>
+                <option value="ebay" data-taxa="0.1325" data-fixa="0.30" data-nome="eBay">eBay (~13.25% + $0.30/order)</option>
+                <option value="tiktok" data-taxa="0.06" data-fixa="0" data-nome="TikTok Shop">TikTok Shop US (6% referral)</option>
                 <option value="fb" data-taxa="0.05" data-fixa="0" data-nome="Facebook Marketplace">Facebook Marketplace</option>
                 <option value="temu" data-taxa="0.10" data-fixa="0" data-nome="Temu">Temu</option>
                 <option value="shopify" data-taxa="0.029" data-fixa="0.30" data-nome="Shopify (own store)">Shopify (own store)</option>
@@ -949,7 +949,7 @@
           </div>
           <div class="projection-value" id="r-lucro-mes">—</div>
         </div>
-        <div id="roas-verdict" class="roas-verdict" style="display:none;margin-top:14px;"></div>
+        <div id="roas-verdict" class="roas-verdict danger" style="margin-top:14px;">Preencha os campos de Ads para ver a simulação de ROAS.</div>
       </div>
 
     </div>
