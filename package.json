@@ -1,0 +1,9 @@
+{
+  "name": "calculadora-3d-usa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Calculadora de Precificação 3D USA - SaaS com Stripe",
+  "dependencies": {
+    "stripe": "^17.4.0"
+  }
+}
