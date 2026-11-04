@@ -1582,7 +1582,7 @@
           <input type="number" id="cpa_manual" value="5.00" min="0.01" step="0.50" style="width:90px;padding:6px 8px;font-size:13px;" oninput="calcular()">
         </div>
         <div id="cpa-auto-hint" style="font-size:10.5px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">
-          CPA = CPC ÷ (CTR × CVR)
+          CPA = CPC ÷ CVR
         </div>
       </div>
       <!-- KPIs resumidos -->
@@ -1863,8 +1863,8 @@
     const cvr = num('cvr') / 100;
     const vendasMes = num('vendas_mes');
 
-    // CPA: usa valor manual se modo 'manual' estiver ativo, senão calcula via CPC/(CTR*CVR)
-    const cpa = (cpaMode === 'manual') ? num('cpa_manual') : ((ctr > 0 && cvr > 0) ? cpc / (ctr * cvr) : 0);
+    // CPA: usa valor manual se modo 'manual' estiver ativo, senão calcula via CPC/CVR (CTR não entra no custo por aquisição quando se paga por clique)
+    const cpa = (cpaMode === 'manual') ? num('cpa_manual') : (cvr > 0 ? cpc / cvr : 0);
     const lucroAntesAds = res.lucro;
     const roasMin = (lucroAntesAds > 0 && res.preco > 0) ? res.preco / lucroAntesAds : Infinity;
     const lucroPosAds = lucroAntesAds - cpa;
