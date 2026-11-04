@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso Online — Mentoria 3D EUA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+ --bg: #0a0e14;
+ --bg-2: #111820;
+ --bg-card: #161d27;
+ --border: rgba(255,255,255,0.07);
+ --border-strong: rgba(255,255,255,0.14);
+ --text: #f0f4f8;
+ --text-dim: #8b9bb4;
+ --text-muted: #5a6a80;
+ --accent: #00d4aa;
+ --accent-dim: rgba(0,212,170,0.12);
+ --font-display: 'Space Grotesk', sans-serif;
+ --font-body: 'Inter', sans-serif;
+ --font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+/* ===== AUTH OVERLAY ===== */
+#auth-overlay {
+ position: fixed; inset: 0; z-index: 9999;
+ background: var(--bg);
+ display: flex; align-items: center; justify-content: center;
+ padding: 24px;
+}
+#auth-overlay.hidden { display: none; }
+.auth-card {
+ max-width: 420px; width: 100%; text-align: center;
+}
+.auth-icon { font-size: 3rem; margin-bottom: 1rem; }
+.auth-title {
+ font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+ margin-bottom: 0.5rem; letter-spacing: -0.02em;
+}
+.auth-desc { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; }
+.auth-input {
+ width: 100%; padding: 1rem;
+ background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 10px;
+ color: var(--text); font-family: var(--font-mono); font-size: 1.1rem;
+ text-align: center; outline: none; transition: border-color 0.2s;
+ margin-bottom: 1rem;
+}
+.auth-input:focus { border-color: var(--accent); }
+.auth-input::placeholder { color: var(--text-muted); }
+.auth-btn {
+ width: 100%; padding: 1rem;
+ background: var(--accent); color: #03241f; border: none; border-radius: 10px;
+ font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+ cursor: pointer; transition: all 0.2s;
+}
+.auth-btn:hover { background: #00eabb; transform: translateY(-1px); }
+.auth-error {
+ color: #ff6b6b; font-size: 0.85rem; margin-top: 1rem; display: none;
+}
+
+/* ===== COURSE CONTENT ===== */
+.course-container {
+ max-width: 960px; margin: 0 auto; padding: 2rem;
+ display: none; /* hidden until auth */
+}
+.course-container.visible { display: block; }
+
+.back-link {
+ display: inline-flex; align-items: center; gap: 0.4rem;
+ font-family: var(--font-display); font-size: 0.85rem; color: var(--text-dim);
+ text-decoration: none; margin-bottom: 2rem; transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+
+.course-header { margin-bottom: 2rem; }
+.course-tag {
+ display: inline-block;
+ font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+ color: var(--accent); background: var(--accent-dim);
+ padding: 0.25rem 0.7rem; border-radius: 6px; margin-bottom: 0.8rem;
+}
+.course-header h1 {
+ font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.2rem);
+ letter-spacing: -0.02em; margin-bottom: 0.5rem;
+}
+.course-header p { color: var(--text-dim); font-size: 0.95rem; }
+
+/* Video Player */
+.video-wrapper {
+ position: relative; width: 100%; padding-bottom: 56.25%; /* 16:9 */
+ background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+ overflow: hidden; margin-bottom: 2rem;
+}
+.video-wrapper video {
+ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+}
+
+/* Modules List */
+.modules-title {
+ font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 1rem;
+}
+.module-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.module-item {
+ display: flex; align-items: center; gap: 1rem;
+ background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+ padding: 1rem 1.4rem; transition: border-color 0.2s;
+}
+.module-item:hover { border-color: var(--accent); }
+.module-num {
+ font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
+ color: var(--accent); opacity: 0.6; min-width: 32px;
+}
+.module-info h3 { font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.15rem; }
+.module-info p { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
+
+footer {
+ margin-top: 4rem; padding: 2rem; text-align: center;
+ border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted);
+}
+
+@media (max-width: 720px) {
+ .course-container { padding: 1.5rem; }
+ .module-item { padding: 0.8rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay">
+ <div class="auth-card">
+ <div class="auth-icon">🎬</div>
+ <div class="auth-title">Curso Online — Mentoria 3D EUA</div>
+ <div class="auth-desc">Digite a senha de acesso para assistir às aulas gravadas.</div>
+ <input type="password" id="auth-pass" class="auth-input" placeholder="Senha de acesso" />
+ <button class="auth-btn" onclick="checkAuth()">Acessar Curso</button>
+ <div class="auth-error" id="auth-error">Senha incorreta. Tente novamente.</div>
+ </div>
+</div>
+
+<!-- COURSE CONTENT (hidden until auth) -->
+<div class="course-container" id="course-content">
+ <a href="/" class="back-link">← Voltar ao site</a>
+
+ <div class="course-header">
+ <div class="course-tag">Gravação Completa da Mentoria</div>
+ <h1>Curso Online — Impressão 3D nos EUA</h1>
+ <p>4 aulas completas gravadas ao vivo. Assista no seu ritmo, quantas vezes quiser.</p>
+ </div>
+
+ <!-- VIDEO PLAYER -->
+ <div class="video-wrapper">
+ <video controls preload="metadata" playsinline controlslist="nodownload noremoteplayback" disablepictureinpicture oncontextmenu="return false;">
+ <source src="" type="video/mp4" id="course-video-source">
+ Seu navegador não suporta vídeo HTML5.
+ </video>
+ </div>
+
+ <!-- MODULES -->
+ <div class="modules-title">Conteúdo das Aulas</div>
+ <div class="module-list">
+ <div class="module-item">
+ <div class="module-num">01</div>
+ <div class="module-info">
+ <h3>Fundamentos do Mercado 3D nos EUA</h3>
+ <p>~1h30 · Nichos lucrativos, perfil do comprador, posicionamento</p>
+ </div>
+ </div>
+ <div class="module-item">
+ <div class="module-num">02</div>
+ <div class="module-info">
+ <h3>Produtos, Máquinas e Materiais</h3>
+ <p>~1h30 · Impressoras, filamentos, precificação com margem real</p>
+ </div>
+ </div>
+ <div class="module-item">
+ <div class="module-num">03</div>
+ <div class="module-info">
+ <h3>Vendas e Marketplaces</h3>
+ <p>~2h · Listings otimizados, SEO, fotos que convertem</p>
+ </div>
+ </div>
+ <div class="module-item">
+ <div class="module-num">04</div>
+ <div class="module-info">
+ <h3>Logística, Ads e Escala</h3>
+ <p>~2h · Envio BR→EUA, ROAS, plano de escala 1x→10x</p>
+ </div>
+ </div>
+ </div>
+
+ <footer>
+ <p>&copy; 2026 3DnaGringa · Acesso restrito por senha</p>
+ </footer>
+</div>
+
+<script>
+const CORRECT_PASS = '2026';
+
+function checkAuth() {
+ const pass = document.getElementById('auth-pass').value;
+ const err = document.getElementById('auth-error');
+
+ if (pass === CORRECT_PASS) {
+ document.getElementById('auth-overlay').classList.add('hidden');
+ document.getElementById('course-content').classList.add('visible');
+ sessionStorage.setItem('curso3d_auth', 'true');
+ } else {
+ err.style.display = 'block';
+ document.getElementById('auth-pass').value = '';
+ document.getElementById('auth-pass').focus();
+ }
+}
+
+// Enter key
+document.getElementById('auth-pass').addEventListener('keypress', function(e) {
+ if (e.key === 'Enter') checkAuth();
+});
+
+// Check session on load
+if (sessionStorage.getItem('curso3d_auth') === 'true') {
+ document.getElementById('auth-overlay').classList.add('hidden');
+ document.getElementById('course-content').classList.add('visible');
+} else {
+ document.getElementById('auth-pass').focus();
+}
+
+// Bloquear download do vídeo: desabilitar clique direito, drag e atalhos
+document.addEventListener('DOMContentLoaded', function() {
+ const video = document.querySelector('video');
+ if (!video) return;
+
+ // Bloquear arrastar o vídeo
+ video.addEventListener('dragstart', function(e) { e.preventDefault(); });
+
+ // Bloquear clique direito no player
+ video.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+ // Bloquear atalhos de teclado que podem expor o vídeo
+ document.addEventListener('keydown', function(e) {
+ // Ctrl+S, Ctrl+Shift+S, Ctrl+U (view source)
+ if ((e.ctrlKey || e.metaKey) && ['s','u'].includes(e.key.toLowerCase())) {
+ e.preventDefault();
+ }
+ });
+});
+</script>
+
+</body>
+</html>
