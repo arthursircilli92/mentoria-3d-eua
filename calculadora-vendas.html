@@ -1868,7 +1868,8 @@
     const lucroAntesAds = res.lucro;
     const roasMin = (lucroAntesAds > 0 && res.preco > 0) ? res.preco / lucroAntesAds : Infinity;
     const lucroPosAds = lucroAntesAds - cpa;
-    const roasAlvo = (lucroPosAds > 0 && res.preco > 0) ? res.preco / lucroPosAds : Infinity;
+    // ROAS Atual é a métrica real de desempenho (Preço / CPA), não o "ROAS Alvo" baseado em lucro residual
+    const roasAtual = (cpa > 0 && res.preco > 0) ? res.preco / cpa : 0;
     const lucroMensal = lucroPosAds * vendasMes;
 
     // Render KPIs
@@ -1910,7 +1911,7 @@
         const lucroFaixa = lucroAntesAds - cpaFaixa;
         const margemFaixa = res.preco > 0 ? (lucroFaixa / res.preco) * 100 : 0;
         const lucroMesFaixa = lucroFaixa * vendasMes;
-        const isActive = isFinite(roasAlvo) && roasAlvo >= f.min && roasAlvo < f.max;
+        const isActive = roasAtual >= f.min && roasAtual < f.max;
         const rowCls = `roas-row-${f.cls}${isActive ? ' active-row' : ''}`;
         return `<tr class="${rowCls}">
           <td><span class="roas-band ${f.band}"></span>${f.label}</td>
@@ -1948,25 +1949,25 @@
       escalaBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:12px;">Ajuste os parâmetros para ver projeções de escala.</td></tr>';
     }
 
-    // Veredito
+    // Veredito (baseado no ROAS Atual = Preço / CPA, não no ROAS Alvo)
     const verdictEl = document.getElementById('roas-verdict');
     verdictEl.style.display = 'block';
     verdictEl.className = 'roas-verdict';
     if (!isFinite(roasMin) || res.inviavel) {
       verdictEl.classList.add('danger');
       verdictEl.innerHTML = '<strong>⚠️ Inviável com ads.</strong> O produto não gera margem suficiente para pagar tráfego pago. Reduza custos ou aumente o preço antes de investir em ads.';
-    } else if (!isFinite(roasAlvo) || lucroPosAds <= 0) {
+    } else if (lucroPosAds <= 0) {
       verdictEl.classList.add('warning');
-      verdictEl.innerHTML = `<strong>⚡ ROAS breakeven: ${roasMin.toFixed(2)}x</strong> — qualquer ROAS abaixo disso dá prejuízo. Com CPA de ${usd(cpa)}, não sobra margem. Otimize criativos e segmentação.`;
-    } else if (roasAlvo <= 3) {
+      verdictEl.innerHTML = `<strong>⚡ ROAS atual: ${roasAtual.toFixed(2)}x</strong> (breakeven: ${roasMin.toFixed(2)}x). Com CPA de ${usd(cpa)}, não sobra margem. Otimize criativos e segmentação para baixar o CPA.`;
+    } else if (roasAtual >= 4) {
       verdictEl.classList.add('success');
-      verdictEl.innerHTML = `<strong>✅ Saudável!</strong> ROAS alvo de ${roasAlvo.toFixed(2)}x é atingível. Projeção: <strong>${usd(lucroMensal)}/mês</strong> com ${vendasMes} vendas. CPA de ${usd(cpa)} deixa margem de ${((lucroPosAds/res.preco)*100).toFixed(1)}% após ads.`;
-    } else if (roasAlvo <= 5) {
+      verdictEl.innerHTML = `<strong>✅ Saudável!</strong> ROAS atual de ${roasAtual.toFixed(2)}x está acima do breakeven (${roasMin.toFixed(2)}x). Projeção: <strong>${usd(lucroMensal)}/mês</strong> com ${vendasMes} vendas. Margem líquida após ads: ${((lucroPosAds/res.preco)*100).toFixed(1)}%.`;
+    } else if (roasAtual >= roasMin) {
       verdictEl.classList.add('warning');
-      verdictEl.innerHTML = `<strong>Apertado.</strong> ROAS alvo de ${roasAlvo.toFixed(2)}x exige campanha bem otimizada. Projeção: <strong>${usd(lucroMensal)}/mês</strong>. Considere aumentar ticket médio ou reduzir CPA.`;
+      verdictEl.innerHTML = `<strong>⚡ Lucro apertado.</strong> ROAS atual de ${roasAtual.toFixed(2)}x supera o breakeven (${roasMin.toFixed(2)}x), mas a margem é mínima (${usd(lucroPosAds)}/venda). Projeção: <strong>${usd(lucroMensal)}/mês</strong>. Para ter folga, suba o CVR ou baixe o CPC.`;
     } else {
       verdictEl.classList.add('danger');
-      verdictEl.innerHTML = `<strong>🔴 Difícil.</strong> ROAS alvo de ${roasAlvo.toFixed(2)}x é alto demais para a maioria dos nichos. Projeção: <strong>${usd(lucroMensal)}/mês</strong>. Reavalie custos ou canal de venda.`;
+      verdictEl.innerHTML = `<strong>🔴 Prejuízo.</strong> ROAS atual de ${roasAtual.toFixed(2)}x está abaixo do breakeven (${roasMin.toFixed(2)}x). Projeção: <strong>${usd(lucroMensal)}/mês</strong>. Reavalie custos, preço ou canal de venda.`;
     }
 
     // Comparativo de canais (top 3 melhores)
