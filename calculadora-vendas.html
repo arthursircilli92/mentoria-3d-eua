@@ -1360,6 +1360,41 @@
     margin-top: 16px; font-size: 11px; color: var(--text-muted);
     display: flex; align-items: center; justify-content: center; gap: 5px;
   }
+  .paywall-divider {
+    height: 1px; background: var(--border); margin: 20px 0 16px;
+  }
+  .paywall-recover-label {
+    font-size: 12px; color: var(--text-muted); margin-bottom: 8px; text-align: center;
+  }
+  .paywall-email-row {
+    display: flex; gap: 8px;
+  }
+  .paywall-email-input {
+    flex: 1; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface-2); color: var(--text);
+    font-size: 13px; font-family: 'Inter', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .paywall-email-input:focus { border-color: var(--accent); }
+  .paywall-email-input::placeholder { color: var(--text-muted); }
+  .paywall-btn-recover {
+    padding: 10px 18px;
+    background: var(--surface-2); color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+  }
+  .paywall-btn-recover:hover { border-color: var(--accent); color: var(--accent); }
+  .paywall-btn-recover:disabled { opacity: 0.6; cursor: not-allowed; }
+  .paywall-btn-recover.loading .paywall-loading { display: inline; }
+  .paywall-btn-recover.loading .paywall-label { display: none; }
+  .paywall-recover-msg {
+    margin-top: 8px; font-size: 12px; text-align: center; min-height: 16px;
+  }
+  .paywall-recover-msg.success { color: var(--success); }
+  .paywall-recover-msg.error { color: #ef4444; }
   .paywall-loading { display: none; }
   .paywall-btn.loading .paywall-loading { display: inline; }
   .paywall-btn.loading .paywall-label { display: none; }
@@ -1408,6 +1443,18 @@
     <div class="paywall-secure">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
       Pagamento seguro via Stripe
+    </div>
+    <div class="paywall-divider"></div>
+    <div class="paywall-recover">
+      <div class="paywall-recover-label">Já assinou? Recupere seu acesso:</div>
+      <div class="paywall-email-row">
+        <input type="email" id="recover-email" placeholder="seu@email.com" class="paywall-email-input" />
+        <button class="paywall-btn-recover" id="recover-btn" onclick="recoverAccess()">
+          <span class="paywall-label">Liberar</span>
+          <span class="paywall-loading"><span class="spinner"></span></span>
+        </button>
+      </div>
+      <div class="paywall-recover-msg" id="recover-msg"></div>
     </div>
   </div>
 </div>
@@ -2262,13 +2309,89 @@
     overlay.classList.remove('hidden');
   }
 
+  async function recoverAccess() {
+    const btn = document.getElementById('recover-btn');
+    const input = document.getElementById('recover-email');
+    const msg = document.getElementById('recover-msg');
+    const overlay = document.getElementById('paywall-overlay');
+    const email = input.value.trim();
+
+    if (!email || !email.includes('@')) {
+      msg.textContent = 'Digite um email válido';
+      msg.className = 'paywall-recover-msg error';
+      return;
+    }
+
+    btn.classList.add('loading');
+    btn.disabled = true;
+    msg.textContent = '';
+    msg.className = 'paywall-recover-msg';
+
+    try {
+      const res = await fetch('/api/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (data.active) {
+        localStorage.setItem('calc3d_email', email);
+        localStorage.setItem('calc3d_customer_id', data.customerId);
+        msg.textContent = '✓ Acesso liberado! Redirecionando...';
+        msg.className = 'paywall-recover-msg success';
+        setTimeout(() => overlay.classList.add('hidden'), 800);
+      } else {
+        msg.textContent = data.error || 'Nenhuma assinatura ativa encontrada para este email';
+        msg.className = 'paywall-recover-msg error';
+      }
+    } catch (e) {
+      console.error('Erro ao recuperar acesso:', e);
+      msg.textContent = 'Erro de conexão. Tente novamente.';
+      msg.className = 'paywall-recover-msg error';
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  }
+
+  // Verificar email salvo no localStorage ao carregar
+  async function checkSavedEmail() {
+    const savedEmail = localStorage.getItem('calc3d_email');
+    if (!savedEmail) return false;
+
+    try {
+      const res = await fetch('/api/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: savedEmail }),
+      });
+      const data = await res.json();
+      if (data.active) {
+        document.getElementById('paywall-overlay').classList.add('hidden');
+        return true;
+      } else {
+        localStorage.removeItem('calc3d_email');
+        localStorage.removeItem('calc3d_customer_id');
+        return false;
+      }
+    } catch (e) {
+      console.warn('Erro ao verificar email salvo:', e);
+      return false;
+    }
+  }
+
   // Carregar Stripe.js dinamicamente
   (async function initPaywall() {
     const script = document.createElement('script');
     script.src = 'https://js.stripe.com/v3/';
-    script.onload = () => {
+    script.onload = async () => {
       stripeInstance = Stripe(STRIPE_CONFIG.publishableKey);
-      checkAccess();
+      // Verifica email salvo primeiro (mais rápido que session_id)
+      const emailLiberado = await checkSavedEmail();
+      if (!emailLiberado) {
+        checkAccess();
+      }
     };
     script.onerror = () => {
       console.error('Falha ao carregar Stripe.js');
