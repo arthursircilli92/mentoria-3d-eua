@@ -1262,9 +1262,140 @@
     .compare-grid { grid-template-columns: 1fr; }
     .roas-kpi-row { flex-direction: column; }
   }
+
+  /* ===== PAYWALL OVERLAY ===== */
+  #paywall-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  #paywall-overlay.hidden { display: none; }
+  .paywall-card {
+    max-width: 480px; width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 32px;
+    text-align: center;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] .paywall-card {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .paywall-icon {
+    width: 56px; height: 56px; margin: 0 auto 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: #fff;
+  }
+  .paywall-title {
+    font-size: 22px; font-weight: 700; color: var(--text);
+    margin-bottom: 8px; letter-spacing: -0.02em;
+  }
+  .paywall-desc {
+    font-size: 14px; color: var(--text-dim); line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .paywall-plans {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .paywall-plan {
+    flex: 1; min-width: 140px;
+    padding: 16px 12px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface-2);
+  }
+  .paywall-plan:hover, .paywall-plan.selected {
+    border-color: var(--accent);
+    background: rgba(99,102,241,0.06);
+  }
+  [data-theme="dark"] .paywall-plan:hover,
+  [data-theme="dark"] .paywall-plan.selected {
+    background: rgba(129,140,248,0.1);
+  }
+  .paywall-plan-name {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
+  }
+  .paywall-plan-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px; font-weight: 700; color: var(--text);
+  }
+  .paywall-plan-period { font-size: 12px; color: var(--text-dim); font-weight: 400; }
+  .paywall-plan-badge {
+    display: inline-block; margin-top: 6px;
+    font-size: 10px; font-weight: 600; color: var(--success);
+    background: var(--success-bg); padding: 2px 8px; border-radius: 4px;
+  }
+  .paywall-btn {
+    width: 100%; padding: 14px 24px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .paywall-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99,102,241,0.3);
+  }
+  .paywall-btn:disabled {
+    opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none;
+  }
+  .paywall-secure {
+    margin-top: 16px; font-size: 11px; color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .paywall-loading { display: none; }
+  .paywall-btn.loading .paywall-loading { display: inline; }
+  .paywall-btn.loading .paywall-label { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin 0.6s linear infinite; vertical-align: middle;
+  }
 </style>
 </head>
 <body>
+
+<!-- PAYWALL OVERLAY (visível por padrão, só some após validação) -->
+<div id="paywall-overlay" style="position:fixed;inset:0;z-index:9999;background:#0c0c1d;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div class="paywall-card">
+    <div class="paywall-icon">🔒</div>
+    <div class="paywall-title">Calculadora de Precificação 3D</div>
+    <div class="paywall-desc">
+      Custo exato por peça, preço com margem alvo, simulador de ROAS e projeção de escala até 10x. Compare 8 marketplaces em tempo real.
+    </div>
+    <div class="paywall-plans">
+      <div class="paywall-plan selected" onclick="selectPlan('monthly')" id="plan-monthly">
+        <div class="paywall-plan-name">Mensal</div>
+        <div class="paywall-plan-price">$9,90<span class="paywall-plan-period">/mês</span></div>
+      </div>
+      <div class="paywall-plan" onclick="selectPlan('yearly')" id="plan-yearly">
+        <div class="paywall-plan-name">Anual</div>
+        <div class="paywall-plan-price">$89,90<span class="paywall-plan-period">/ano</span></div>
+        <div class="paywall-plan-badge">−25% vs mensal</div>
+      </div>
+    </div>
+    <button class="paywall-btn" id="checkout-btn" onclick="startCheckout()">
+      <span class="paywall-label">Assinar Agora</span>
+      <span class="paywall-loading"><span class="spinner"></span> Redirecionando...</span>
+    </button>
+    <div class="paywall-secure">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      Pagamento seguro via Stripe
+    </div>
+  </div>
+</div>
+
 <div class="app">
 
   <header>
