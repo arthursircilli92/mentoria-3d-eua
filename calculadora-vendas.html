@@ -8,8 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* ===== GLASS THEME ===== */
-  /* Light */
+  /* ===== VARIÁVEIS DE TEMA ===== */
   :root {
     --bg: #eef0f8;
     --surface: rgba(255,255,255,0.65);
@@ -27,46 +26,9 @@
     --warning-bg: rgba(217,119,6,0.1);
     --danger: #dc2626;
     --danger-bg: rgba(220,38,38,0.1);
+    --compare-bg: rgba(255,255,255,0.4);
   }
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow-x: hidden;
-  }
-  body {
-    background: #eef0f8;
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(99,102,241,0.1) 0%, transparent 50%),
-      radial-gradient(circle at 85% 80%, rgba(129,140,248,0.08) 0%, transparent 50%);
-  }
-  .panel {
-    background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(100,100,140,0.1);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-  }
-  .card { background: rgba(255,255,255,0.5); border: 1px solid rgba(100,100,140,0.08); border-radius: 12px; }
-  input, select {
-    background: rgba(255,255,255,0.7); border: 1px solid rgba(100,100,140,0.15); border-radius: 10px; backdrop-filter: blur(8px);
-    appearance: none; -webkit-appearance: none; -moz-appearance: none;
-  }
-  input:focus, select:focus {
-    border-color: rgba(99,102,241,0.5); box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
-  }
-  .brand-mark { background: linear-gradient(135deg, #6366f1, #818cf8); border-radius: 10px; box-shadow: 0 4px 16px rgba(99,102,241,0.25); }
-  .hero { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(129,140,248,0.04)); border: 1px solid rgba(99,102,241,0.15); border-radius: 14px; }
-  .breakdown { background: rgba(255,255,255,0.4); border: 1px solid rgba(100,100,140,0.08); border-radius: 10px; }
-  .compare-col { background: rgba(255,255,255,0.4); }
-  .compare-grid { background: rgba(99,102,241,0.08); border-radius: 0 0 16px 16px; overflow: hidden; }
-  .analysis { background: rgba(255,255,255,0.5); border: 1px solid rgba(100,100,140,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
-  .score-bar { background: rgba(100,100,140,0.1); border-radius: 4px; }
-  .section-num { background: rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.12); }
-  header { border-bottom: 1px solid rgba(100,100,140,0.1); }
-  .custom-fields { background: rgba(255,255,255,0.3); border: 1px dashed rgba(100,100,140,0.15); border-radius: 10px; }
 
-  /* Dark */
   [data-theme="dark"] {
     --bg: #0c0c1d;
     --surface: rgba(255,255,255,0.06);
@@ -84,117 +46,18 @@
     --warning-bg: rgba(251,191,36,0.12);
     --danger: #f87171;
     --danger-bg: rgba(248,113,113,0.12);
+    --compare-bg: #12122a;
   }
-  [data-theme="dark"] body {
-    background: #0c0c1d;
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(129,140,248,0.15) 0%, transparent 50%),
-      radial-gradient(circle at 85% 80%, rgba(167,139,250,0.12) 0%, transparent 50%),
-      radial-gradient(circle at 50% 50%, rgba(52,211,153,0.06) 0%, transparent 60%);
-  }
-  [data-theme="dark"] .panel {
-    background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
-  }
-  [data-theme="dark"] .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; }
-  [data-theme="dark"] input, [data-theme="dark"] select {
-    background: #1a1a30; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: #f0f0ff;
-    appearance: none; -webkit-appearance: none; -moz-appearance: none;
-  }
-  [data-theme="dark"] select option {
-    background: #1a1a30; color: #f0f0ff;
-  }
-  [data-theme="dark"] input:focus, [data-theme="dark"] select:focus {
-    border-color: rgba(129,140,248,0.6); box-shadow: 0 0 0 3px rgba(129,140,248,0.15), 0 0 20px rgba(129,140,248,0.1);
-  }
-  [data-theme="dark"] .brand-mark { background: linear-gradient(135deg, #818cf8, #a78bfa); border-radius: 10px; box-shadow: 0 4px 16px rgba(129,140,248,0.3); }
-  [data-theme="dark"] .hero { background: linear-gradient(135deg, rgba(129,140,248,0.1), rgba(167,139,250,0.05)); border: 1px solid rgba(129,140,248,0.2); border-radius: 14px; }
-  [data-theme="dark"] { --compare-bg: #12122a; }
- [data-theme="dark"] .breakdown { background: #14142a; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
-  [data-theme="dark"] .compare-col { background: #12122a !important; }
-  [data-theme="dark"] .compare-name { color: #c0c0e0 !important; }
-  [data-theme="dark"] .compare-price { color: #f0f0ff !important; }
-  [data-theme="dark"] .compare-profit { color: #34d399 !important; }
-  [data-theme="dark"] .compare-profit.negative { color: #f87171 !important; }
-  [data-theme="dark"] .compare-meta { color: #9090b0 !important; }
-  [data-theme="dark"] .compare-grid { background: #1e1e3a !important; border-radius: 0 0 16px 16px; overflow: hidden; }
-  [data-theme="dark"] .analysis { background: #14142a; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(12px); }
-  [data-theme="dark"] .score-bar { background: rgba(255,255,255,0.08); border-radius: 4px; }
-  [data-theme="dark"] .section-num { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
-  [data-theme="dark"] header { border-bottom: 1px solid rgba(255,255,255,0.08); }
-  [data-theme="dark"] .custom-fields { background: #14142a; border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; }
-  [data-theme="dark"] .breakdown-row { color: #d0d0e8; }
-  [data-theme="dark"] .metric-value { color: #f0f0ff; }
-  [data-theme="dark"] .metric-label { color: #a0a0c0; }
-  [data-theme="dark"] .panel-title { color: #c0c0e0; }
-  [data-theme="dark"] .label { color: #a0a0c0; }
-  [data-theme="dark"] footer { color: #808098; }
 
-  /* ===== ROAS TABLE (ZiemCalc style) ===== */
-  .roas-table-wrap { overflow-x: auto; margin-top: 8px; }
-  .roas-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'JetBrains Mono', monospace; }
-  .roas-table th { text-align: left; padding: 8px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); border-bottom: 2px solid var(--border); font-weight: 600; white-space: nowrap; }
-  .roas-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; font-weight: 500; }
-  [data-theme="dark"] .roas-table th { border-bottom-color: rgba(255,255,255,0.1); color: #a0a0c0; }
-  [data-theme="dark"] .roas-table td { border-bottom-color: rgba(255,255,255,0.06); }
-  .roas-table tr.active-row { font-weight: 700; }
-  .roas-table tr.active-row td { border-bottom: 2px solid var(--accent); }
-  /* Faixas de cor — azul em vez de verde para "Excelente" */
-  .roas-band { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
-  .band-blue { background: #3b82f6; }
-  .band-green { background: #22c55e; }
-  .band-yellow { background: #eab308; }
-  .band-orange { background: #f97316; }
-  .band-red { background: #ef4444; }
-  .roas-row-blue td { background: rgba(59,130,246,0.06); }
-  .roas-row-green td { background: rgba(34,197,94,0.06); }
-  .roas-row-yellow td { background: rgba(234,179,8,0.06); }
-  .roas-row-orange td { background: rgba(249,115,22,0.06); }
-  .roas-row-red td { background: rgba(239,68,68,0.06); }
-  [data-theme="dark"] .roas-row-blue td { background: rgba(59,130,246,0.1); }
-  [data-theme="dark"] .roas-row-green td { background: rgba(34,197,94,0.1); }
-  [data-theme="dark"] .roas-row-yellow td { background: rgba(234,179,8,0.1); }
-  [data-theme="dark"] .roas-row-orange td { background: rgba(249,115,22,0.1); }
-  [data-theme="dark"] .roas-row-red td { background: rgba(239,68,68,0.1); }
-  .roas-kpi-row { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-  .roas-kpi { flex: 1; min-width: 100px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; text-align: center; }
-  [data-theme="dark"] .roas-kpi { background: #16162e; border-color: rgba(255,255,255,0.08); }
-  .roas-kpi-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; }
-  .roas-kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: var(--text); }
-  .roas-verdict { padding: 14px 16px; border-radius: 10px; font-size: 12px; line-height: 1.6; font-weight: 500; margin-top: 14px; }
-  .roas-verdict.success { background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.2); }
-  .roas-verdict.warning { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(217,119,6,0.15); }
-  .roas-verdict.danger { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(220,38,38,0.15); }
-  [data-theme="dark"] .roas-verdict.success { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); }
-  [data-theme="dark"] .roas-verdict.warning { border-color: rgba(251,191,36,0.2); }
-  [data-theme="dark"] .roas-verdict.danger { border-color: rgba(248,113,113,0.2); }
-
-  /* ===== ADVANCED MODE TOGGLE ===== */
-  .mode-toggle { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 8px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; }
-  [data-theme="dark"] .mode-toggle { background: #16162e; border-color: rgba(255,255,255,0.08); }
-  .mode-toggle label { font-size: 12px; color: var(--text-dim); cursor: pointer; user-select: none; font-weight: 500; }
-  .toggle-switch { position: relative; width: 38px; height: 20px; background: var(--border-strong); border-radius: 10px; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
-  .toggle-switch.active { background: var(--accent); }
-  .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-  .toggle-switch.active::after { transform: translateX(18px); }
-  .advanced-fields { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); animation: fadeIn 0.2s ease; }
-  .advanced-fields.visible { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* ===== PROFIT GOAL BADGE ===== */
-  .profit-goal-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-left: 8px; letter-spacing: 0.02em; }
-  .profit-goal-badge.met { background: var(--success-bg); color: var(--success); }
-  .profit-goal-badge.missed { background: var(--danger-bg); color: var(--danger); }
-
-  /* ===== MONTHLY PROJECTION HIGHLIGHT ===== */
-  .projection-highlight { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(129,140,248,0.03)); border: 1px solid rgba(99,102,241,0.12); border-radius: 10px; margin-top: 12px; }
-  [data-theme="dark"] .projection-highlight { background: linear-gradient(135deg, rgba(129,140,248,0.08), rgba(167,139,250,0.04)); border-color: rgba(129,140,248,0.15); }
-  .projection-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-  .projection-value { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; }
-
+  /* ===== RESET & BASE ===== */
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { font-size: 14px; overflow-x: hidden; width: 100%; }
+
+  html {
+    font-size: 14px;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
@@ -206,11 +69,25 @@
     width: 100%;
     max-width: 100vw;
   }
+
+  [data-theme="light"] body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(99,102,241,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(129,140,248,0.08) 0%, transparent 50%);
+  }
+
+  [data-theme="dark"] body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(129,140,248,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(167,139,250,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(52,211,153,0.06) 0%, transparent 60%);
+  }
+
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
-  /* LAYOUT */
+  /* ===== LAYOUT ===== */
   .app {
     max-width: 1100px;
     width: 100%;
@@ -219,15 +96,12 @@
     box-sizing: border-box;
     overflow-x: hidden;
   }
-  @media (min-width: 1400px) {
-    .app {
-      padding-left: calc((100vw - 1100px) / 2);
-      padding-right: calc((100vw - 1100px) / 2);
-    }
-  }
-  .roas-table-wrap { overflow-x: auto; max-width: 100%; }
 
-  /* HEADER */
+  @media (max-width: 768px) {
+    .app { padding: 16px 16px 48px; }
+  }
+
+  /* ===== HEADER ===== */
   header {
     display: flex;
     align-items: center;
@@ -235,16 +109,20 @@
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 12px;
   }
+
   .brand {
     display: flex;
     align-items: center;
     gap: 10px;
   }
+
   .brand-mark {
     width: 28px;
     height: 28px;
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: var(--bg);
     display: flex;
     align-items: center;
@@ -252,13 +130,20 @@
     font-family: 'JetBrains Mono', monospace;
     font-weight: 600;
     font-size: 13px;
-    border-radius: 4px;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.25);
   }
+
+  [data-theme="dark"] .brand-mark {
+    box-shadow: 0 4px 16px rgba(129,140,248,0.3);
+  }
+
   .brand-name {
     font-weight: 600;
     font-size: 14px;
     letter-spacing: -0.01em;
   }
+
   .brand-tag {
     font-size: 11px;
     color: var(--text-muted);
@@ -268,11 +153,33 @@
     font-family: 'JetBrains Mono', monospace;
     margin-left: 4px;
   }
+
   .header-actions {
     display: flex;
     align-items: center;
     gap: 8px;
   }
+
+  .site-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  .site-link:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
   .theme-toggle {
     background: transparent;
     border: 1px solid var(--border);
@@ -286,29 +193,49 @@
     justify-content: center;
     transition: all 0.15s;
   }
+
   .theme-toggle:hover {
     color: var(--text);
     border-color: var(--border-strong);
   }
 
-  /* MAIN GRID */
+  /* ===== MAIN GRID ===== */
   .main-grid {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
     gap: 24px;
     align-items: start;
   }
+
   .main-grid > * { min-width: 0; }
+  .main-grid > .roas-full-panel { grid-column: 1 / -1 !important; width: 100% !important; }
+
   @media (max-width: 980px) {
     .main-grid { grid-template-columns: 1fr; }
   }
 
-  /* PANELS */
+  /* ===== STACKS ===== */
+  .left-stack, .right-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ===== PANELS ===== */
   .panel {
     background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    overflow: hidden;
   }
+
+  [data-theme="dark"] .panel {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
   .panel-head {
     padding: 14px 20px;
     border-bottom: 1px solid var(--border);
@@ -316,39 +243,23 @@
     align-items: center;
     justify-content: space-between;
   }
+
   .panel-title {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
+
   .panel-body {
     padding: 20px;
   }
 
-  /* SECTIONS */
-  .section {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px dashed var(--border);
-  }
-  .section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-  [data-theme="dark"] .section { border-bottom: 1px solid rgba(99,102,241,0.15); }
-  .section-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    margin-bottom: 14px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(99,102,241,0.1);
-  }
-  [data-theme="dark"] .section-label { color: #818cf8; border-bottom-color: rgba(129,140,248,0.15); }
+  /* ===== SECTION NUMBERS ===== */
   .section-num {
     width: 18px;
     height: 18px;
@@ -364,18 +275,26 @@
     font-weight: 600;
   }
 
-  /* FORM */
+  [data-theme="dark"] .section-num {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  /* ===== FORM FIELDS ===== */
   .field-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
+
   .field {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
+
   .field.full { grid-column: 1 / -1; }
+
   label {
     font-size: 11.5px;
     font-weight: 500;
@@ -384,16 +303,19 @@
     justify-content: space-between;
     align-items: baseline;
   }
+
   label .hint {
     font-size: 10.5px;
     color: var(--text-muted);
     font-family: 'JetBrains Mono', monospace;
   }
+
   .input-wrap {
     position: relative;
     display: flex;
     align-items: center;
   }
+
   .input-affix {
     position: absolute;
     color: var(--text-muted);
@@ -402,6 +324,7 @@
     pointer-events: none;
     font-weight: 500;
   }
+
   .input-affix.pre { left: 10px; }
   .input-affix.suf { right: 10px; }
 
@@ -420,13 +343,30 @@
     -webkit-appearance: none;
     -moz-appearance: none;
   }
+
+  [data-theme="dark"] input, [data-theme="dark"] select {
+    background: #1a1a30;
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  [data-theme="dark"] select option {
+    background: #1a1a30;
+    color: #f0f0ff;
+  }
+
   input.with-pre { padding-left: 28px; }
   input.with-suf { padding-right: 32px; }
+
   input:focus, select:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent);
   }
+
+  [data-theme="dark"] input:focus, [data-theme="dark"] select:focus {
+    box-shadow: 0 0 0 3px rgba(129,140,248,0.15), 0 0 20px rgba(129,140,248,0.1);
+  }
+
   select {
     font-family: 'Inter', sans-serif;
     font-weight: 500;
@@ -440,7 +380,9 @@
     gap: 6px;
     align-items: center;
   }
+
   .time-row input { text-align: center; }
+
   .time-sep {
     text-align: center;
     color: var(--text-muted);
@@ -457,25 +399,362 @@
     border: 1px dashed var(--border-strong);
     border-radius: 6px;
   }
+
+  [data-theme="dark"] .custom-fields {
+    background: #14142a;
+    border-color: rgba(255,255,255,0.12);
+  }
+
   .custom-fields.visible { display: grid; }
 
-  /* RIGHT PANEL */
-  .left-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .right-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+ /* ===== MARGIN PRESET BUTTONS ===== */
+ .margin-presets {
+ display: flex;
+ gap: 6px;
+ margin-bottom: 8px;
+ flex-wrap: wrap;
+ }
 
-  /* HERO RESULT */
+ .margin-btn {
+ padding: 5px 12px;
+ border-radius: 6px;
+ border: 1px solid var(--border);
+ background: var(--surface-2);
+ color: var(--text-dim);
+ font-size: 11px;
+ font-weight: 600;
+ font-family: 'JetBrains Mono', monospace;
+ cursor: pointer;
+ transition: all 0.15s;
+ }
+
+ .margin-btn:hover {
+ border-color: var(--accent);
+ color: var(--text);
+ }
+
+ .margin-btn.active {
+ background: var(--accent);
+ border-color: var(--accent);
+ color: #fff;
+ }
+
+ [data-theme="dark"] .margin-btn {
+ background: #16162e;
+ border-color: rgba(255,255,255,0.08);
+ }
+
+ [data-theme="dark"] .margin-btn.active {
+ background: var(--accent);
+ border-color: var(--accent);
+ }
+
+ /* ===== COLORED PANEL TITLES ===== */
+ .panel-title.title-peca { color: #3b82f6; }
+ .panel-title.title-producao { color: #f59e0b; }
+ .panel-title.title-estrategia { color: #8b5cf6; }
+ .panel-title.title-ads { color: #ec4899; }
+ .panel-title.title-resultados { color: #10b981; }
+ .panel-title.title-comparativo { color: #06b6d4; }
+ .panel-title.title-roas { color: #f97316; }
+
+ [data-theme="dark"] .panel-title.title-peca { color: #60a5fa; }
+ [data-theme="dark"] .panel-title.title-producao { color: #fbbf24; }
+ [data-theme="dark"] .panel-title.title-estrategia { color: #a78bfa; }
+ [data-theme="dark"] .panel-title.title-ads { color: #f472b6; }
+ [data-theme="dark"] .panel-title.title-resultados { color: #34d399; }
+ [data-theme="dark"] .panel-title.title-comparativo { color: #22d3ee; }
+ [data-theme="dark"] .panel-title.title-roas { color: #fb923c; }
+
+ /* ===== ADS LEGENDS ===== */
+ .ads-legends {
+ margin-top: 12px;
+ padding: 10px 14px;
+ background: var(--surface-2);
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
+ }
+
+ [data-theme="dark"] .ads-legends {
+ background: #14142a;
+ }
+
+ .ads-legend-item {
+ font-size: 11px;
+ line-height: 1.5;
+ color: var(--text-dim);
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ }
+
+ .ads-legend-dot {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ flex-shrink: 0;
+ }
+
+ .ads-legend-item strong {
+ color: var(--text);
+ font-weight: 600;
+ }
+
+ /* ===== ANALYSIS TEXT PANEL (independent block below Analysis) ===== */
+ .analysis-text-panel {
+ margin-top: 0;
+ }
+
+ .analysis-text-panel .panel-body.analysis-text {
+ padding: 16px 20px;
+ font-size: 12.5px;
+ line-height: 1.7;
+ color: var(--text-dim);
+ }
+
+ .analysis-text p {
+ margin-bottom: 6px;
+ }
+
+ .analysis-text p:last-child {
+ margin-bottom: 0;
+ }
+
+ .analysis-text strong {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11.5px;
+ font-weight: 600;
+ color: var(--text);
+ background: var(--surface-2);
+ padding: 1px 5px;
+ border-radius: 3px;
+ }
+
+ /* ===== ANALYSIS LAYOUT (DONUT + LEGEND SIDE BY SIDE) ===== */
+ .analysis-layout {
+ display: flex;
+ flex-direction: row;
+ align-items: center;
+ gap: 32px;
+ padding: 12px 0;
+ width: 100%;
+ }
+
+ .analysis-layout .cost-donut-wrap {
+ flex-shrink: 0;
+ }
+
+ .analysis-layout .cost-legend {
+ flex: 1;
+ min-width: 0;
+ }
+
+ @media (max-width: 768px) {
+ .analysis-layout { flex-direction: column; align-items: center; gap: 16px; }
+ .analysis-layout .cost-legend { width: 100%; min-width: unset; }
+ }
+
+ /* ===== COST DONUT WRAP ===== */
+
+ .cost-donut-wrap {
+ width: 140px;
+ height: 140px;
+ position: relative;
+ flex-shrink: 0;
+ overflow: visible;
+ }
+
+ .cost-donut-wrap svg {
+ width: 100%;
+ height: 100%;
+ transform: rotate(-90deg);
+ display: block;
+ overflow: visible;
+ }
+
+ /* ===== ANALYSIS SECTION SPACING ===== */
+ .analysis {
+ padding: 20px;
+ background: var(--surface);
+ backdrop-filter: blur(20px);
+ -webkit-backdrop-filter: blur(20px);
+ border: 1px solid var(--border);
+ border-radius: 12px;
+ box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+ overflow: hidden;
+ }
+
+ [data-theme="dark"] .analysis {
+ box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+ }
+
+ .analysis-head {
+ padding-bottom: 12px;
+ border-bottom: 1px solid var(--border);
+ margin-bottom: 16px;
+ }
+
+ .cost-donut-center {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ text-align: center;
+ pointer-events: none;
+ }
+
+ .cost-donut-center .label {
+ font-size: 9px;
+ font-weight: 600;
+ text-transform: uppercase;
+ letter-spacing: 0.06em;
+ color: var(--text-muted);
+ margin-bottom: 2px;
+ }
+
+ .cost-donut-center .value {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 14px;
+ font-weight: 700;
+ color: var(--text);
+ }
+
+ .cost-legend {
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
+ flex: 1;
+ min-width: 0;
+ }
+
+ .cost-legend-item {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 12px;
+ color: var(--text-dim);
+ }
+
+ .cost-legend-dot {
+ width: 10px;
+ height: 10px;
+ border-radius: 50%;
+ flex-shrink: 0;
+ }
+
+ .cost-legend-label {
+ flex: 1;
+ font-weight: 500;
+ }
+
+ .cost-legend-value {
+ font-family: 'JetBrains Mono', monospace;
+ font-weight: 600;
+ font-size: 11.5px;
+ color: var(--text);
+ }
+
+ .cost-legend-pct {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 10.5px;
+ color: var(--text-muted);
+ min-width: 38px;
+ text-align: right;
+ }
+
+ @media (max-width: 600px) {
+ .analysis-layout { flex-direction: column; align-items: center; gap: 16px; }
+ .cost-donut-wrap { width: 120px; height: 120px; }
+ .cost-legend { min-width: unset; width: 100%; }
+ }
+
+ /* ===== CPA TOGGLE & LESSON ===== */
+ .cpa-toggle-btn {
+ padding: 5px 14px;
+ font-size: 11px;
+ font-weight: 600;
+ font-family: 'JetBrains Mono', monospace;
+ border: none;
+ background: var(--surface-2);
+ color: var(--text-dim);
+ cursor: pointer;
+ transition: all 0.15s;
+ }
+
+ .cpa-toggle-btn:first-child { border-radius: 5px 0 0 5px; }
+ .cpa-toggle-btn:last-child { border-radius: 0 5px 5px 0; }
+
+ .cpa-toggle-btn.active {
+ background: var(--accent);
+ color: #fff;
+ }
+
+ [data-theme="dark"] .cpa-toggle-btn {
+ background: #16162e;
+ }
+
+ [data-theme="dark"] .cpa-toggle-btn.active {
+ background: var(--accent);
+ }
+
+ .cpa-lesson {
+ margin-bottom: 18px;
+ padding: 14px 16px;
+ background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(129,140,248,0.03));
+ border: 1px solid rgba(99,102,241,0.12);
+ border-radius: 10px;
+ }
+
+ [data-theme="dark"] .cpa-lesson {
+ background: linear-gradient(135deg, rgba(129,140,248,0.08), rgba(167,139,250,0.04));
+ border-color: rgba(129,140,248,0.15);
+ }
+
+ .cpa-lesson-title {
+ font-size: 12px;
+ font-weight: 700;
+ color: var(--accent);
+ margin-bottom: 8px;
+ letter-spacing: 0.02em;
+ }
+
+ .cpa-lesson-body {
+ font-size: 12.5px;
+ line-height: 1.7;
+ color: var(--text-dim);
+ }
+
+ .cpa-lesson-body p { margin-bottom: 6px; }
+ .cpa-lesson-body p:last-child { margin-bottom: 0; }
+
+ .cpa-lesson-body strong {
+ color: var(--text);
+ font-weight: 600;
+ }
+
+ .cpa-lesson-body code {
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 11.5px;
+ background: var(--surface-2);
+ padding: 1px 5px;
+ border-radius: 3px;
+ color: var(--accent);
+ }
+
+  /* ===== HERO RESULT ===== */
   .hero {
     padding: 24px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(129,140,248,0.04));
     border-bottom: 1px solid var(--border);
   }
+
+  [data-theme="dark"] .hero {
+    background: linear-gradient(135deg, rgba(129,140,248,0.1), rgba(167,139,250,0.05));
+  }
+
   .hero-label {
     font-size: 11px;
     font-weight: 600;
@@ -484,6 +763,7 @@
     color: var(--text-muted);
     margin-bottom: 6px;
   }
+
   .hero-value {
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(28px, 4vw, 42px);
@@ -496,6 +776,7 @@
     white-space: nowrap;
     max-width: 100%;
   }
+
   .hero-sub {
     font-size: 12.5px;
     color: var(--text-dim);
@@ -504,9 +785,9 @@
     gap: 10px;
     flex-wrap: wrap;
   }
-  .hero-sub .sep {
-    color: var(--text-muted);
-  }
+
+  .hero-sub .sep { color: var(--text-muted); }
+
   .chip {
     display: inline-flex;
     align-items: center;
@@ -517,22 +798,26 @@
     font-weight: 600;
     font-family: 'JetBrains Mono', monospace;
   }
+
   .chip.success { background: var(--success-bg); color: var(--success); }
   .chip.warning { background: var(--warning-bg); color: var(--warning); }
   .chip.danger { background: var(--danger-bg); color: var(--danger); }
 
-  /* METRICS ROW */
+  /* ===== METRICS ROW ===== */
   .metrics {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     border-bottom: 1px solid var(--border);
     overflow: hidden;
   }
+
   .metric {
     padding: 16px 20px;
     border-right: 1px solid var(--border);
   }
+
   .metric:last-child { border-right: none; }
+
   .metric-label {
     font-size: 10.5px;
     font-weight: 600;
@@ -541,19 +826,28 @@
     color: var(--text-muted);
     margin-bottom: 4px;
   }
+
   .metric-value {
     font-family: 'JetBrains Mono', monospace;
     font-size: 18px;
     font-weight: 600;
     letter-spacing: -0.01em;
   }
+
   .metric-value.positive { color: var(--success); }
   .metric-value.negative { color: var(--danger); }
 
-  /* BREAKDOWN */
+  /* ===== BREAKDOWN ===== */
   .breakdown {
     padding: 16px 20px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
   }
+
+  [data-theme="dark"] .breakdown {
+    background: #14142a;
+  }
+
   .breakdown-title {
     font-size: 11px;
     font-weight: 600;
@@ -562,52 +856,102 @@
     color: var(--text-muted);
     margin-bottom: 10px;
   }
+
   .breakdown-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px 0;
     font-size: 13px;
-  }
-  .breakdown-row .lb {
     color: var(--text-dim);
+  }
+
+  [data-theme="dark"] .breakdown-row { color: #d0d0e8; }
+
+  .breakdown-row .lb {
     display: flex;
     align-items: center;
     gap: 8px;
   }
+
   .breakdown-row .lb .dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: var(--text-muted);
   }
+
   .breakdown-row .vl {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
     font-size: 12.5px;
   }
+
   .breakdown-total {
     border-top: 1px solid var(--border);
     margin-top: 8px;
     padding-top: 8px;
     font-weight: 600;
   }
+
   .breakdown-total .vl { color: var(--text); font-weight: 600; }
 
-  /* COMPARE CHANNELS */
+  /* ===== SCORE BAR ===== */
+  .score-wrap {
+    padding: 16px 20px;
+  }
+
+  .score-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .score-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .score-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .score-bar {
+    height: 4px;
+    background: var(--surface-2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  [data-theme="dark"] .score-bar { background: rgba(255,255,255,0.08); }
+
+  .score-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease, background 0.3s ease;
+  }
+
+  /* ===== COMPARE CHANNELS ===== */
   .compare-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1px;
     background: var(--border);
-    border-top: 1px solid var(--border);
     overflow: hidden;
   }
+
   .compare-col {
-    background: var(--compare-bg, var(--surface));
+    background: var(--compare-bg);
     padding: 16px;
     position: relative;
   }
+
   .compare-col.best::before {
     content: 'MELHOR';
     position: absolute;
@@ -621,6 +965,7 @@
     color: white;
     border-radius: 3px;
   }
+
   .compare-name {
     font-size: 11px;
     font-weight: 600;
@@ -629,19 +974,27 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
+
+  [data-theme="dark"] .compare-name { color: #c0c0e0; }
+
   .compare-price {
     font-family: 'JetBrains Mono', monospace;
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 4px;
   }
+
+  [data-theme="dark"] .compare-price { color: #f0f0ff; }
+
   .compare-profit {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: var(--success);
     font-weight: 500;
   }
+
   .compare-profit.negative { color: var(--danger); }
+
   .compare-meta {
     font-size: 10.5px;
     color: var(--text-muted);
@@ -649,20 +1002,217 @@
     font-family: 'JetBrains Mono', monospace;
   }
 
-  /* ANALYSIS */
-  .analysis {
-    margin-top: 24px;
+  [data-theme="dark"] .compare-meta { color: #9090b0; }
+
+  /* ===== ROAS TABLE ===== */
+  .roas-section {
     padding: 20px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
   }
+
+  .roas-kpi-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .roas-kpi {
+    flex: 1;
+    min-width: 100px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+  }
+
+  [data-theme="dark"] .roas-kpi {
+    background: #16162e;
+    border-color: rgba(255,255,255,0.08);
+  }
+
+  .roas-kpi-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .roas-kpi-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .roas-table-wrap {
+    overflow-x: auto;
+    margin-top: 8px;
+    max-width: 100%;
+  }
+
+  .roas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .roas-table th {
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  [data-theme="dark"] .roas-table th {
+    border-bottom-color: rgba(255,255,255,0.1);
+    color: #a0a0c0;
+  }
+
+  .roas-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  [data-theme="dark"] .roas-table td {
+    border-bottom-color: rgba(255,255,255,0.06);
+  }
+
+  .roas-table tr.active-row { font-weight: 700; }
+  .roas-table tr.active-row td { border-bottom: 2px solid var(--accent); }
+
+  .roas-band {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .band-blue { background: #3b82f6; }
+  .band-green { background: #22c55e; }
+  .band-yellow { background: #eab308; }
+  .band-orange { background: #f97316; }
+  .band-red { background: #ef4444; }
+
+  .roas-row-blue td { background: rgba(59,130,246,0.06); }
+  .roas-row-green td { background: rgba(34,197,94,0.06); }
+  .roas-row-yellow td { background: rgba(234,179,8,0.06); }
+  .roas-row-orange td { background: rgba(249,115,22,0.06); }
+  .roas-row-red td { background: rgba(239,68,68,0.06); }
+
+  [data-theme="dark"] .roas-row-blue td { background: rgba(59,130,246,0.1); }
+  [data-theme="dark"] .roas-row-green td { background: rgba(34,197,94,0.1); }
+  [data-theme="dark"] .roas-row-yellow td { background: rgba(234,179,8,0.1); }
+  [data-theme="dark"] .roas-row-orange td { background: rgba(249,115,22,0.1); }
+  [data-theme="dark"] .roas-row-red td { background: rgba(239,68,68,0.1); }
+
+  .projection-highlight {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(129,140,248,0.03));
+    border: 1px solid rgba(99,102,241,0.12);
+    border-radius: 10px;
+    margin-top: 14px;
+  }
+
+  [data-theme="dark"] .projection-highlight {
+    background: linear-gradient(135deg, rgba(129,140,248,0.08), rgba(167,139,250,0.04));
+    border-color: rgba(129,140,248,0.15);
+  }
+
+  .projection-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+
+  .projection-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .roas-verdict {
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.6;
+    font-weight: 500;
+    margin-top: 14px;
+  }
+
+  .roas-verdict.success {
+    background: rgba(59,130,246,0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59,130,246,0.2);
+  }
+
+  .roas-verdict.warning {
+    background: var(--warning-bg);
+    color: var(--warning);
+    border: 1px solid rgba(217,119,6,0.15);
+  }
+
+  .roas-verdict.danger {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid rgba(220,38,38,0.15);
+  }
+
+  [data-theme="dark"] .roas-verdict.success {
+    background: rgba(59,130,246,0.15);
+    border-color: rgba(59,130,246,0.3);
+  }
+
+  [data-theme="dark"] .roas-verdict.warning { border-color: rgba(251,191,36,0.2); }
+  [data-theme="dark"] .roas-verdict.danger { border-color: rgba(248,113,113,0.2); }
+
+  .escala-section {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--border);
+  }
+
+  .escala-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  /* ===== ROAS FULL WIDTH PANEL ===== */
+  .roas-full-panel {
+    margin-top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    grid-column: 1 / -1;
+  }
+
   .analysis-head {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 12px;
   }
+
   .analysis-title {
     font-size: 12px;
     font-weight: 600;
@@ -670,13 +1220,16 @@
     letter-spacing: 0.06em;
     color: var(--text-dim);
   }
+
   .analysis-body {
     font-size: 13.5px;
     line-height: 1.6;
     color: var(--text);
   }
+
   .analysis-body p { margin-bottom: 10px; }
   .analysis-body p:last-child { margin-bottom: 0; }
+
   .analysis-body strong {
     font-weight: 600;
     font-family: 'JetBrains Mono', monospace;
@@ -687,41 +1240,7 @@
     border-radius: 3px;
   }
 
-  /* SCORE BAR */
-  .score-wrap {
-    padding: 16px 20px;
-    border-top: 1px solid var(--border);
-  }
-  .score-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 8px;
-  }
-  .score-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
-  }
-  .score-value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-  }
-  .score-bar {
-    height: 4px;
-    background: var(--surface-2);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .score-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.3s ease, background 0.3s ease;
-  }
-
+  /* ===== FOOTER ===== */
   footer {
     margin-top: 48px;
     padding-top: 20px;
@@ -730,6 +1249,18 @@
     color: var(--text-muted);
     text-align: center;
     font-family: 'JetBrains Mono', monospace;
+  }
+
+  [data-theme="dark"] footer { color: #808098; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .field-grid { grid-template-columns: 1fr; }
+    .metrics { grid-template-columns: 1fr; }
+    .metric { border-right: none; border-bottom: 1px solid var(--border); }
+    .metric:last-child { border-bottom: none; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .roas-kpi-row { flex-direction: column; }
   }
 </style>
 </head>
@@ -743,8 +1274,8 @@
       <span class="brand-tag">v2.0</span>
     </div>
     <div class="header-actions">
-      <a href="https://3dnagringa.vercel.app/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-dim);font-size:12px;font-weight:500;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">← Site Principal</a>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Alternar claro/escuro">
+      <a href="https://3dnagringa.vercel.app/" target="_blank" rel="noopener" class="site-link">← Site Principal</a>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Alternar claro/escuro">
         <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="4"/>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
@@ -761,7 +1292,7 @@
       <!-- ETAPA 1: PEÇA -->
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title"><span class="section-num">1</span> Peça</div>
+          <div class="panel-title title-peca"><span class="section-num">1</span> Peça</div>
         </div>
         <div class="panel-body">
           <div class="field-grid">
@@ -787,7 +1318,7 @@
       <!-- ETAPA 2: PRODUÇÃO -->
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title"><span class="section-num">2</span> Produção</div>
+          <div class="panel-title title-producao"><span class="section-num">2</span> Produção</div>
         </div>
         <div class="panel-body">
           <div class="field-grid">
@@ -808,26 +1339,6 @@
                 <option value="custom" data-w="0" data-amort="0">Personalizada</option>
               </select>
             </div>
-          </div>
-
-          <div class="custom-fields" id="custom-fields">
-            <div class="field">
-              <label>Potência <span class="hint">W</span></label>
-              <div class="input-wrap">
-                <input type="number" id="w_custom" class="with-suf" value="350" min="50" step="10" oninput="calcular()">
-                <span class="input-affix suf">W</span>
-              </div>
-            </div>
-            <div class="field">
-              <label>Amortização <span class="hint">$/h</span></label>
-              <div class="input-wrap">
-                <span class="input-affix pre">$</span>
-                <input type="number" id="am_custom" class="with-pre" value="0.50" min="0" step="0.05" oninput="calcular()">
-              </div>
-            </div>
-          </div>
-
-          <div class="field-grid" style="margin-top:12px;">
             <div class="field">
               <label>Energia <span class="hint">$/kWh</span></label>
               <div class="input-wrap">
@@ -857,13 +1368,30 @@
               </div>
             </div>
           </div>
+
+          <div class="custom-fields" id="custom-fields">
+            <div class="field">
+              <label>Potência <span class="hint">W</span></label>
+              <div class="input-wrap">
+                <input type="number" id="w_custom" class="with-suf" value="350" min="50" step="10" oninput="calcular()">
+                <span class="input-affix suf">W</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Amortização <span class="hint">$/h</span></label>
+              <div class="input-wrap">
+                <span class="input-affix pre">$</span>
+                <input type="number" id="am_custom" class="with-pre" value="0.50" min="0" step="0.05" oninput="calcular()">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- ETAPA 3: ESTRATÉGIA -->
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title"><span class="section-num">3</span> Estratégia</div>
+          <div class="panel-title title-estrategia"><span class="section-num">3</span> Estratégia</div>
         </div>
         <div class="panel-body">
           <div class="field-grid">
@@ -882,7 +1410,7 @@
             </div>
             <div class="field">
               <label>Margem alvo <span class="hint" id="margem-hint">50%</span></label>
-              <input type="number" id="margem" value="50" min="10" max="80" step="5" oninput="document.getElementById('margem-hint').textContent=this.value+'%'; calcular()">
+              <input type="number" id="margem" value="50" min="10" max="80" step="5" oninput="updateMarginUI(this.value); calcular()">
             </div>
           </div>
         </div>
@@ -891,7 +1419,7 @@
       <!-- ETAPA 4: ADS & ROAS -->
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title"><span class="section-num">4</span> Ads & ROAS</div>
+          <div class="panel-title title-ads"><span class="section-num">4</span> Ads & ROAS</div>
         </div>
         <div class="panel-body">
           <div class="field-grid">
@@ -923,6 +1451,12 @@
                 <span class="input-affix suf">/mês</span>
               </div>
             </div>
+          </div>
+          <!-- Legendas de métricas de Ads -->
+          <div class="ads-legends">
+            <div class="ads-legend-item"><span class="ads-legend-dot" style="background:#3b82f6;"></span><strong>CPC</strong> (Cost Per Click) — custo médio pago por cada clique no anúncio</div>
+            <div class="ads-legend-item"><span class="ads-legend-dot" style="background:#8b5cf6;"></span><strong>CTR</strong> (Click-Through Rate) — % de pessoas que clicam no anúncio após vê-lo</div>
+            <div class="ads-legend-item"><span class="ads-legend-dot" style="background:#ec4899;"></span><strong>CVR</strong> (Conversion Rate) — % de cliques que resultam em venda efetiva</div>
           </div>
         </div>
       </div>
@@ -980,102 +1514,147 @@
 
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title">Comparativo de canais</div>
+          <div class="panel-title title-comparativo">Comparativo de canais</div>
         </div>
         <div class="compare-grid" id="compare-grid">
           <!-- populado por JS -->
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">📊 Simulador de ROAS & Ads</div>
+      <!-- Análise: donut + legenda lado a lado -->
+      <div class="analysis" id="analysis">
+        <div class="analysis-head">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-dim);">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <div class="analysis-title">Análise</div>
         </div>
-        <!-- KPIs resumidos -->
-        <div class="roas-kpi-row">
-          <div class="roas-kpi">
-            <div class="roas-kpi-label">CPA Estimado</div>
-            <div class="roas-kpi-value" id="r-cpa">—</div>
-          </div>
-          <div class="roas-kpi">
-            <div class="roas-kpi-label">ROAS Breakeven</div>
-            <div class="roas-kpi-value" id="r-roas-min">—</div>
-          </div>
-          <div class="roas-kpi">
-            <div class="roas-kpi-label">Lucro/Venda (Ads)</div>
-            <div class="roas-kpi-value" id="r-lucro-ads">—</div>
-          </div>
-        </div>
-        <!-- Tabela dinâmica de faixas de ROAS -->
-        <div class="roas-table-wrap">
-          <table class="roas-table">
-            <thead>
-              <tr>
-                <th>Faixa ROAS</th>
-                <th>Classificação</th>
-                <th>Lucro/Venda</th>
-                <th>Margem Líq.</th>
-                <th>Lucro/Mês</th>
-              </tr>
-            </thead>
-            <tbody id="roas-table-body">
-              <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px;">Aguardando parâmetros...</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- Projeção mensal -->
-        <div class="projection-highlight">
-          <div>
-            <div class="projection-label">Projeção Mensal</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;"><span id="r-vendas-mes-label">30</span> vendas estimadas</div>
-          </div>
-          <div class="projection-value" id="r-lucro-mes">—</div>
-        </div>
-        <!-- Veredito -->
-        <!-- Simulador de Escala -->
-        <div style="margin-top:18px;">
-          <div class="panel-title" style="font-size:13px;margin-bottom:10px;">📈 Simulador de Escala</div>
-          <div class="roas-table-wrap">
-            <table class="roas-table">
-              <thead>
-                <tr>
-                  <th>Cenário</th>
-                  <th>Vendas/Mês</th>
-                  <th>Receita</th>
-                  <th>Custo Ads</th>
-                  <th>Lucro Líq.</th>
-                </tr>
-              </thead>
-              <tbody id="escala-table-body">
-                <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:16px;">Aguardando parâmetros...</td></tr>
-              </tbody>
-            </table>
+        <div id="cost-chart" style="display:none;">
+          <div class="analysis-layout">
+            <div class="cost-donut-wrap">
+              <svg viewBox="0 0 36 36" id="cost-donut-svg"></svg>
+              <div class="cost-donut-center">
+                <div class="label">Custo total</div>
+                <div class="value" id="cost-donut-total">—</div>
+              </div>
+            </div>
+            <div class="cost-legend" id="cost-legend"></div>
           </div>
         </div>
-        <div id="roas-verdict" class="roas-verdict danger" style="margin-top:14px;">Preencha os campos de Ads para ver a simulação de ROAS.</div>
+      </div>
+
+      <!-- BLOCO DE TEXTO DA ANÁLISE (separado, dentro do right-stack) -->
+      <div class="panel analysis-text-panel">
+        <div class="panel-body analysis-text" id="analysis-text">
+          <p>Aguardando parâmetros.</p>
+        </div>
       </div>
 
     </div>
 
-  </div>
-
-  <div class="analysis" id="analysis">
-    <div class="analysis-head">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-dim);">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-      </svg>
-      <div class="analysis-title">Análise</div>
+    <!-- TABELA ROAS (dentro do main-grid, largura total) -->
+    <div class="panel roas-full-panel">
+      <div class="panel-head">
+        <div class="panel-title title-roas">📊 Simulador de ROAS & Ads</div>
+      </div>
+      <div class="roas-section">
+        <!-- Botões rápidos de margem -->
+        <div style="margin-bottom:16px;">
+          <label style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:8px;display:block;">Margem alvo</label>
+          <div class="margin-presets">
+            <button class="margin-btn" onclick="setMargem(20)">20%</button>
+            <button class="margin-btn" onclick="setMargem(30)">30%</button>
+            <button class="margin-btn" onclick="setMargem(40)">40%</button>
+            <button class="margin-btn active" onclick="setMargem(50)">50%</button>
+          <button class="margin-btn" onclick="setMargem(60)">60%</button>
+          <button class="margin-btn" onclick="setMargem(70)">70%</button>
+        </div>
+      </div>
+      <!-- Toggle CPA: Calcular vs Manual -->
+      <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <label style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);">Modo CPA:</label>
+        <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+          <button id="btn-cpa-auto" class="cpa-toggle-btn active" onclick="setCpaMode('auto')">Calcular</button>
+          <button id="btn-cpa-manual" class="cpa-toggle-btn" onclick="setCpaMode('manual')">Manual</button>
+        </div>
+        <div id="cpa-manual-input" style="display:none;align-items:center;gap:6px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);">$</span>
+          <input type="number" id="cpa_manual" value="5.00" min="0.01" step="0.50" style="width:90px;padding:6px 8px;font-size:13px;" oninput="calcular()">
+        </div>
+        <div id="cpa-auto-hint" style="font-size:10.5px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">
+          CPA = CPC ÷ (CTR × CVR)
+        </div>
+      </div>
+      <!-- KPIs resumidos -->
+      <div class="roas-kpi-row">
+        <div class="roas-kpi">
+          <div class="roas-kpi-label">CPA Estimado</div>
+          <div class="roas-kpi-value" id="r-cpa">—</div>
+        </div>
+        <div class="roas-kpi">
+          <div class="roas-kpi-label">ROAS Breakeven</div>
+          <div class="roas-kpi-value" id="r-roas-min">—</div>
+        </div>
+        <div class="roas-kpi">
+          <div class="roas-kpi-label">Lucro/Venda (Ads)</div>
+          <div class="roas-kpi-value" id="r-lucro-ads">—</div>
+        </div>
+      </div>
+      <!-- Tabela dinâmica de faixas de ROAS -->
+      <div class="roas-table-wrap">
+        <table class="roas-table">
+          <thead>
+            <tr>
+              <th>Faixa ROAS</th>
+              <th>Classificação</th>
+              <th>Lucro/Venda</th>
+              <th>Margem Líq.</th>
+              <th>Lucro/Mês</th>
+            </tr>
+          </thead>
+          <tbody id="roas-table-body">
+            <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px;">Aguardando parâmetros...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Projeção mensal -->
+      <div class="projection-highlight">
+        <div>
+          <div class="projection-label">Projeção Mensal</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;"><span id="r-vendas-mes-label">30</span> vendas estimadas</div>
+        </div>
+        <div class="projection-value" id="r-lucro-mes">—</div>
+      </div>
+      <!-- Simulador de Escala -->
+      <div class="escala-section">
+        <div class="escala-title">📈 Simulador de Escala</div>
+        <div class="roas-table-wrap">
+          <table class="roas-table">
+            <thead>
+              <tr>
+                <th>Cenário</th>
+                <th>Vendas/Mês</th>
+                <th>Receita</th>
+                <th>Custo Ads</th>
+                <th>Lucro Líq.</th>
+              </tr>
+            </thead>
+            <tbody id="escala-table-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:16px;">Aguardando parâmetros...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="roas-verdict" class="roas-verdict danger" style="margin-top:14px;">Preencha os campos de Ads para ver a simulação de ROAS.</div>
     </div>
-    <div class="analysis-body" id="analysis-body">
-      <p>Aguardando parâmetros.</p>
-    </div>
   </div>
-
-  <footer>
-    Mentoria 3D EUA · Arthur Sircilli + Guilherme · © 2026
-  </footer>
 
 </div>
+</div>
+
+<footer>
+  Mentoria 3D EUA · Arthur Sircilli + Guilherme · © 2026
+</footer>
 
 <script>
   // ===== THEME =====
@@ -1093,6 +1672,32 @@
   // ===== HELPERS =====
   function num(id) { return parseFloat(document.getElementById(id).value) || 0; }
   function usd(v) { return '$' + v.toFixed(2); }
+
+  // ===== MARGIN PRESETS & CPA TOGGLE =====
+  let cpaMode = 'auto'; // 'auto' ou 'manual'
+
+  function setMargem(val) {
+    document.getElementById('margem').value = val;
+    updateMarginUI(val);
+    calcular();
+  }
+
+  function updateMarginUI(val) {
+    document.getElementById('margem-hint').textContent = val + '%';
+    document.querySelectorAll('.margin-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.textContent) === parseInt(val));
+    });
+  }
+
+  function setCpaMode(mode) {
+    cpaMode = mode;
+    document.getElementById('btn-cpa-auto').classList.toggle('active', mode === 'auto');
+    document.getElementById('btn-cpa-manual').classList.toggle('active', mode === 'manual');
+    document.getElementById('cpa-manual-input').style.display = mode === 'manual' ? 'flex' : 'none';
+    document.getElementById('cpa-auto-hint').style.display = mode === 'auto' ? 'block' : 'none';
+    calcular();
+  }
+
   function getImp() {
     const sel = document.getElementById('impressora');
     if (sel.value === 'custom') {
@@ -1103,7 +1708,6 @@
   }
   function getCanal(id) {
     const sel = document.getElementById('canal');
-    // se id passado, achar option por valor
     const opts = Array.from(sel.options);
     const opt = id ? opts.find(o => o.value === id) : sel.options[sel.selectedIndex];
     return {
@@ -1147,7 +1751,7 @@
     const cMaq = imp.amort * tempoH;
     const cEmb = embalagem;
     const custoSemFalha = cFil + cEner + cMaq + cEmb;
-    const cFalha = custoSemFalha * (falhasPct / (1 - falhasPct)); // reserva para cobrir as que falham
+    const cFalha = custoSemFalha * (falhasPct / (1 - falhasPct));
     const custoBase = custoSemFalha + cFalha;
 
     const res = calcularCanal(custoBase, canal, margemPct);
@@ -1188,9 +1792,9 @@
     // Score de viabilidade (0-100)
     let score = 0;
     if (!res.inviavel && res.lucro > 0) {
-      const sMargem = Math.min(res.margemReal / 60, 1) * 40;     // até 60% = 40pts
-      const sLph = Math.min(Math.max(lph, 0) / 50, 1) * 35;     // até $50/h = 35pts
-      const sTempo = tempoH <= 4 ? 25 : Math.max(0, 25 - (tempoH - 4) * 5); // ≤4h = 25pts
+      const sMargem = Math.min(res.margemReal / 60, 1) * 40;
+      const sLph = Math.min(Math.max(lph, 0) / 50, 1) * 35;
+      const sTempo = tempoH <= 4 ? 25 : Math.max(0, 25 - (tempoH - 4) * 5);
       score = Math.round(sMargem + sLph + sTempo);
     }
     const scoreFill = document.getElementById('r-score-fill');
@@ -1208,28 +1812,66 @@
       scoreNum.style.color = 'var(--danger)';
     }
 
+    // ===== GRÁFICO DE COMPOSIÇÃO DE CUSTOS (DONUT) =====
+    const costItems = [
+      { label: 'Filamento', value: cFil, color: '#3b82f6' },
+      { label: 'Energia', value: cEner, color: '#f59e0b' },
+      { label: 'Máquina', value: cMaq, color: '#8b5cf6' },
+      { label: 'Embalagem', value: cEmb, color: '#ec4899' },
+      { label: 'Falhas', value: cFalha, color: '#ef4444' }
+    ];
+    const totalCost = custoBase;
+    const chartEl = document.getElementById('cost-chart');
+    const svgEl = document.getElementById('cost-donut-svg');
+    const totalEl = document.getElementById('cost-donut-total');
+    const legendEl = document.getElementById('cost-legend');
+
+    if (totalCost > 0) {
+      chartEl.style.display = 'block';
+      const layoutEl = chartEl.querySelector('.analysis-layout');
+      if (layoutEl) layoutEl.style.display = 'flex';
+      totalEl.textContent = usd(totalCost);
+
+      // Render donut segments using SVG circle stroke-dasharray
+      const radius = 15.9155; // circumference ≈ 100 for easy percentage mapping
+      let cumulativePct = 0;
+
+      svgEl.innerHTML = costItems.map(item => {
+        const pct = (item.value / totalCost) * 100;
+        const dashArray = `${pct} ${100 - pct}`;
+        const dashOffset = 100 - cumulativePct + 25; // +25 to start at 12 o'clock
+        cumulativePct += pct;
+        return `<circle cx="18" cy="18" r="${radius}" fill="transparent" stroke="${item.color}" stroke-width="4" stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" />`;
+      }).join('');
+
+      legendEl.innerHTML = costItems.map(item => {
+        const pct = (item.value / totalCost) * 100;
+        return `<div class="cost-legend-item">
+          <span class="cost-legend-dot" style="background:${item.color};"></span>
+          <span class="cost-legend-label">${item.label}</span>
+          <span class="cost-legend-value">${usd(item.value)}</span>
+          <span class="cost-legend-pct">${pct.toFixed(1)}%</span>
+        </div>`;
+      }).join('');
+    } else {
+      chartEl.style.display = 'none';
+    }
+
     // ===== ADS & ROAS ANALYSIS =====
     const cpc = num('cpc');
     const ctr = num('ctr') / 100;
     const cvr = num('cvr') / 100;
     const vendasMes = num('vendas_mes');
 
-    // CPA = CPC / (CTR * CVR) — cost per acquisition via ads
-    const cpa = (ctr > 0 && cvr > 0) ? cpc / (ctr * cvr) : 0;
-
-    // ROAS mínimo (breakeven): preço / lucro_antes_ads
-    // Se lucro antes de ads <= 0, ROAS é infinito (inviável com ads)
-    const lucroAntesAds = res.lucro; // lucro já descontando taxas do canal
+    // CPA: usa valor manual se modo 'manual' estiver ativo, senão calcula via CPC/(CTR*CVR)
+    const cpa = (cpaMode === 'manual') ? num('cpa_manual') : ((ctr > 0 && cvr > 0) ? cpc / (ctr * cvr) : 0);
+    const lucroAntesAds = res.lucro;
     const roasMin = (lucroAntesAds > 0 && res.preco > 0) ? res.preco / lucroAntesAds : Infinity;
-
-    // ROAS alvo: preço / (lucro - CPA), garantindo margem após ads
     const lucroPosAds = lucroAntesAds - cpa;
     const roasAlvo = (lucroPosAds > 0 && res.preco > 0) ? res.preco / lucroPosAds : Infinity;
-
-    // Lucro mensal projetado
     const lucroMensal = lucroPosAds * vendasMes;
 
-    // ===== RENDER KPIs =====
+    // Render KPIs
     document.getElementById('r-cpa').textContent = cpa > 0 ? usd(cpa) : '—';
     document.getElementById('r-roas-min').textContent = isFinite(roasMin) ? roasMin.toFixed(2) + 'x' : '∞';
     const lucroAdsKpi = document.getElementById('r-lucro-ads');
@@ -1241,14 +1883,21 @@
     lucroMesEl.textContent = isFinite(lucroMensal) ? usd(lucroMensal) : '—';
     lucroMesEl.style.color = lucroMensal >= 0 ? '#3b82f6' : 'var(--danger)';
 
-    // ===== TABELA DINÂMICA DE FAIXAS DE ROAS =====
-    // Faixas baseadas na margem alvo selecionada pelo usuário
+    // Tabela dinâmica de faixas de ROAS
+    // Faixas adaptativas baseadas na margem alvo do usuário
+    const margemAlvoPct = num('margem');
+    const roasBreakevenBase = margemAlvoPct > 0 ? (100 / margemAlvoPct) : 2;
+    const f1 = roasBreakevenBase;
+    const f2 = f1 * 1.5;
+    const f3 = f1 * 2;
+    const f4 = f1 * 3;
+
     const faixas = [
-      { min: 1, max: 2, label: '1x – 2x', cls: 'red', band: 'band-red', desc: 'Prejuízo / Breakeven' },
-      { min: 2, max: 3, label: '2x – 3x', cls: 'orange', band: 'band-orange', desc: 'Margem baixa' },
-      { min: 3, max: 4, label: '3x – 4x', cls: 'yellow', band: 'band-yellow', desc: 'Aceitável' },
-      { min: 4, max: 6, label: '4x – 6x', cls: 'green', band: 'band-green', desc: 'Bom' },
-      { min: 6, max: Infinity, label: '6x+', cls: 'blue', band: 'band-blue', desc: 'Excelente' }
+      { min: 1, max: f1, label: `1x – ${f1.toFixed(1)}x`, cls: 'red', band: 'band-red', desc: 'Prejuízo' },
+      { min: f1, max: f2, label: `${f1.toFixed(1)}x – ${f2.toFixed(1)}x`, cls: 'orange', band: 'band-orange', desc: 'Breakeven' },
+      { min: f2, max: f3, label: `${f2.toFixed(1)}x – ${f3.toFixed(1)}x`, cls: 'yellow', band: 'band-yellow', desc: 'Margem baixa' },
+      { min: f3, max: f4, label: `${f3.toFixed(1)}x – ${f4.toFixed(1)}x`, cls: 'green', band: 'band-green', desc: 'Bom' },
+      { min: f4, max: Infinity, label: `${f4.toFixed(1)}x+`, cls: 'blue', band: 'band-blue', desc: 'Excelente' }
     ];
 
     const tbody = document.getElementById('roas-table-body');
@@ -1256,7 +1905,6 @@
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger);padding:16px;font-weight:600;">Produto inviável com ads — margem insuficiente para cobrir CPA.</td></tr>';
     } else {
       tbody.innerHTML = faixas.map(f => {
-        // Para cada faixa, calcula o lucro no ponto médio do ROAS
         const roasMid = f.max === Infinity ? f.min + 2 : (f.min + f.max) / 2;
         const cpaFaixa = res.preco / roasMid;
         const lucroFaixa = lucroAntesAds - cpaFaixa;
@@ -1274,7 +1922,7 @@
       }).join('');
     }
 
-    // ===== SIMULADOR DE ESCALA =====
+    // Simulador de Escala
     const escalaBody = document.getElementById('escala-table-body');
     if (escalaBody && !res.inviavel && lucroAntesAds > 0) {
       const cenarios = [
@@ -1300,7 +1948,7 @@
       escalaBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:12px;">Ajuste os parâmetros para ver projeções de escala.</td></tr>';
     }
 
-    // ===== VEREDITO =====
+    // Veredito
     const verdictEl = document.getElementById('roas-verdict');
     verdictEl.style.display = 'block';
     verdictEl.className = 'roas-verdict';
@@ -1347,113 +1995,30 @@
       `).join('');
     }
 
-    // Análise textual automática
-    const analysisBody = document.getElementById('analysis-body');
+    // Análise textual compacta (parágrafos curtos ao lado do donut)
+    const analysisText = document.getElementById('analysis-text');
     const linhas = [];
-    linhas.push(`<p>O custo unitário desta peça é <strong>${usd(custoBase)}</strong>, composto por ${((cFil/custoBase)*100).toFixed(0)}% de filamento, ${((cEner/custoBase)*100).toFixed(0)}% de energia, ${((cMaq/custoBase)*100).toFixed(0)}% de máquina e ${((cEmb/custoBase)*100).toFixed(0)}% de embalagem. A reserva de falhas de ${(falhasPct*100).toFixed(0)}% adiciona <strong>${usd(cFalha)}</strong> ao custo.</p>`);
+    linhas.push(`<p>O custo unitário é <strong>${usd(custoBase)}</strong>: ${((cFil/totalCost)*100).toFixed(0)}% filamento, ${((cEner/totalCost)*100).toFixed(0)}% energia, ${((cMaq/totalCost)*100).toFixed(0)}% máquina, ${((cEmb/totalCost)*100).toFixed(0)}% embalagem. Falhas: +<strong>${usd(cFalha)}</strong>.</p>`);
 
     if (res.inviavel || res.lucro <= 0) {
-      linhas.push(`<p>No <strong>${canal.nome}</strong>, a margem alvo de ${(margemPct*100).toFixed(0)}% torna o produto inviável. As taxas consomem ${((res.taxas/(res.preco||1))*100).toFixed(1)}% do preço final. Considere reduzir custos de produção, aumentar a margem alvo ou migrar para um canal com taxas menores.</p>`);
+      linhas.push(`<p>Inviável via <strong>${canal.nome}</strong>. Taxas consomem ${((res.taxas/(res.preco||1))*100).toFixed(1)}%. Reduza custos ou mude de canal.</p>`);
     } else {
-      linhas.push(`<p>Via <strong>${canal.nome}</strong>, o preço sugerido de <strong>${usd(res.preco)}</strong> gera lucro líquido de <strong>${usd(res.lucro)}</strong> (${res.margemReal.toFixed(1)}% de margem real). O lucro por hora é de <strong>${usd(lph)}</strong>${lph < 15 ? ', abaixo do mínimo recomendado de $ 15/h - avalie se o tempo investido compensa.' : ', dentro de uma faixa saudável.'}</p>`);
+      linhas.push(`<p>Via <strong>${canal.nome}</strong>: preço <strong>${usd(res.preco)}</strong>, lucro <strong>${usd(res.lucro)}</strong> (${res.margemReal.toFixed(1)}%), <strong>${usd(lph)}/h</strong>${lph < 15 ? ' ⚠️ abaixo de $15/h' : ' ✅'}.</p>`);
     }
 
     if (comparados.length > 1) {
       const melhor = comparados[0];
       const atual = comparados.find(c => c.id === canal.id);
       if (atual && melhor.id !== canal.id) {
-        linhas.push(`<p>O canal mais lucrativo para esta peça é o <strong>${melhor.nome}</strong>, com lucro de <strong>${usd(melhor.lucro)}</strong> - ${usd(melhor.lucro - res.lucro)} a mais que o ${canal.nome}. Vale avaliar a migração.</p>`);
+        linhas.push(`<p>Melhor canal: <strong>${melhor.nome}</strong> (+<strong>${usd(melhor.lucro - res.lucro)}</strong> vs ${canal.nome}).</p>`);
       }
     }
 
     if (tempoH > 6) {
-      linhas.push(`<p>Com <strong>${tempoH.toFixed(1)}h</strong> de impressão, esta peça ocupa a máquina por muito tempo. Considere otimizar o modelo (reduzir preenchimento, usar nozzle maior) ou cobrar um prêmio pelo tempo de ocupação.</p>`);
+      linhas.push(`<p><strong>${tempoH.toFixed(1)}h</strong> de impressão — otimize o modelo ou cobre prêmio por tempo.</p>`);
     }
 
-    analysisBody.innerHTML = linhas.join('');
-  }
-
-  // ===== IMPORTAR / EXPORTAR CONFIGURAÇÕES (JSON) =====
-  // Adaptado para peças 3D: salva peso, tempo, filamento, impressora, energia,
-  // embalagem, falhas, pós-venda, canal e margem como perfil reutilizável.
-  function exportarConfig() {
-    const config = {
-      versao: '3d-calc-v2',
-      exportado_em: new Date().toISOString(),
-      peca: {
-        peso_g: num('peso'),
-        tempo_h: num('tempo_h'),
-        tempo_m: num('tempo_m')
-      },
-      producao: {
-        filamento_rskg: num('preco_kg'),
-        impressora: document.getElementById('impressora').value,
-        potencia_w: num('w_custom'),
-        amortizacao_rsh: num('am_custom'),
-        energia_rskwh: num('kwh'),
-        embalagem_rs: num('embalagem'),
-        taxa_falhas_pct: num('falhas'),
-        pos_venda_min: num('posvenda')
-      },
-      estrategia: {
-        canal: document.getElementById('canal').value,
-        margem_alvo_pct: num('margem')
-      }
-    };
-    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'config-peca-3d.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function importarConfig() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const cfg = JSON.parse(ev.target.result);
-          if (cfg.versao !== '3d-calc-v2') {
-            alert('Arquivo incompatível. Use um JSON exportado por esta calculadora.');
-            return;
-          }
-          // Preencher campos
-          if (cfg.peca) {
-            document.getElementById('peso').value = cfg.peca.peso_g || 80;
-            document.getElementById('tempo_h').value = cfg.peca.tempo_h || 2;
-            document.getElementById('tempo_m').value = cfg.peca.tempo_m || 30;
-          }
-          if (cfg.producao) {
-            document.getElementById('preco_kg').value = cfg.producao.filamento_rskg || 75;
-            document.getElementById('impressora').value = cfg.producao.impressora || 'p1s';
-            document.getElementById('w_custom').value = cfg.producao.potencia_w || 350;
-            document.getElementById('am_custom').value = cfg.producao.amortizacao_rsh || 0.50;
-            document.getElementById('kwh').value = cfg.producao.energia_rskwh || 0.84;
-            document.getElementById('embalagem').value = cfg.producao.embalagem_rs || 3.50;
-            document.getElementById('falhas').value = cfg.producao.taxa_falhas_pct || 8;
-            document.getElementById('posvenda').value = cfg.producao.pos_venda_min || 10;
-            toggleCustom();
-          }
-          if (cfg.estrategia) {
-            document.getElementById('canal').value = cfg.estrategia.canal || 'etsy';
-            document.getElementById('margem').value = cfg.estrategia.margem_alvo_pct || 50;
-            document.getElementById('margem-hint').textContent = (cfg.estrategia.margem_alvo_pct || 50) + '%';
-          }
-          calcular();
-        } catch (err) {
-          alert('Erro ao ler arquivo: ' + err.message);
-        }
-      };
-      reader.readAsText(file);
-    };
-    input.click();
+    analysisText.innerHTML = linhas.join('');
   }
 
   // Inicializar
