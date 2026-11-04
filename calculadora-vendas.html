@@ -1297,8 +1297,16 @@
   }
   .paywall-desc {
     font-size: 14px; color: var(--text-dim); line-height: 1.6;
-    margin-bottom: 28px;
+    margin-bottom: 16px;
   }
+  .paywall-features {
+    list-style: none; padding: 0; margin: 0 0 24px;
+    text-align: left; font-size: 13px; color: var(--text-dim);
+  }
+  .paywall-features li {
+    padding: 5px 0; display: flex; align-items: center; gap: 8px;
+  }
+  .paywall-features li::before { content: none; }
   .paywall-plans {
     display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
   }
@@ -1374,6 +1382,14 @@
     <div class="paywall-desc">
       Custo exato por peça, preço com margem alvo, simulador de ROAS e projeção de escala até 10x. Compare 8 marketplaces em tempo real.
     </div>
+    <ul class="paywall-features">
+      <li>✓ Cálculos ilimitados de preço e ROAS</li>
+      <li>✓ Simulador de escala até 10x volume mensal</li>
+      <li>✓ Comparativo de 8 marketplaces em tempo real</li>
+      <li>✓ Projeção de lucro mensal pós-ads</li>
+      <li>✓ Modo escuro + funciona no celular</li>
+      <li>✓ Atualizações inclusas na assinatura</li>
+    </ul>
     <div class="paywall-plans">
       <div class="paywall-plan selected" onclick="selectPlan('monthly')" id="plan-monthly">
         <div class="paywall-plan-name">Mensal</div>
@@ -2152,6 +2168,114 @@
 
     analysisText.innerHTML = linhas.join('');
   }
+
+  // ===== STRIPE PAYWALL LOGIC =====
+  const STRIPE_CONFIG = {
+    publishableKey: 'pk_live_51TJcFSL6dFACWnIO3evRgKX1JpfZzSUrq2izc0kQ7pRRAZfi9DiWNlsHrWbjHiB4rg8uhEmJMhTtKcZIfR6Go6D400XTxn1ZEh',
+    priceMonthly: 'price_1UXrUzL6dFACWnIOJZprplhd',
+    priceYearly: 'price_1UXrUyL6dFACWnIOBipoGNqz',
+  };
+
+  let selectedPlan = 'monthly';
+  let stripeInstance = null;
+
+  function selectPlan(plan) {
+    selectedPlan = plan;
+    document.getElementById('plan-monthly').classList.toggle('selected', plan === 'monthly');
+    document.getElementById('plan-yearly').classList.toggle('selected', plan === 'yearly');
+  }
+
+  async function startCheckout() {
+    const btn = document.getElementById('checkout-btn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    try {
+      const priceId = selectedPlan === 'monthly' ? STRIPE_CONFIG.priceMonthly : STRIPE_CONFIG.priceYearly;
+
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Erro ao criar sessão de checkout');
+      }
+
+      const { url } = await res.json();
+      window.location.href = url;
+    } catch (err) {
+      console.error('Checkout error:', err);
+      alert('Erro ao iniciar pagamento: ' + err.message);
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  }
+
+  async function checkAccess() {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const overlay = document.getElementById('paywall-overlay');
+
+    // Se já tem token válido no localStorage, libera acesso
+    const storedToken = localStorage.getItem('calc3d_session_id');
+    if (storedToken && !sessionId) {
+      try {
+        const res = await fetch('/api/check-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: storedToken }),
+        });
+        const data = await res.json();
+        if (data.active) {
+          overlay.classList.add('hidden');
+          return;
+        }
+      } catch (e) {
+        console.warn('Erro ao verificar token salvo:', e);
+      }
+    }
+
+    // Se veio do checkout com session_id, verifica assinatura
+    if (sessionId) {
+      try {
+        const res = await fetch('/api/check-subscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId }),
+        });
+        const data = await res.json();
+        if (data.active) {
+          localStorage.setItem('calc3d_session_id', sessionId);
+          overlay.classList.add('hidden');
+          window.history.replaceState({}, '', window.location.pathname);
+          return;
+        }
+      } catch (e) {
+        console.error('Erro ao verificar assinatura:', e);
+      }
+    }
+
+    // Sem acesso — mostra paywall
+    overlay.classList.remove('hidden');
+  }
+
+  // Carregar Stripe.js dinamicamente
+  (async function initPaywall() {
+    const script = document.createElement('script');
+    script.src = 'https://js.stripe.com/v3/';
+    script.onload = () => {
+      stripeInstance = Stripe(STRIPE_CONFIG.publishableKey);
+      checkAccess();
+    };
+    script.onerror = () => {
+      console.error('Falha ao carregar Stripe.js');
+      document.getElementById('paywall-overlay').classList.remove('hidden');
+    };
+    document.head.appendChild(script);
+  })();
 
   // Inicializar
   calcular();
