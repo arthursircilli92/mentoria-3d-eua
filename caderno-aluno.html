@@ -121,7 +121,51 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); }
 
-/* PRINT */
+/* PDF EXPORT THEME — applied via JS before rendering */
+body.pdf-export-mode { background: #fff !important; color: #111 !important; }
+body.pdf-export-mode .container { display: block !important; max-width: 100% !important; padding: 20px !important; }
+body.pdf-export-mode .back-link,
+body.pdf-export-mode .export-section,
+body.pdf-export-mode footer,
+body.pdf-export-mode #auth-overlay,
+body.pdf-export-mode .save-indicator,
+body.pdf-export-mode .img-file-input,
+body.pdf-export-mode .img-remove { display: none !important; }
+body.pdf-export-mode .card {
+ background: #fafafa !important; border: 1px solid #ddd !important;
+ border-radius: 8px !important; padding: 18px !important; margin-bottom: 14px !important;
+ page-break-inside: avoid !important; break-inside: avoid !important;
+}
+body.pdf-export-mode .header { margin-bottom: 16px !important; }
+body.pdf-export-mode .header h1 { color: #111 !important; font-size: 22px !important; }
+body.pdf-export-mode .header p { color: #555 !important; }
+body.pdf-export-mode .tag { background: #e0f7f1 !important; color: #007a5e !important; }
+body.pdf-export-mode .num { background: #007a5e !important; color: #fff !important; }
+body.pdf-export-mode .card h2 { color: #111 !important; font-size: 16px !important; }
+body.pdf-export-mode .field label { color: #333 !important; font-size: 13px !important; }
+body.pdf-export-mode .field input,
+body.pdf-export-mode .field textarea,
+body.pdf-export-mode .field select {
+ background: #fff !important; border: 1px solid #ccc !important; color: #111 !important;
+ font-size: 13px !important; padding: 8px 10px !important; min-height: auto !important;
+}
+body.pdf-export-mode .status-opt {
+ border: 1px solid #ccc !important; color: #666 !important; background: #f5f5f5 !important;
+}
+body.pdf-export-mode .status-opt.active {
+ background: #e0f7f1 !important; border-color: #007a5e !important; color: #007a5e !important;
+}
+body.pdf-export-mode .img-upload-area { align-items: flex-start !important; }
+body.pdf-export-mode .img-preview {
+ width: 160px !important; height: 160px !important;
+ border: 1px solid #ccc !important; background: #f5f5f5 !important;
+ border-radius: 8px !important;
+}
+body.pdf-export-mode .img-preview img {
+ width: 100% !important; height: 100% !important; object-fit: contain !important; display: block !important;
+}
+
+/* Native print fallback */
 @media print {
  body { background: #fff; color: #111; }
  .back-link, .export-section, footer, #auth-overlay, .save-indicator { display: none !important; }
@@ -135,8 +179,8 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  .header p { color: #666; }
  .status-opt { border: 1px solid #ccc; color: #666; background: #f5f5f5; }
  .status-opt.active { background: #e0f7f1; border-color: #007a5e; color: #007a5e; }
- .img-preview { border: 1px solid #ccc; background: #f5f5f5; }
- .img-preview img { display: block; }
+ .img-preview { width: 160px; height: 160px; border: 1px solid #ccc; background: #f5f5f5; }
+ .img-preview img { display: block; width: 100%; height: 100%; object-fit: contain; }
  .img-file-input, .img-remove { display: none !important; }
 }
 </style>
@@ -498,21 +542,55 @@ async function exportPDF() {
  const date = document.getElementById('student-date').value || 'sem-data';
  btn.disabled = true;
  btn.textContent = '⏳ Gerando PDF...';
+
+ const content = document.getElementById('main-content');
+
+ // Apply print-friendly theme before rendering
+ document.body.classList.add('pdf-export-mode');
+
+ // Wait for images to fully load in the DOM
+ const imgs = content.querySelectorAll('img');
+ if (imgs.length > 0) {
+ await Promise.all(Array.from(imgs).map(img => {
+ if (img.complete) return Promise.resolve();
+ return new Promise(resolve => {
+ img.onload = resolve;
+ img.onerror = resolve;
+ });
+ }));
+ }
+
+ // Small delay to ensure CSS reflow is applied
+ await new Promise(r => setTimeout(r, 300));
+
  try {
  await html2pdf().set({
- margin: [10, 10, 10, 10],
+ margin: [8, 8, 8, 8],
  filename: `caderno-${name.replace(/\s+/g,'-').toLowerCase()}-${date}.pdf`,
- image: { type: 'jpeg', quality: 0.98 },
- html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0a0e14' },
+ image: { type: 'jpeg', quality: 0.95 },
+ html2canvas: {
+ scale: 2,
+ useCORS: true,
+ allowTaint: true,
+ backgroundColor: '#ffffff',
+ logging: false,
+ windowWidth: 760
+ },
  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
- pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
- }).from(document.getElementById('main-content')).save();
+ pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card', after: '.card' }
+ }).from(content).save();
+
  btn.textContent = '✅ PDF gerado!';
- setTimeout(() => { btn.textContent = '📄 Exportar Ficha em PDF'; btn.disabled = false; }, 3000);
  } catch(err) {
  console.error('Erro PDF:', err);
  btn.textContent = '❌ Erro ao gerar';
- setTimeout(() => { btn.textContent = '📄 Exportar Ficha em PDF'; btn.disabled = false; }, 3000);
+ } finally {
+ // Restore dark theme
+ document.body.classList.remove('pdf-export-mode');
+ setTimeout(() => {
+ btn.textContent = '📄 Exportar Ficha em PDF';
+ btn.disabled = false;
+ }, 3000);
  }
 }
 </script>
