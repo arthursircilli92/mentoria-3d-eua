@@ -122,6 +122,12 @@ nav a.cta:hover { background: #00eabb; border-color: #00eabb; transform: transla
  display: flex; align-items: center; justify-content: center;
  font-size: 1.4rem; margin-bottom: 1.2rem;
 }
+.card-img {
+ display: block; width: calc(100% + 4rem); max-width: none;
+ margin: -2rem -2rem 1.4rem; aspect-ratio: 1 / 1; object-fit: cover;
+ border-bottom: 1px solid var(--border);
+}
+.card-badge { z-index: 2; }
 .card h3 { font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 0.5rem; }
 .card p { color: var(--text-dim); font-size: 0.92rem; line-height: 1.6; }
 
@@ -255,7 +261,7 @@ footer a:hover { color: var(--accent); }
  <!-- CURSO ONLINE (ATIVO) -->
  <div class="card">
  <div class="card-badge">Disponível</div>
- <div class="card-icon">🎬</div>
+ <img class="card-img" src="img/curso-mentoria-v1.jpg" alt="Mentoria Vendas 3D" loading="lazy">
  <h3>Curso Online Completo</h3>
  <p>Gravação completa da mentoria: 4 aulas cobrindo fundamentos, produtos, vendas e logística. Assista no seu ritmo, acesso vitalício.</p>
  <a href="curso-online.html" class="card-link">Assistir →</a>
@@ -264,7 +270,7 @@ footer a:hover { color: var(--accent); }
  <!-- CALCULADORA (EM BREVE) -->
  <div class="card card-soon">
  <div class="card-badge badge-soon">Em Breve</div>
- <div class="card-icon">🧮</div>
+ <img class="card-img" src="img/calculadora-v1.jpg" alt="Calculadora de Precificação 3D" loading="lazy">
  <h3>Calculadora de Precificação</h3>
  <p>Custo exato por peça, preço com margem alvo, simulador de ROAS e projeção de escala até 10x. Compare 8 marketplaces em tempo real.</p>
  <span class="card-soon-tag">Vendida separadamente</span>
