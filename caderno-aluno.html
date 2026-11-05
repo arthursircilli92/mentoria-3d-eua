@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno do Aluno — Tarefa Aula 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+ --bg: #0a0e14;
+ --bg-2: #111820;
+ --bg-card: #161d27;
+ --border: rgba(255,255,255,0.07);
+ --border-strong: rgba(255,255,255,0.14);
+ --text: #f0f4f8;
+ --text-dim: #8b9bb4;
+ --text-muted: #5a6a80;
+ --accent: #00d4aa;
+ --accent-dim: rgba(0,212,170,0.12);
+ --orange: #ffa552;
+ --font-display: 'Space Grotesk', sans-serif;
+ --font-body: 'Inter', sans-serif;
+ --font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+/* ===== AUTH OVERLAY ===== */
+#auth-overlay {
+ position: fixed; inset: 0; z-index: 9999;
+ background: var(--bg);
+ display: flex; align-items: center; justify-content: center;
+ padding: 24px;
+}
+#auth-overlay.hidden { display: none; }
+.auth-card { max-width: 420px; width: 100%; text-align: center; }
+.auth-icon { font-size: 3rem; margin-bottom: 1rem; }
+.auth-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.auth-desc { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; }
+.auth-input {
+ width: 100%; padding: 1rem;
+ background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 10px;
+ color: var(--text); font-family: var(--font-mono); font-size: 1.1rem;
+ text-align: center; outline: none; transition: border-color 0.2s; margin-bottom: 1rem;
+}
+.auth-input:focus { border-color: var(--accent); }
+.auth-input::placeholder { color: var(--text-muted); }
+.auth-btn {
+ width: 100%; padding: 1rem;
+ background: var(--accent); color: #03241f; border: none; border-radius: 10px;
+ font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+ cursor: pointer; transition: all 0.2s;
+}
+.auth-btn:hover { background: #00eabb; transform: translateY(-1px); }
+.auth-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 1rem; display: none; }
+
+/* ===== MAIN CONTENT ===== */
+.container {
+ max-width: 800px; margin: 0 auto; padding: 2rem;
+ display: none;
+}
+.container.visible { display: block; }
+
+.back-link {
+ display: inline-flex; align-items: center; gap: 0.4rem;
+ font-family: var(--font-display); font-size: 0.85rem; color: var(--text-dim);
+ text-decoration: none; margin-bottom: 2rem; transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+
+.header { margin-bottom: 2.5rem; }
+.tag {
+ display: inline-block;
+ font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+ color: var(--accent); background: var(--accent-dim);
+ padding: 0.25rem 0.7rem; border-radius: 6px; margin-bottom: 0.8rem;
+}
+.header h1 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.header p { color: var(--text-dim); font-size: 0.95rem; }
+
+/* Student Info */
+.student-info {
+ background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+ padding: 1.5rem; margin-bottom: 2rem;
+}
+.student-info h2 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent); }
+.info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 600px) { .info-row { grid-template-columns: 1fr; } }
+
+/* Form Fields */
+.field { margin-bottom: 1.2rem; }
+.field label {
+ display: block; font-family: var(--font-display); font-size: 0.88rem; font-weight: 600;
+ margin-bottom: 0.4rem; color: var(--text);
+}
+.field .hint { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+.field input, .field textarea, .field select {
+ width: 100%; padding: 0.75rem 1rem;
+ background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: 8px;
+ color: var(--text); font-family: var(--font-body); font-size: 0.9rem;
+ outline: none; transition: border-color 0.2s; resize: vertical;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
+.field input::placeholder, .field textarea::placeholder { color: var(--text-muted); }
+.field textarea { min-height: 80px; }
+
+/* Product Card */
+.product-card {
+ background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+ padding: 1.8rem; margin-bottom: 1.5rem; position: relative;
+}
+.product-card h2 {
+ font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 1.2rem;
+ display: flex; align-items: center; gap: 0.6rem;
+}
+.product-num {
+ background: var(--accent); color: #03241f;
+ width: 32px; height: 32px; border-radius: 8px;
+ display: flex; align-items: center; justify-content: center;
+ font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+}
+
+/* Export Button */
+.export-section { text-align: center; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.export-btn {
+ display: inline-flex; align-items: center; gap: 0.6rem;
+ padding: 1rem 2.5rem;
+ background: var(--accent); color: #03241f; border: none; border-radius: 10px;
+ font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+ cursor: pointer; transition: all 0.2s;
+}
+.export-btn:hover { background: #00eabb; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,170,0.3); }
+.export-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.export-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.8rem; }
+
+footer {
+ margin-top: 3rem; padding: 1.5rem; text-align: center;
+ border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted);
+}
+
+/* Print / PDF styles */
+@media print {
+ body { background: #fff; color: #111; }
+ .back-link, .export-section, footer, #auth-overlay { display: none !important; }
+ .container { display: block !important; max-width: 100%; padding: 0; }
+ .product-card, .student-info { border: 1px solid #ccc; background: #fafafa; break-inside: avoid; }
+ .field input, .field textarea, .field select {
+ border: 1px solid #ccc; background: #fff; color: #111;
+ }
+ .tag { background: #e0f7f1; color: #007a5e; }
+ .product-num { background: #007a5e; color: #fff; }
+ .header h1, .product-card h2, .student-info h2 { color: #111; }
+ .field label { color: #333; }
+ .field .hint, .header p { color: #666; }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay">
+ <div class="auth-card">
+ <div class="auth-icon">📓</div>
+ <div class="auth-title">Caderno do Aluno</div>
+ <div class="auth-desc">Digite a senha de acesso para preencher sua ficha de tarefa.</div>
+ <input type="password" id="auth-pass" class="auth-input" placeholder="Senha de acesso" />
+ <button class="auth-btn" onclick="checkAuth()">Acessar Caderno</button>
+ <div class="auth-error" id="auth-error">Senha incorreta. Tente novamente.</div>
+ </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container" id="main-content">
+ <a href="/curso-online.html" class="back-link">← Voltar ao Curso</a>
+
+ <div class="header">
+ <div class="tag">Tarefa da Aula 1</div>
+ <h1>Caderno do Aluno — Análise de Produtos</h1>
+ <p>Escolha 2 produtos que você venderia nos EUA e preencha a ficha abaixo. Ao final, exporte em PDF e envie no grupo da mentoria.</p>
+ </div>
+
+ <!-- DADOS DO ALUNO -->
+ <div class="student-info">
+ <h2>👤 Dados do Aluno</h2>
+ <div class="info-row">
+ <div class="field">
+ <label>Nome Completo</label>
+ <input type="text" id="student-name" placeholder="Seu nome completo" />
+ </div>
+ <div class="field">
+ <label>Data</label>
+ <input type="date" id="student-date" />
+ </div>
+ </div>
+ <div class="field">
+ <label>Turma / Grupo</label>
+ <input type="text" id="student-group" placeholder="Ex: Turma 1 - Novembro 2026" />
+ </div>
+ </div>
+
+ <!-- PRODUTO 1 -->
+ <div class="product-card">
+ <h2><span class="product-num">1</span> Primeiro Produto</h2>
+
+ <div class="field">
+ <label>Link do STL / Modelo 3D</label>
+ <div class="hint">Cole o link do arquivo STL (Thingiverse, Cults3D, Thangs, etc.)</div>
+ <input type="url" id="p1-stl" placeholder="https://..." />
+ </div>
+
+ <div class="field">
+ <label>Link da Loja Concorrente</label>
+ <div class="hint">Link da loja no Etsy/Amazon/eBay que já vende esse produto</div>
+ <input type="url" id="p1-store" placeholder="https://..." />
+ </div>
+
+ <div class="field">
+ <label>Nome / Descrição do Produto</label>
+ <input type="text" id="p1-name" placeholder="Ex: Suporte para fone de ouvido estilo gamer" />
+ </div>
+
+ <div class="field">
+ <label>Por que escolheu este produto?</label>
+ <div class="hint">Justifique sua escolha: demanda, nicho, margem, diferencial, etc.</div>
+ <textarea id="p1-reason" placeholder="Explique os motivos da sua escolha..."></textarea>
+ </div>
+
+ <div class="info-row">
+ <div class="field">
+ <label>Peso Estimado (g)</label>
+ <input type="number" id="p1-weight" placeholder="Ex: 45" />
+ </div>
+ <div class="field">
+ <label>Tempo de Impressão Estimado</label>
+ <input type="text" id="p1-time" placeholder="Ex: 2h30min" />
+ </div>
+ </div>
+
+ <div class="info-row">
+ <div class="field">
+ <label>Custo Estimado de Produção (USD)</label>
+ <div class="hint">Filamento + energia + mão de obra</div>
+ <input type="text" id="p1-cost" placeholder="Ex: $1.80" />
+ </div>
+ <div class="field">
+ <label>Preço de Venda Sugerido (USD)</label>
+ <input type="text" id="p1-price" placeholder="Ex: $12.99" />
+ </div>
+ </div>
+
+ <div class="field">
+ <label>Margem Alvo (%)</label>
+ <div class="hint">Qual margem você pretende aplicar e por quê</div>
+ <input type="text" id="p1-margin" placeholder="Ex: 70% — produto de nicho com pouca concorrência" />
+ </div>
+
+ <div class="field">
+ <label>Diferencial Competitivo</label>
+ <div class="hint">O que você faria diferente do concorrente? (melhor foto, bundle, material, prazo, cor, etc.)</div>
+ <textarea id="p1-diff" placeholder="Ex: Vou oferecer em 3 cores diferentes e incluir um adesivo personalizado..."></textarea>
+ </div>
+
+ <div class="field">
+ <label>Público-Alvo / Nicho</label>
+ <div class="hint">Para quem é esse produto?</div>
+ <input type="text" id="p1-audience" placeholder="Ex: Gamers, donos de gatos, decoração geek..." />
+ </div>
+
+ <div class="field">
+ <label>Complexidade de Pós-Processamento</label>
+ <select id="p1-postprocess">
+ <option value="">Selecione...</option>
+ <option value="nenhuma">Nenhuma — sai pronto da impressora</option>
+ <option value="baixa">Baixa — remoção de suporte leve</option>
+ <option value="media">Média — lixar e/ou pintar</option>
+ <option value="alta">Alta — montagem, pintura detalhada, acabamento complexo</option>
+ </select>
+ </div>
+
+ <div class="field">
+ <label>Riscos Identificados</label>
+ <div class="hint">O que pode dar errado? (concorrência alta, peça frágil, direitos autorais, sazonalidade, etc.)</div>
+ <textarea id="p1-risks" placeholder="Ex: Muitos concorrentes vendendo o mesmo modelo, preciso diferenciar nas fotos..."></textarea>
+ </div>
+ </div>
+
+ <!-- PRODUTO 2 -->
+ <div class="product-card">
+ <h2><span class="product-num">2</span> Segundo Produto</h2>
+
+ <div class="field">
+ <label>Link do STL / Modelo 3D</label>
+ <div class="hint">Cole o link do arquivo STL (Thingiverse, Cults3D, Thangs, etc.)</div>
+ <input type="url" id="p2-stl" placeholder="https://..." />
+ </div>
+
+ <div class="field">
+ <label>Link da Loja Concorrente</label>
+ <div class="hint">Link da loja no Etsy/Amazon/eBay que já vende esse produto</div>
+ <input type="url" id="p2-store" placeholder="https://..." />
+ </div>
+
+ <div class="field">
+ <label>Nome / Descrição do Produto</label>
+ <input type="text" id="p2-name" placeholder="Ex: Organizador de cabos para mesa" />
+ </div>
+
+ <div class="field">
+ <label>Por que escolheu este produto?</label>
+ <div class="hint">Justifique sua escolha: demanda, nicho, margem, diferencial, etc.</div>
+ <textarea id="p2-reason" placeholder="Explique os motivos da sua escolha..."></textarea>
+ </div>
+
+ <div class="info-row">
+ <div class="field">
+ <label>Peso Estimado (g)</label>
+ <input type="number" id="p2-weight" placeholder="Ex: 30" />
+ </div>
+ <div class="field">
+ <label>Tempo de Impressão Estimado</label>
+ <input type="text" id="p2-time" placeholder="Ex: 1h45min" />
+ </div>
+ </div>
+
+ <div class="info-row">
+ <div class="field">
+ <label>Custo Estimado de Produção (USD)</label>
+ <div class="hint">Filamento + energia + mão de obra</div>
+ <input type="text" id="p2-cost" placeholder="Ex: $1.20" />
+ </div>
+ <div class="field">
+ <label>Preço de Venda Sugerido (USD)</label>
+ <input type="text" id="p2-price" placeholder="Ex: $9.99" />
+ </div>
+ </div>
+
+ <div class="field">
+ <label>Margem Alvo (%)</label>
+ <div class="hint">Qual margem você pretende aplicar e por quê</div>
+ <input type="text" id="p2-margin" placeholder="Ex: 65% — produto simples com boa rotatividade" />
+ </div>
+
+ <div class="field">
+ <label>Diferencial Competitivo</label>
+ <div class="hint">O que você faria diferente do concorrente?</div>
+ <textarea id="p2-diff" placeholder="Ex: Bundle com 3 unidades em cores diferentes..."></textarea>
+ </div>
+
+ <div class="field">
+ <label>Público-Alvo / Nicho</label>
+ <div class="hint">Para quem é esse produto?</div>
+ <input type="text" id="p2-audience" placeholder="Ex: Home office, organização de escritório..." />
+ </div>
+
+ <div class="field">
+ <label>Complexidade de Pós-Processamento</label>
+ <select id="p2-postprocess">
+ <option value="">Selecione...</option>
+ <option value="nenhuma">Nenhuma — sai pronto da impressora</option>
+ <option value="baixa">Baixa — remoção de suporte leve</option>
+ <option value="media">Média — lixar e/ou pintar</option>
+ <option value="alta">Alta — montagem, pintura detalhada, acabamento complexo</option>
+ </select>
+ </div>
+
+ <div class="field">
+ <label>Riscos Identificados</label>
+ <div class="hint">O que pode dar errado?</div>
+ <textarea id="p2-risks" placeholder="Ex: Peça pequena pode ser frágil no envio internacional..."></textarea>
+ </div>
+ </div>
+
+ <!-- EXPORTAR -->
+ <div class="export-section">
+ <button class="export-btn" id="export-btn" onclick="exportPDF()">
+ 📄 Exportar Ficha em PDF
+ </button>
+ <div class="export-hint">Após gerar o PDF, envie o arquivo no grupo da mentoria para correção.</div>
+ </div>
+
+ <footer>
+ <p>&copy; 2026 3DnaGringa · Caderno do Aluno — Mentoria Impressão 3D EUA</p>
+ </footer>
+</div>
+
+<script>
+const CORRECT_PASS = '2026';
+
+function checkAuth() {
+ const pass = document.getElementById('auth-pass').value;
+ const err = document.getElementById('auth-error');
+ if (pass === CORRECT_PASS) {
+ document.getElementById('auth-overlay').classList.add('hidden');
+ document.getElementById('main-content').classList.add('visible');
+ sessionStorage.setItem('caderno3d_auth', 'true');
+ // Preencher data automaticamente
+ document.getElementById('student-date').valueAsDate = new Date();
+ } else {
+ err.style.display = 'block';
+ document.getElementById('auth-pass').value = '';
+ document.getElementById('auth-pass').focus();
+ }
+}
+
+document.getElementById('auth-pass').addEventListener('keypress', function(e) {
+ if (e.key === 'Enter') checkAuth();
+});
+
+if (sessionStorage.getItem('caderno3d_auth') === 'true') {
+ document.getElementById('auth-overlay').classList.add('hidden');
+ document.getElementById('main-content').classList.add('visible');
+ document.getElementById('student-date').valueAsDate = new Date();
+} else {
+ document.getElementById('auth-pass').focus();
+}
+
+async function exportPDF() {
+ const btn = document.getElementById('export-btn');
+ const name = document.getElementById('student-name').value.trim() || 'aluno';
+ const date = document.getElementById('student-date').value || 'sem-data';
+
+ btn.disabled = true;
+ btn.textContent = '⏳ Gerando PDF...';
+
+ const element = document.getElementById('main-content');
+
+ const opt = {
+ margin: [10, 10, 10, 10],
+ filename: `caderno-aluno-${name.replace(/\s+/g, '-').toLowerCase()}-${date}.pdf`,
+ image: { type: 'jpeg', quality: 0.98 },
+ html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0a0e14' },
+ jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+ pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+ };
+
+ try {
+ await html2pdf().set(opt).from(element).save();
+ btn.textContent = '✅ PDF gerado com sucesso!';
+ setTimeout(() => {
+ btn.textContent = '📄 Exportar Ficha em PDF';
+ btn.disabled = false;
+ }, 3000);
+ } catch (err) {
+ console.error('Erro ao gerar PDF:', err);
+ btn.textContent = '❌ Erro ao gerar PDF';
+ setTimeout(() => {
+ btn.textContent = '📄 Exportar Ficha em PDF';
+ btn.disabled = false;
+ }, 3000);
+ }
+}
+</script>
+
+</body>
+</html>
