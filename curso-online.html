@@ -200,20 +200,39 @@ footer {
 </div>
 
 <script>
-const CORRECT_PASS = '2026';
-
-function checkAuth() {
- const pass = document.getElementById('auth-pass').value;
- const err = document.getElementById('auth-error');
-
- if (pass === CORRECT_PASS) {
+function showCourse() {
  document.getElementById('auth-overlay').classList.add('hidden');
  document.getElementById('course-content').classList.add('visible');
- sessionStorage.setItem('curso3d_auth', 'true');
+}
+
+async function unlock(pass) {
+ const res = await fetch('/api/video-url', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ password: pass })
+ });
+ const data = await res.json().catch(() => ({}));
+ if (!res.ok || !data.ok) return false;
+ const video = document.querySelector('video');
+ document.getElementById('course-video-source').src = data.url;
+ video.load();
+ showCourse();
+ return true;
+}
+
+async function checkAuth() {
+ const input = document.getElementById('auth-pass');
+ const err = document.getElementById('auth-error');
+ const pass = input.value;
+ let ok = false;
+ try { ok = await unlock(pass); } catch (e) { ok = false; }
+
+ if (ok) {
+ try { sessionStorage.setItem('curso3d_pass', pass); } catch (e) {}
  } else {
  err.style.display = 'block';
- document.getElementById('auth-pass').value = '';
- document.getElementById('auth-pass').focus();
+ input.value = '';
+ input.focus();
  }
 }
 
@@ -222,13 +241,16 @@ document.getElementById('auth-pass').addEventListener('keypress', function(e) {
  if (e.key === 'Enter') checkAuth();
 });
 
-// Check session on load
-if (sessionStorage.getItem('curso3d_auth') === 'true') {
- document.getElementById('auth-overlay').classList.add('hidden');
- document.getElementById('course-content').classList.add('visible');
-} else {
+// Reabrir sessão ao recarregar a página
+(async function() {
+ let saved = null;
+ try { saved = sessionStorage.getItem('curso3d_pass'); } catch (e) {}
+ if (saved) {
+ try { if (await unlock(saved)) return; } catch (e) {}
+ try { sessionStorage.removeItem('curso3d_pass'); } catch (e) {}
+ }
  document.getElementById('auth-pass').focus();
-}
+})();
 
 // Bloquear download do vídeo: desabilitar clique direito, drag e atalhos
 document.addEventListener('DOMContentLoaded', function() {
