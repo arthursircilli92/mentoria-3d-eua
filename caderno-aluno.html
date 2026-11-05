@@ -82,6 +82,36 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 .units-field { display: none; }
 .units-field.show { display: block; }
 
+/* IMAGE UPLOAD */
+.img-upload-area {
+ display: flex; align-items: center; gap: 1rem; margin-top: 0.3rem;
+}
+.img-preview {
+ width: 80px; height: 80px; border-radius: 10px;
+ background: var(--bg-2); border: 1px dashed var(--border-strong);
+ display: flex; align-items: center; justify-content: center;
+ overflow: hidden; flex-shrink: 0; font-size: 1.8rem; color: var(--text-muted);
+}
+.img-preview img { width: 100%; height: 100%; object-fit: cover; }
+.img-input-wrapper { flex: 1; }
+.img-file-input {
+ width: 100%; padding: 0.55rem 0.9rem;
+ background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: 8px;
+ color: var(--text); font-family: var(--font-body); font-size: 0.82rem;
+ outline: none; cursor: pointer;
+}
+.img-file-input::file-selector-button {
+ background: var(--accent-dim); color: var(--accent); border: none; border-radius: 6px;
+ padding: 0.3rem 0.7rem; font-family: var(--font-display); font-size: 0.75rem; font-weight: 600;
+ cursor: pointer; margin-right: 0.6rem; transition: all 0.2s;
+}
+.img-file-input::file-selector-button:hover { background: var(--accent); color: #03241f; }
+.img-remove {
+ background: none; border: none; color: #ff6b6b; font-size: 0.78rem;
+ cursor: pointer; font-family: var(--font-display); margin-top: 0.3rem; display: none;
+}
+.img-remove.show { display: inline-block; }
+
 /* EXPORT */
 .export-section { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
 .export-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 2.2rem; background: var(--accent); color: #03241f; border: none; border-radius: 10px; font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
@@ -105,6 +135,9 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  .header p { color: #666; }
  .status-opt { border: 1px solid #ccc; color: #666; background: #f5f5f5; }
  .status-opt.active { background: #e0f7f1; border-color: #007a5e; color: #007a5e; }
+ .img-preview { border: 1px solid #ccc; background: #f5f5f5; }
+ .img-preview img { display: block; }
+ .img-file-input, .img-remove { display: none !important; }
 }
 </style>
 </head>
@@ -164,6 +197,16 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <div class="card">
  <h2><span class="num">1</span> Primeiro Produto</h2>
  <div class="field">
+ <label>Imagem do Produto</label>
+ <div class="img-upload-area">
+ <div class="img-preview" id="p1-img-preview">📷</div>
+ <div class="img-input-wrapper">
+ <input type="file" class="img-file-input" id="p1-img-file" accept="image/*" onchange="handleImageUpload('p1')" />
+ <button class="img-remove" id="p1-img-remove" onclick="removeImage('p1')">✕ Remover imagem</button>
+ </div>
+ </div>
+ </div>
+ <div class="field">
  <label>Nome do Produto</label>
  <input type="text" id="p1-name" data-save placeholder="Ex: Suporte para fone gamer" />
  </div>
@@ -215,6 +258,16 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <!-- PRODUTO 2 -->
  <div class="card">
  <h2><span class="num">2</span> Segundo Produto</h2>
+ <div class="field">
+ <label>Imagem do Produto</label>
+ <div class="img-upload-area">
+ <div class="img-preview" id="p2-img-preview">📷</div>
+ <div class="img-input-wrapper">
+ <input type="file" class="img-file-input" id="p2-img-file" accept="image/*" onchange="handleImageUpload('p2')" />
+ <button class="img-remove" id="p2-img-remove" onclick="removeImage('p2')">✕ Remover imagem</button>
+ </div>
+ </div>
+ </div>
  <div class="field">
  <label>Nome do Produto</label>
  <input type="text" id="p2-name" data-save placeholder="Ex: Organizador de cabos" />
@@ -348,6 +401,95 @@ document.querySelectorAll('[data-save]').forEach(el => {
  el.addEventListener('input', autoSave);
  el.addEventListener('change', autoSave);
 });
+
+// Image upload handling
+const imageStore = {};
+
+function handleImageUpload(prefix) {
+ const fileInput = document.getElementById(`${prefix}-img-file`);
+ const file = fileInput.files[0];
+ if (!file) return;
+
+ // Limit to 500KB after compression to avoid localStorage overflow
+ if (file.size > 2 * 1024 * 1024) {
+ alert('Imagem muito grande. Escolha uma imagem menor que 2MB.');
+ fileInput.value = '';
+ return;
+ }
+
+ const reader = new FileReader();
+ reader.onload = function(e) {
+ // Compress image using canvas
+ const img = new Image();
+ img.onload = function() {
+ const canvas = document.createElement('canvas');
+ const maxSize = 400;
+ let w = img.width, h = img.height;
+ if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+ else if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+ canvas.width = w;
+ canvas.height = h;
+ canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+ const compressed = canvas.toDataURL('image/jpeg', 0.7);
+ imageStore[prefix] = compressed;
+ document.getElementById(`${prefix}-img-preview`).innerHTML = `<img src="${compressed}" alt="Produto">`;
+ document.getElementById(`${prefix}-img-remove`).classList.add('show');
+ autoSave();
+ };
+ img.src = e.target.result;
+ };
+ reader.readAsDataURL(file);
+}
+
+function removeImage(prefix) {
+ delete imageStore[prefix];
+ document.getElementById(`${prefix}-img-preview`).innerHTML = '📷';
+ document.getElementById(`${prefix}-img-file`).value = '';
+ document.getElementById(`${prefix}-img-remove`).classList.remove('show');
+ autoSave();
+}
+
+// Override autoSave to include images
+const _origAutoSave = autoSave;
+autoSave = function() {
+ clearTimeout(saveTimeout);
+ saveTimeout = setTimeout(() => {
+ const data = {};
+ document.querySelectorAll('[data-save]').forEach(el => { data[el.id] = el.value; });
+ const activeStatus = document.querySelector('.status-opt.active');
+ if (activeStatus) data.status = activeStatus.dataset.value;
+ data.images = imageStore;
+ localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+ showSaveIndicator();
+ }, 400);
+};
+
+// Override loadSaved to restore images
+const _origLoadSaved = loadSaved;
+loadSaved = function() {
+ try {
+ const raw = localStorage.getItem(STORAGE_KEY);
+ if (!raw) { document.getElementById('student-date').valueAsDate = new Date(); return; }
+ const data = JSON.parse(raw);
+ Object.entries(data).forEach(([id, val]) => {
+ if (id === 'status') { setStatus(val); return; }
+ if (id === 'images') return;
+ const el = document.getElementById(id);
+ if (el) el.value = val;
+ });
+ if (!data.student_date) document.getElementById('student-date').valueAsDate = new Date();
+ // Restore images
+ if (data.images) {
+ ['p1', 'p2'].forEach(prefix => {
+ if (data.images[prefix]) {
+ imageStore[prefix] = data.images[prefix];
+ document.getElementById(`${prefix}-img-preview`).innerHTML = `<img src="${data.images[prefix]}" alt="Produto">`;
+ document.getElementById(`${prefix}-img-remove`).classList.add('show');
+ }
+ });
+ }
+ } catch(e) { console.warn('Erro ao carregar dados salvos:', e); }
+};
 
 // PDF Export
 async function exportPDF() {
