@@ -82,36 +82,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 .units-field { display: none; }
 .units-field.show { display: block; }
 
-/* IMAGE UPLOAD */
-.img-upload-area {
- display: flex; align-items: center; gap: 1rem; margin-top: 0.3rem;
-}
-.img-preview {
- width: 80px; height: 80px; border-radius: 10px;
- background: var(--bg-2); border: 1px dashed var(--border-strong);
- display: flex; align-items: center; justify-content: center;
- overflow: hidden; flex-shrink: 0; font-size: 1.8rem; color: var(--text-muted);
-}
-.img-preview img { width: 100%; height: 100%; object-fit: cover; }
-.img-input-wrapper { flex: 1; }
-.img-file-input {
- width: 100%; padding: 0.55rem 0.9rem;
- background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: 8px;
- color: var(--text); font-family: var(--font-body); font-size: 0.82rem;
- outline: none; cursor: pointer;
-}
-.img-file-input::file-selector-button {
- background: var(--accent-dim); color: var(--accent); border: none; border-radius: 6px;
- padding: 0.3rem 0.7rem; font-family: var(--font-display); font-size: 0.75rem; font-weight: 600;
- cursor: pointer; margin-right: 0.6rem; transition: all 0.2s;
-}
-.img-file-input::file-selector-button:hover { background: var(--accent); color: #03241f; }
-.img-remove {
- background: none; border: none; color: #ff6b6b; font-size: 0.78rem;
- cursor: pointer; font-family: var(--font-display); margin-top: 0.3rem; display: none;
-}
-.img-remove.show { display: inline-block; }
-
 /* EXPORT */
 .export-section { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
 .export-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 2.2rem; background: var(--accent); color: #03241f; border: none; border-radius: 10px; font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
@@ -121,67 +91,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); }
 
-/* PDF EXPORT THEME — applied via JS before rendering */
-body.pdf-export-mode { background: #fff !important; color: #111 !important; }
-body.pdf-export-mode .container { display: block !important; max-width: 100% !important; padding: 20px !important; }
-body.pdf-export-mode .back-link,
-body.pdf-export-mode .export-section,
-body.pdf-export-mode footer,
-body.pdf-export-mode #auth-overlay,
-body.pdf-export-mode .save-indicator,
-body.pdf-export-mode .img-file-input,
-body.pdf-export-mode .img-remove { display: none !important; }
-body.pdf-export-mode .card {
- background: #fafafa !important; border: 1px solid #ddd !important;
- border-radius: 8px !important; padding: 18px !important; margin-bottom: 14px !important;
- page-break-inside: avoid !important; break-inside: avoid !important;
-}
-body.pdf-export-mode .header { margin-bottom: 16px !important; }
-body.pdf-export-mode .header h1 { color: #111 !important; font-size: 22px !important; }
-body.pdf-export-mode .header p { color: #555 !important; }
-body.pdf-export-mode .tag { background: #e0f7f1 !important; color: #007a5e !important; }
-body.pdf-export-mode .num { background: #007a5e !important; color: #fff !important; }
-body.pdf-export-mode .card h2 { color: #111 !important; font-size: 16px !important; }
-body.pdf-export-mode .field label { color: #333 !important; font-size: 13px !important; }
-body.pdf-export-mode .field input,
-body.pdf-export-mode .field textarea,
-body.pdf-export-mode .field select {
- background: #fff !important; border: 1px solid #ccc !important; color: #111 !important;
- font-size: 13px !important; padding: 8px 10px !important; min-height: auto !important;
-}
-body.pdf-export-mode .status-opt {
- border: 1px solid #ccc !important; color: #666 !important; background: #f5f5f5 !important;
-}
-body.pdf-export-mode .status-opt.active {
- background: #e0f7f1 !important; border-color: #007a5e !important; color: #007a5e !important;
-}
-body.pdf-export-mode .img-upload-area { align-items: flex-start !important; }
-body.pdf-export-mode .img-preview {
- width: 160px !important; height: 160px !important;
- border: 1px solid #ccc !important; background: #f5f5f5 !important;
- border-radius: 8px !important;
-}
-body.pdf-export-mode .img-preview img {
- width: 100% !important; height: 100% !important; object-fit: contain !important; display: block !important;
-}
+/* ===== PDF REPORT TEMPLATE (hidden on screen, used only for export) ===== */
+#pdf-report { display: none; }
 
-/* Native print fallback */
 @media print {
- body { background: #fff; color: #111; }
- .back-link, .export-section, footer, #auth-overlay, .save-indicator { display: none !important; }
- .container { display: block !important; max-width: 100%; padding: 0; }
- .card { border: 1px solid #ccc; background: #fafafa; break-inside: avoid; }
- .field input, .field textarea, .field select { border: 1px solid #ccc; background: #fff; color: #111; }
- .tag { background: #e0f7f1; color: #007a5e; }
- .num { background: #007a5e; color: #fff; }
- .header h1, .card h2 { color: #111; }
- .field label { color: #333; }
- .header p { color: #666; }
- .status-opt { border: 1px solid #ccc; color: #666; background: #f5f5f5; }
- .status-opt.active { background: #e0f7f1; border-color: #007a5e; color: #007a5e; }
- .img-preview { width: 160px; height: 160px; border: 1px solid #ccc; background: #f5f5f5; }
- .img-preview img { display: block; width: 100%; height: 100%; object-fit: contain; }
- .img-file-input, .img-remove { display: none !important; }
+ body { background: #fff !important; color: #111 !important; }
+ #auth-overlay, .save-indicator, .back-link, .export-section, footer, #main-content { display: none !important; }
+ #pdf-report { display: block !important; }
 }
 </style>
 </head>
@@ -201,7 +117,7 @@ body.pdf-export-mode .img-preview img {
 
 <div class="save-indicator" id="save-indicator">💾 Salvo automaticamente</div>
 
-<!-- MAIN -->
+<!-- MAIN (screen view) -->
 <div class="container" id="main-content">
  <a href="/curso-online.html" class="back-link">← Voltar ao Curso</a>
 
@@ -240,16 +156,6 @@ body.pdf-export-mode .img-preview img {
  <!-- PRODUTO 1 -->
  <div class="card">
  <h2><span class="num">1</span> Primeiro Produto</h2>
- <div class="field">
- <label>Imagem do Produto</label>
- <div class="img-upload-area">
- <div class="img-preview" id="p1-img-preview">📷</div>
- <div class="img-input-wrapper">
- <input type="file" class="img-file-input" id="p1-img-file" accept="image/*" onchange="handleImageUpload('p1')" />
- <button class="img-remove" id="p1-img-remove" onclick="removeImage('p1')">✕ Remover imagem</button>
- </div>
- </div>
- </div>
  <div class="field">
  <label>Nome do Produto</label>
  <input type="text" id="p1-name" data-save placeholder="Ex: Suporte para fone gamer" />
@@ -302,16 +208,6 @@ body.pdf-export-mode .img-preview img {
  <!-- PRODUTO 2 -->
  <div class="card">
  <h2><span class="num">2</span> Segundo Produto</h2>
- <div class="field">
- <label>Imagem do Produto</label>
- <div class="img-upload-area">
- <div class="img-preview" id="p2-img-preview">📷</div>
- <div class="img-input-wrapper">
- <input type="file" class="img-file-input" id="p2-img-file" accept="image/*" onchange="handleImageUpload('p2')" />
- <button class="img-remove" id="p2-img-remove" onclick="removeImage('p2')">✕ Remover imagem</button>
- </div>
- </div>
- </div>
  <div class="field">
  <label>Nome do Produto</label>
  <input type="text" id="p2-name" data-save placeholder="Ex: Organizador de cabos" />
@@ -371,6 +267,9 @@ body.pdf-export-mode .img-preview img {
  <p>&copy; 2026 3DnaGringa · Caderno do Aluno — Mentoria Impressão 3D EUA</p>
  </footer>
 </div>
+
+<!-- PDF REPORT TEMPLATE (hidden on screen, built dynamically for clean export) -->
+<div id="pdf-report"></div>
 
 <script>
 const CORRECT_PASS = '2026';
@@ -434,6 +333,7 @@ function loadSaved() {
  const data = JSON.parse(raw);
  Object.entries(data).forEach(([id, val]) => {
  if (id === 'status') { setStatus(val); return; }
+ if (id === 'images') return;
  const el = document.getElementById(id);
  if (el) el.value = val;
  });
@@ -446,96 +346,72 @@ document.querySelectorAll('[data-save]').forEach(el => {
  el.addEventListener('change', autoSave);
 });
 
-// Image upload handling
-const imageStore = {};
-
-function handleImageUpload(prefix) {
- const fileInput = document.getElementById(`${prefix}-img-file`);
- const file = fileInput.files[0];
- if (!file) return;
-
- // Limit to 500KB after compression to avoid localStorage overflow
- if (file.size > 2 * 1024 * 1024) {
- alert('Imagem muito grande. Escolha uma imagem menor que 2MB.');
- fileInput.value = '';
- return;
- }
-
- const reader = new FileReader();
- reader.onload = function(e) {
- // Compress image using canvas
- const img = new Image();
- img.onload = function() {
- const canvas = document.createElement('canvas');
- const maxSize = 400;
- let w = img.width, h = img.height;
- if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
- else if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
- canvas.width = w;
- canvas.height = h;
- canvas.getContext('2d').drawImage(img, 0, 0, w, h);
- const compressed = canvas.toDataURL('image/jpeg', 0.7);
- imageStore[prefix] = compressed;
- document.getElementById(`${prefix}-img-preview`).innerHTML = `<img src="${compressed}" alt="Produto">`;
- document.getElementById(`${prefix}-img-remove`).classList.add('show');
- autoSave();
- };
- img.src = e.target.result;
- };
- reader.readAsDataURL(file);
-}
-
-function removeImage(prefix) {
- delete imageStore[prefix];
- document.getElementById(`${prefix}-img-preview`).innerHTML = '📷';
- document.getElementById(`${prefix}-img-file`).value = '';
- document.getElementById(`${prefix}-img-remove`).classList.remove('show');
- autoSave();
-}
-
-// Override autoSave to include images
-const _origAutoSave = autoSave;
-autoSave = function() {
- clearTimeout(saveTimeout);
- saveTimeout = setTimeout(() => {
- const data = {};
- document.querySelectorAll('[data-save]').forEach(el => { data[el.id] = el.value; });
- const activeStatus = document.querySelector('.status-opt.active');
- if (activeStatus) data.status = activeStatus.dataset.value;
- data.images = imageStore;
- localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
- showSaveIndicator();
- }, 400);
-};
-
-// Override loadSaved to restore images
-const _origLoadSaved = loadSaved;
-loadSaved = function() {
- try {
- const raw = localStorage.getItem(STORAGE_KEY);
- if (!raw) { document.getElementById('student-date').valueAsDate = new Date(); return; }
- const data = JSON.parse(raw);
- Object.entries(data).forEach(([id, val]) => {
- if (id === 'status') { setStatus(val); return; }
- if (id === 'images') return;
+// Helper to get display value from select/input
+function getVal(id) {
  const el = document.getElementById(id);
- if (el) el.value = val;
- });
- if (!data.student_date) document.getElementById('student-date').valueAsDate = new Date();
- // Restore images
- if (data.images) {
- ['p1', 'p2'].forEach(prefix => {
- if (data.images[prefix]) {
- imageStore[prefix] = data.images[prefix];
- document.getElementById(`${prefix}-img-preview`).innerHTML = `<img src="${data.images[prefix]}" alt="Produto">`;
- document.getElementById(`${prefix}-img-remove`).classList.add('show');
+ if (!el) return '';
+ if (el.tagName === 'SELECT') {
+ const opt = el.options[el.selectedIndex];
+ return opt && opt.value ? opt.text : '';
  }
- });
- }
- } catch(e) { console.warn('Erro ao carregar dados salvos:', e); }
-};
+ return el.value || '';
+}
 
-// PDF Export
+// Build clean HTML report for PDF
+function buildReportHTML() {
+ const name = document.getElementById('student-name').value.trim() || 'Aluno';
+ const date = document.getElementById('student-date').value || new Date().toISOString().split('T')[0];
+ const statusEl = document.querySelector('.status-opt.active');
+ const status = statusEl ? statusEl.textContent : 'Ainda não vendo';
+ const units = document.getElementById('student-units').value;
+
+ function productSection(num, prefix) {
+ return `
+ <div style="background:#fafafa;border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:14px;page-break-inside:avoid;">
+ <h2 style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:#111;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+ <span style="background:#007a5e;color:#fff;width:26px;height:26px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">${num}</span>
+ Produto ${num}
+ </h2>
+ <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:'Inter',sans-serif;">
+ <tr><td style="padding:5px 0;color:#555;width:180px;vertical-align:top;"><strong>Nome:</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-name') || '—'}</td></tr>
+ <tr><td style="padding:5px 0;color:#555;vertical-align:top;"><strong>Link STL:</strong></td><td style="padding:5px 0;color:#111;word-break:break-all;">${getVal(prefix+'-stl') || '—'}</td></tr>
+ <tr><td style="padding:5px 0;color:#555;vertical-align:top;"><strong>Link Loja:</strong></td><td style="padding:5px 0;color:#111;word-break:break-all;">${getVal(prefix+'-store') || '—'}</td></tr>
+ <tr><td style="padding:5px 0;color:#555;"><strong>Licença:</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-license') || '—'}</td></tr>
+ <tr><td style="padding:5px 0;color:#555;"><strong>Peso (g):</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-weight') || '—'}</td></tr>
+ <tr><td style="padding:5px 0;color:#555;"><strong>Tempo (h):</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-time') || '—'}</td></tr>
+ <tr><td style="padding:5px 0;color:#555;"><strong>Pós-Processamento:</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-post') || '—'}</td></tr>
+ <tr><td style="padding:5px 0;color:#555;vertical-align:top;"><strong>Por quê?:</strong></td><td style="padding:5px 0;color:#111;line-height:1.5;">${getVal(prefix+'-reason') || '—'}</td></tr>
+ </table>
+ </div>`;
+ }
+
+ return `
+ <div style="font-family:'Inter',sans-serif;color:#111;padding:10px;">
+ <div style="margin-bottom:20px;">
+ <div style="display:inline-block;background:#e0f7f1;color:#007a5e;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:8px;">Exercício 1 — Preparação Aula 2</div>
+ <h1 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#111;margin-bottom:4px;">Caderno do Aluno</h1>
+ <p style="color:#666;font-size:13px;">Ficha de análise de produtos para validação na Aula 2.</p>
+ </div>
+
+ <div style="background:#fafafa;border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:14px;">
+ <h2 style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:#111;margin-bottom:10px;">👤 Dados do Aluno</h2>
+ <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:'Inter',sans-serif;">
+ <tr><td style="padding:4px 0;color:#555;width:120px;"><strong>Nome:</strong></td><td style="padding:4px 0;color:#111;">${name}</td></tr>
+ <tr><td style="padding:4px 0;color:#555;"><strong>Data:</strong></td><td style="padding:4px 0;color:#111;">${date}</td></tr>
+ <tr><td style="padding:4px 0;color:#555;"><strong>Status:</strong></td><td style="padding:4px 0;color:#111;">${status}${units ? ' (' + units + ' unidades vendidas)' : ''}</td></tr>
+ </table>
+ </div>
+
+ ${productSection(1, 'p1')}
+ ${productSection(2, 'p2')}
+
+ <div style="margin-top:20px;padding-top:12px;border-top:1px solid #ddd;text-align:center;font-size:11px;color:#999;">
+ &copy; 2026 3DnaGringa · Caderno do Aluno — Mentoria Impressão 3D EUA
+ </div>
+ </div>`;
+}
+
+// PDF Export — builds a clean report instead of screenshotting the dark UI
 async function exportPDF() {
  const btn = document.getElementById('export-btn');
  const name = document.getElementById('student-name').value.trim() || 'aluno';
@@ -543,50 +419,27 @@ async function exportPDF() {
  btn.disabled = true;
  btn.textContent = '⏳ Gerando PDF...';
 
- const content = document.getElementById('main-content');
-
- // Apply print-friendly theme before rendering
- document.body.classList.add('pdf-export-mode');
-
- // Wait for images to fully load in the DOM
- const imgs = content.querySelectorAll('img');
- if (imgs.length > 0) {
- await Promise.all(Array.from(imgs).map(img => {
- if (img.complete) return Promise.resolve();
- return new Promise(resolve => {
- img.onload = resolve;
- img.onerror = resolve;
- });
- }));
- }
-
- // Small delay to ensure CSS reflow is applied
- await new Promise(r => setTimeout(r, 300));
+ // Build clean report HTML
+ const reportContainer = document.getElementById('pdf-report');
+ reportContainer.innerHTML = buildReportHTML();
+ reportContainer.style.display = 'block';
 
  try {
  await html2pdf().set({
- margin: [8, 8, 8, 8],
+ margin: [10, 10, 10, 10],
  filename: `caderno-${name.replace(/\s+/g,'-').toLowerCase()}-${date}.pdf`,
- image: { type: 'jpeg', quality: 0.95 },
- html2canvas: {
- scale: 2,
- useCORS: true,
- allowTaint: true,
- backgroundColor: '#ffffff',
- logging: false,
- windowWidth: 760
- },
+ image: { type: 'jpeg', quality: 0.98 },
+ html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
- pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: '.card', after: '.card' }
- }).from(content).save();
+ pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+ }).from(reportContainer).save();
 
  btn.textContent = '✅ PDF gerado!';
  } catch(err) {
  console.error('Erro PDF:', err);
  btn.textContent = '❌ Erro ao gerar';
  } finally {
- // Restore dark theme
- document.body.classList.remove('pdf-export-mode');
+ reportContainer.style.display = 'none';
  setTimeout(() => {
  btn.textContent = '📄 Exportar Ficha em PDF';
  btn.disabled = false;
