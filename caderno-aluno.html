@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
  --bg: #0a0e14;
@@ -91,14 +91,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); }
 
-/* ===== PDF REPORT TEMPLATE (hidden on screen, used only for export) ===== */
-#pdf-report { display: none; }
-
-@media print {
- body { background: #fff !important; color: #111 !important; }
- #auth-overlay, .save-indicator, .back-link, .export-section, footer, #main-content { display: none !important; }
- #pdf-report { display: block !important; }
-}
 </style>
 </head>
 <body>
@@ -268,9 +260,6 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  </footer>
 </div>
 
-<!-- PDF REPORT TEMPLATE (hidden on screen, built dynamically for clean export) -->
-<div id="pdf-report"></div>
-
 <script>
 const CORRECT_PASS = '2026';
 const STORAGE_KEY = 'caderno_aluno_v2';
@@ -357,89 +346,156 @@ function getVal(id) {
  return el.value || '';
 }
 
-// Build clean HTML report for PDF
-function buildReportHTML() {
- const name = document.getElementById('student-name').value.trim() || 'Aluno';
- const date = document.getElementById('student-date').value || new Date().toISOString().split('T')[0];
- const statusEl = document.querySelector('.status-opt.active');
- const status = statusEl ? statusEl.textContent : 'Ainda não vendo';
- const units = document.getElementById('student-units').value;
-
- function productSection(num, prefix) {
- return `
- <div style="background:#fafafa;border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:14px;page-break-inside:avoid;">
- <h2 style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:#111;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
- <span style="background:#007a5e;color:#fff;width:26px;height:26px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">${num}</span>
- Produto ${num}
- </h2>
- <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:'Inter',sans-serif;">
- <tr><td style="padding:5px 0;color:#555;width:180px;vertical-align:top;"><strong>Nome:</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-name') || '—'}</td></tr>
- <tr><td style="padding:5px 0;color:#555;vertical-align:top;"><strong>Link STL:</strong></td><td style="padding:5px 0;color:#111;word-break:break-all;">${getVal(prefix+'-stl') || '—'}</td></tr>
- <tr><td style="padding:5px 0;color:#555;vertical-align:top;"><strong>Link Loja:</strong></td><td style="padding:5px 0;color:#111;word-break:break-all;">${getVal(prefix+'-store') || '—'}</td></tr>
- <tr><td style="padding:5px 0;color:#555;"><strong>Licença:</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-license') || '—'}</td></tr>
- <tr><td style="padding:5px 0;color:#555;"><strong>Peso (g):</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-weight') || '—'}</td></tr>
- <tr><td style="padding:5px 0;color:#555;"><strong>Tempo (h):</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-time') || '—'}</td></tr>
- <tr><td style="padding:5px 0;color:#555;"><strong>Pós-Processamento:</strong></td><td style="padding:5px 0;color:#111;">${getVal(prefix+'-post') || '—'}</td></tr>
- <tr><td style="padding:5px 0;color:#555;vertical-align:top;"><strong>Por quê?:</strong></td><td style="padding:5px 0;color:#111;line-height:1.5;">${getVal(prefix+'-reason') || '—'}</td></tr>
- </table>
- </div>`;
- }
-
- return `
- <div style="font-family:'Inter',sans-serif;color:#111;padding:10px;">
- <div style="margin-bottom:20px;">
- <div style="display:inline-block;background:#e0f7f1;color:#007a5e;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:8px;">Exercício 1 — Preparação Aula 2</div>
- <h1 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#111;margin-bottom:4px;">Caderno do Aluno</h1>
- <p style="color:#666;font-size:13px;">Ficha de análise de produtos para validação na Aula 2.</p>
- </div>
-
- <div style="background:#fafafa;border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:14px;">
- <h2 style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:#111;margin-bottom:10px;">👤 Dados do Aluno</h2>
- <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:'Inter',sans-serif;">
- <tr><td style="padding:4px 0;color:#555;width:120px;"><strong>Nome:</strong></td><td style="padding:4px 0;color:#111;">${name}</td></tr>
- <tr><td style="padding:4px 0;color:#555;"><strong>Data:</strong></td><td style="padding:4px 0;color:#111;">${date}</td></tr>
- <tr><td style="padding:4px 0;color:#555;"><strong>Status:</strong></td><td style="padding:4px 0;color:#111;">${status}${units ? ' (' + units + ' unidades vendidas)' : ''}</td></tr>
- </table>
- </div>
-
- ${productSection(1, 'p1')}
- ${productSection(2, 'p2')}
-
- <div style="margin-top:20px;padding-top:12px;border-top:1px solid #ddd;text-align:center;font-size:11px;color:#999;">
- &copy; 2026 3DnaGringa · Caderno do Aluno — Mentoria Impressão 3D EUA
- </div>
- </div>`;
+// ===== EXPORTAR PDF =====
+// O PDF é montado direto dos dados (texto de verdade, links clicáveis, várias páginas).
+// Não usa "print de tela", que falhava e saía em branco.
+function pdfClean(str) {
+ return String(str == null ? '' : str)
+ .replace(/[—–]/g, '-')
+ .replace(/[“”]/g, '"')
+ .replace(/[‘’]/g, "'")
+ .replace(/…/g, '...')
+ .replace(/\r/g, '')
+ .replace(/[^\n\x20-\x7E -ÿ]/g, '');
 }
 
-// PDF Export — builds a clean report instead of screenshotting the dark UI
-async function exportPDF() {
+function pdfDate(iso) {
+ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+ return m ? `${m[3]}/${m[2]}/${m[1]}` : (iso || '');
+}
+
+function exportPDF() {
  const btn = document.getElementById('export-btn');
- const name = document.getElementById('student-name').value.trim() || 'aluno';
- const date = document.getElementById('student-date').value || 'sem-data';
+ const name = document.getElementById('student-name').value.trim() || 'Aluno';
+ const dateIso = document.getElementById('student-date').value || new Date().toISOString().split('T')[0];
  btn.disabled = true;
  btn.textContent = '⏳ Gerando PDF...';
 
- // Build clean report HTML
- const reportContainer = document.getElementById('pdf-report');
- reportContainer.innerHTML = buildReportHTML();
- reportContainer.style.display = 'block';
-
  try {
- await html2pdf().set({
- margin: [10, 10, 10, 10],
- filename: `caderno-${name.replace(/\s+/g,'-').toLowerCase()}-${date}.pdf`,
- image: { type: 'jpeg', quality: 0.98 },
- html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
- jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
- pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
- }).from(reportContainer).save();
+ if (!window.jspdf) throw new Error('A biblioteca de PDF não carregou. Verifique a internet e recarregue a página.');
+ const { jsPDF } = window.jspdf;
+ const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+ const PW = 210, PH = 297, M = 15, W = PW - 2 * M, LABEL_W = 44, GAP = 3;
+ const VAL_X = M + LABEL_W + GAP, VAL_W = W - LABEL_W - GAP;
+ const GREEN = [0, 122, 94], DARK = [17, 17, 17], GRAY = [95, 95, 95], LINE = [220, 220, 220], BLUE = [20, 80, 200];
+ let y = M;
 
+ // quebra o texto na largura certa, inclusive links longos sem espaço
+ function wrap(str, maxW) {
+ const out = [];
+ pdfClean(str).split('\n').forEach(par => {
+ let line = '';
+ par.split(' ').forEach(word => {
+ let w = word;
+ while (doc.getTextWidth(w) > maxW) {
+ let cut = w.length;
+ while (cut > 1 && doc.getTextWidth(w.slice(0, cut)) > maxW) cut--;
+ if (line) { out.push(line); line = ''; }
+ out.push(w.slice(0, cut));
+ w = w.slice(cut);
+ }
+ const test = line ? line + ' ' + w : w;
+ if (doc.getTextWidth(test) <= maxW) line = test;
+ else { out.push(line); line = w; }
+ });
+ out.push(line);
+ });
+ return out;
+ }
+
+ function ensure(h) {
+ if (y + h > PH - M - 8) { doc.addPage(); y = M; }
+ }
+
+ function row(label, value, opts) {
+ opts = opts || {};
+ const val = pdfClean(value).trim();
+ const isLink = opts.link && /^https?:\/\//i.test(val);
+ doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+ const lines = wrap(val || '-', VAL_W);
+ const LH = 5;
+ ensure(lines.length * LH + 3);
+ doc.setFont('helvetica', 'bold'); doc.setTextColor(...GRAY);
+ doc.text(pdfClean(label), M, y + 4);
+ doc.setFont('helvetica', 'normal');
+ lines.forEach((ln, i) => {
+ const ly = y + 4 + i * LH;
+ if (isLink) {
+ doc.setTextColor(...BLUE);
+ doc.text(ln, VAL_X, ly);
+ const w = doc.getTextWidth(ln);
+ doc.setDrawColor(...BLUE); doc.setLineWidth(0.2); doc.line(VAL_X, ly + 0.8, VAL_X + w, ly + 0.8);
+ doc.link(VAL_X, ly - 3.5, w, 4.5, { url: val });
+ } else {
+ doc.setTextColor(...DARK);
+ doc.text(ln, VAL_X, ly);
+ }
+ });
+ y += lines.length * LH + 2;
+ doc.setDrawColor(...LINE); doc.setLineWidth(0.15); doc.line(M, y, M + W, y);
+ y += 1.5;
+ }
+
+ function sectionTitle(txt) {
+ ensure(14);
+ doc.setFillColor(...GREEN); doc.roundedRect(M, y, W, 8, 1.5, 1.5, 'F');
+ doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(255, 255, 255);
+ doc.text(pdfClean(txt), M + 3, y + 5.6);
+ y += 11;
+ }
+
+ // Cabeçalho
+ doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...GREEN);
+ doc.text('EXERCÍCIO 1 - PREPARAÇÃO AULA 2', M, y + 3);
+ y += 8;
+ doc.setFontSize(20); doc.setTextColor(...DARK); doc.text('Caderno do Aluno', M, y + 6);
+ y += 11;
+ doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(...GRAY);
+ doc.text('Ficha de análise de produtos para validação na Aula 2.', M, y + 3);
+ y += 9;
+
+ // Dados do aluno
+ const statusEl = document.querySelector('.status-opt.active');
+ const status = statusEl ? statusEl.textContent.trim() : 'Ainda não vendo';
+ const units = document.getElementById('student-units').value;
+ sectionTitle('Dados do aluno');
+ row('Nome', name);
+ row('Data', pdfDate(dateIso));
+ row('Situação', status + (units && statusEl && statusEl.dataset.value === 'ja-vendo' ? ' (' + units + ' unidades vendidas)' : ''));
+ y += 4;
+
+ // Produtos
+ [['1', 'p1'], ['2', 'p2']].forEach(([num, pre]) => {
+ ensure(95);
+ sectionTitle('Produto ' + num);
+ row('Nome do produto', getVal(pre + '-name'));
+ row('Link do STL', getVal(pre + '-stl'), { link: true });
+ row('Link da loja que vende', getVal(pre + '-store'), { link: true });
+ row('Licença permite venda?', getVal(pre + '-license'));
+ row('Peso do filamento (g)', getVal(pre + '-weight'));
+ row('Tempo de impressão (h)', getVal(pre + '-time'));
+ row('Pós-processamento', getVal(pre + '-post'));
+ row('Por que esse produto?', getVal(pre + '-reason'));
+ y += 4;
+ });
+
+ // Rodapé com numeração
+ const total = doc.getNumberOfPages();
+ for (let i = 1; i <= total; i++) {
+ doc.setPage(i);
+ doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
+ doc.text('3DnaGringa · Caderno do Aluno - Mentoria Impressão 3D EUA', M, PH - 8);
+ doc.text('Página ' + i + ' de ' + total, PW - M, PH - 8, { align: 'right' });
+ }
+
+ const slug = name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'aluno';
+ doc.save(`caderno-${slug}-${dateIso}.pdf`);
  btn.textContent = '✅ PDF gerado!';
- } catch(err) {
+ } catch (err) {
  console.error('Erro PDF:', err);
  btn.textContent = '❌ Erro ao gerar';
+ alert('Não foi possível gerar o PDF: ' + err.message);
  } finally {
- reportContainer.style.display = 'none';
  setTimeout(() => {
  btn.textContent = '📄 Exportar Ficha em PDF';
  btn.disabled = false;
