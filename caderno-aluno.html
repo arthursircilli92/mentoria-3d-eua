@@ -180,7 +180,7 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <div class="img-input-wrapper">
  <input type="file" class="img-file-input" id="p1-img-file" accept="image/*" onchange="handleImageUpload('p1')" />
  <button type="button" class="img-remove" id="p1-img-remove" onclick="removeImage('p1')">✕ Remover foto</button>
- <div class="img-hint">A foto sai grande no PDF.</div>
+ <div class="img-hint">A foto sai no PDF em tamanho médio.</div>
  </div>
  </div>
  </div>
@@ -243,7 +243,7 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <div class="img-input-wrapper">
  <input type="file" class="img-file-input" id="p2-img-file" accept="image/*" onchange="handleImageUpload('p2')" />
  <button type="button" class="img-remove" id="p2-img-remove" onclick="removeImage('p2')">✕ Remover foto</button>
- <div class="img-hint">A foto sai grande no PDF.</div>
+ <div class="img-hint">A foto sai no PDF em tamanho médio.</div>
  </div>
  </div>
  </div>
@@ -570,14 +570,14 @@ function exportPDF() {
  const photo = imageStore[pre];
  let dw = 0, dh = 0;
  if (photo) {
- const MAXH = 90;
- const sc = Math.min(W / photo.w, MAXH / photo.h);
+ const MAXW = 85, MAXH = 65; // tamanho médio, qualquer foto cabe nessa caixa
+ const sc = Math.min(MAXW / photo.w, MAXH / photo.h);
  dw = photo.w * sc; dh = photo.h * sc;
  }
  ensure(photo ? 11 + dh + 5 + 72 : 95);
  sectionTitle('Produto ' + num);
  if (photo) {
- const ix = M + (W - dw) / 2;
+ const ix = M;
  doc.addImage(photo.data, 'JPEG', ix, y, dw, dh);
  doc.setDrawColor(...LINE); doc.setLineWidth(0.2); doc.rect(ix, y, dw, dh);
  y += dh + 5;
