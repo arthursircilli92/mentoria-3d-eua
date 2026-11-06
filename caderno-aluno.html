@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
@@ -102,6 +104,18 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
 .img-remove { background: none; border: none; color: #ff6b6b; font-size: 0.78rem; cursor: pointer; font-family: var(--font-display); margin-top: 0.3rem; display: none; }
 .img-remove.show { display: inline-block; }
 .img-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+/* RECORTE DA FOTO */
+.crop-modal { display: none; position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 1rem; }
+.crop-modal.show { display: flex; }
+.crop-box { background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 14px; padding: 1.2rem; width: 100%; max-width: 560px; }
+.crop-title { font-family: var(--font-display); font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+.crop-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.8rem; }
+.crop-stage { width: 100%; height: min(60vh, 440px); background: #000; border-radius: 8px; overflow: hidden; }
+.crop-stage img { display: block; max-width: 100%; }
+.crop-actions { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 0.9rem; }
+.crop-actions button { padding: 0.65rem 1.2rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-2); color: var(--text); font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+.crop-actions button.primary { background: var(--accent); color: #03241f; border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -180,7 +194,7 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <div class="img-input-wrapper">
  <input type="file" class="img-file-input" id="p1-img-file" accept="image/*" onchange="handleImageUpload('p1')" />
  <button type="button" class="img-remove" id="p1-img-remove" onclick="removeImage('p1')">✕ Remover foto</button>
- <div class="img-hint">A foto sai no PDF em tamanho médio.</div>
+ <div class="img-hint">Você recorta a foto em quadrado (1:1) ao enviar.</div>
  </div>
  </div>
  </div>
@@ -243,7 +257,7 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <div class="img-input-wrapper">
  <input type="file" class="img-file-input" id="p2-img-file" accept="image/*" onchange="handleImageUpload('p2')" />
  <button type="button" class="img-remove" id="p2-img-remove" onclick="removeImage('p2')">✕ Remover foto</button>
- <div class="img-hint">A foto sai no PDF em tamanho médio.</div>
+ <div class="img-hint">Você recorta a foto em quadrado (1:1) ao enviar.</div>
  </div>
  </div>
  </div>
@@ -291,6 +305,19 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <footer>
  <p>&copy; 2026 3DnaGringa · Caderno do Aluno — Mentoria Impressão 3D EUA</p>
  </footer>
+</div>
+
+<!-- RECORTE DA FOTO -->
+<div class="crop-modal" id="crop-modal">
+ <div class="crop-box">
+ <div class="crop-title">Recorte a foto (quadrada)</div>
+ <div class="crop-sub">Arraste e use o zoom (roda do mouse ou dois dedos) para enquadrar o produto.</div>
+ <div class="crop-stage"><img id="crop-img" alt="Foto para recortar"></div>
+ <div class="crop-actions">
+ <button type="button" onclick="cancelCrop()">Cancelar</button>
+ <button type="button" class="primary" onclick="confirmCrop()">Usar foto</button>
+ </div>
+ </div>
 </div>
 
 <script>
@@ -394,32 +421,51 @@ function renderImage(prefix) {
  }
 }
 
+let cropState = null; // { prefix, cropper, url }
+
 function handleImageUpload(prefix) {
  const input = document.getElementById(prefix + '-img-file');
  const file = input.files[0];
  if (!file) return;
  if (!file.type.startsWith('image/')) { alert('Escolha um arquivo de imagem.'); input.value = ''; return; }
- const reader = new FileReader();
- reader.onload = e => {
- const img = new Image();
+ if (typeof Cropper === 'undefined') { alert('O recorte não carregou. Verifique a internet e recarregue a página.'); input.value = ''; return; }
+
+ const url = URL.createObjectURL(file);
+ const img = document.getElementById('crop-img');
+ closeCrop();
  img.onload = () => {
- const MAX = 1200; // boa qualidade para sair grande no PDF
- let w = img.naturalWidth, h = img.naturalHeight;
- const k = Math.min(1, MAX / Math.max(w, h));
- w = Math.round(w * k); h = Math.round(h * k);
- const canvas = document.createElement('canvas');
- canvas.width = w; canvas.height = h;
- const ctx = canvas.getContext('2d');
- ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); // fundo branco (PNG transparente)
- ctx.drawImage(img, 0, 0, w, h);
- imageStore[prefix] = { data: canvas.toDataURL('image/jpeg', 0.82), w, h };
- renderImage(prefix); saveImages(); showSaveIndicator();
+ const cropper = new Cropper(img, {
+ aspectRatio: 1, viewMode: 1, dragMode: 'move', autoCropArea: 1,
+ background: false, guides: true, center: true, highlight: false,
+ cropBoxMovable: true, cropBoxResizable: true, toggleDragModeOnDblclick: false,
+ });
+ cropState = { prefix, cropper, url };
+ };
+ img.src = url;
+ document.getElementById('crop-modal').classList.add('show');
  input.value = '';
- };
- img.onerror = () => { alert('Não foi possível ler essa imagem. Tente outra.'); input.value = ''; };
- img.src = e.target.result;
- };
- reader.readAsDataURL(file);
+}
+
+function closeCrop() {
+ if (cropState) {
+ try { cropState.cropper.destroy(); } catch (e) {}
+ URL.revokeObjectURL(cropState.url);
+ cropState = null;
+ }
+ document.getElementById('crop-modal').classList.remove('show');
+}
+
+function cancelCrop() { closeCrop(); }
+
+function confirmCrop() {
+ if (!cropState) return;
+ const { prefix, cropper } = cropState;
+ const SIZE = 1000; // quadrado 1:1, boa qualidade para o PDF
+ const canvas = cropper.getCroppedCanvas({ width: SIZE, height: SIZE, fillColor: '#ffffff', imageSmoothingQuality: 'high' });
+ if (!canvas) { alert('Não foi possível recortar essa imagem.'); return; }
+ imageStore[prefix] = { data: canvas.toDataURL('image/jpeg', 0.85), w: canvas.width, h: canvas.height };
+ renderImage(prefix); saveImages(); showSaveIndicator();
+ closeCrop();
 }
 
 function removeImage(prefix) {
@@ -570,7 +616,7 @@ function exportPDF() {
  const photo = imageStore[pre];
  let dw = 0, dh = 0;
  if (photo) {
- const MAXW = 85, MAXH = 65; // tamanho médio, qualquer foto cabe nessa caixa
+ const MAXW = 70, MAXH = 70; // foto já vem quadrada (1:1): sai com 70 x 70 mm
  const sc = Math.min(MAXW / photo.w, MAXH / photo.h);
  dw = photo.w * sc; dh = photo.h * sc;
  }
