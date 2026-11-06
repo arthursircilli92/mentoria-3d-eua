@@ -183,8 +183,9 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <input type="url" id="p1-stl" data-save placeholder="https://thingiverse.com/..." />
  </div>
  <div class="field">
- <label>Link de Quem Já Vende</label>
+ <label>Link do Anúncio (Etsy, Amazon, eBay...)</label>
  <input type="url" id="p1-store" data-save placeholder="https://etsy.com/..." />
+ <div class="img-hint">Já vende? Cole o link do seu anúncio. Ainda não vende? Cole o de um anúncio que já vende esse produto.</div>
  </div>
  </div>
  <div class="field">
@@ -246,8 +247,9 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <input type="url" id="p2-stl" data-save placeholder="https://thingiverse.com/..." />
  </div>
  <div class="field">
- <label>Link de Quem Já Vende</label>
+ <label>Link do Anúncio (Etsy, Amazon, eBay...)</label>
  <input type="url" id="p2-store" data-save placeholder="https://etsy.com/..." />
+ <div class="img-hint">Já vende? Cole o link do seu anúncio. Ainda não vende? Cole o de um anúncio que já vende esse produto.</div>
  </div>
  </div>
  <div class="field">
@@ -630,7 +632,7 @@ function exportPDF() {
  }
  row('Nome do produto', getVal(pre + '-name'));
  row('Link do STL', getVal(pre + '-stl'), { link: true });
- row('Link da loja que vende', getVal(pre + '-store'), { link: true });
+ row('Link do anúncio', getVal(pre + '-store'), { link: true });
  row('Licença permite venda?', getVal(pre + '-license'));
  row('Peso do filamento (g)', getVal(pre + '-weight'));
  row('Tempo de impressão (h)', getVal(pre + '-time'));
