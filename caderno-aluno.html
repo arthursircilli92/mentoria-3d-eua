@@ -91,6 +91,17 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); }
 
+
+/* FOTO DO PRODUTO */
+.img-upload-area { display: flex; align-items: center; gap: 1rem; margin-top: 0.3rem; }
+.img-preview { width: 96px; height: 96px; border-radius: 10px; background: var(--bg-2); border: 1px dashed var(--border-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; font-size: 1.8rem; color: var(--text-muted); }
+.img-preview img { width: 100%; height: 100%; object-fit: cover; }
+.img-input-wrapper { flex: 1; min-width: 0; }
+.img-file-input { width: 100%; padding: 0.55rem 0.9rem; background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 0.82rem; outline: none; cursor: pointer; }
+.img-file-input::file-selector-button { background: var(--accent-dim); color: var(--accent); border: none; border-radius: 6px; padding: 0.3rem 0.7rem; font-family: var(--font-display); font-size: 0.75rem; font-weight: 600; cursor: pointer; margin-right: 0.6rem; }
+.img-remove { background: none; border: none; color: #ff6b6b; font-size: 0.78rem; cursor: pointer; font-family: var(--font-display); margin-top: 0.3rem; display: none; }
+.img-remove.show { display: inline-block; }
+.img-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; }
 </style>
 </head>
 <body>
@@ -163,6 +174,17 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  </div>
  </div>
  <div class="field">
+ <label>Foto do Produto</label>
+ <div class="img-upload-area">
+ <div class="img-preview" id="p1-img-preview">📷</div>
+ <div class="img-input-wrapper">
+ <input type="file" class="img-file-input" id="p1-img-file" accept="image/*" onchange="handleImageUpload('p1')" />
+ <button type="button" class="img-remove" id="p1-img-remove" onclick="removeImage('p1')">✕ Remover foto</button>
+ <div class="img-hint">A foto sai grande no PDF.</div>
+ </div>
+ </div>
+ </div>
+ <div class="field">
  <label>Licença do STL Permite Venda?</label>
  <select id="p1-license" data-save>
  <option value="">Selecione...</option>
@@ -212,6 +234,17 @@ footer { margin-top: 2.5rem; padding: 1.5rem; text-align: center; border-top: 1p
  <div class="field">
  <label>Link de Quem Já Vende</label>
  <input type="url" id="p2-store" data-save placeholder="https://etsy.com/..." />
+ </div>
+ </div>
+ <div class="field">
+ <label>Foto do Produto</label>
+ <div class="img-upload-area">
+ <div class="img-preview" id="p2-img-preview">📷</div>
+ <div class="img-input-wrapper">
+ <input type="file" class="img-file-input" id="p2-img-file" accept="image/*" onchange="handleImageUpload('p2')" />
+ <button type="button" class="img-remove" id="p2-img-remove" onclick="removeImage('p2')">✕ Remover foto</button>
+ <div class="img-hint">A foto sai grande no PDF.</div>
+ </div>
  </div>
  </div>
  <div class="field">
@@ -316,6 +349,7 @@ function showSaveIndicator() {
 }
 
 function loadSaved() {
+ loadImages();
  try {
  const raw = localStorage.getItem(STORAGE_KEY);
  if (!raw) { document.getElementById('student-date').valueAsDate = new Date(); return; }
@@ -334,6 +368,73 @@ document.querySelectorAll('[data-save]').forEach(el => {
  el.addEventListener('input', autoSave);
  el.addEventListener('change', autoSave);
 });
+
+// ===== FOTO DO PRODUTO =====
+const IMG_KEY = 'caderno_aluno_imgs_v1';
+const imageStore = {}; // { p1: {data, w, h}, p2: {...} }
+
+function saveImages() {
+ try { localStorage.setItem(IMG_KEY, JSON.stringify(imageStore)); }
+ catch (e) { console.warn('Não foi possível guardar as fotos neste navegador:', e); }
+}
+
+function renderImage(prefix) {
+ const box = document.getElementById(prefix + '-img-preview');
+ const rm = document.getElementById(prefix + '-img-remove');
+ const item = imageStore[prefix];
+ if (item) {
+ box.innerHTML = '';
+ const img = document.createElement('img');
+ img.src = item.data; img.alt = 'Foto do produto';
+ box.appendChild(img);
+ rm.classList.add('show');
+ } else {
+ box.textContent = '📷';
+ rm.classList.remove('show');
+ }
+}
+
+function handleImageUpload(prefix) {
+ const input = document.getElementById(prefix + '-img-file');
+ const file = input.files[0];
+ if (!file) return;
+ if (!file.type.startsWith('image/')) { alert('Escolha um arquivo de imagem.'); input.value = ''; return; }
+ const reader = new FileReader();
+ reader.onload = e => {
+ const img = new Image();
+ img.onload = () => {
+ const MAX = 1200; // boa qualidade para sair grande no PDF
+ let w = img.naturalWidth, h = img.naturalHeight;
+ const k = Math.min(1, MAX / Math.max(w, h));
+ w = Math.round(w * k); h = Math.round(h * k);
+ const canvas = document.createElement('canvas');
+ canvas.width = w; canvas.height = h;
+ const ctx = canvas.getContext('2d');
+ ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); // fundo branco (PNG transparente)
+ ctx.drawImage(img, 0, 0, w, h);
+ imageStore[prefix] = { data: canvas.toDataURL('image/jpeg', 0.82), w, h };
+ renderImage(prefix); saveImages(); showSaveIndicator();
+ input.value = '';
+ };
+ img.onerror = () => { alert('Não foi possível ler essa imagem. Tente outra.'); input.value = ''; };
+ img.src = e.target.result;
+ };
+ reader.readAsDataURL(file);
+}
+
+function removeImage(prefix) {
+ delete imageStore[prefix];
+ renderImage(prefix); saveImages();
+}
+
+function loadImages() {
+ try {
+ const raw = localStorage.getItem(IMG_KEY);
+ if (!raw) return;
+ const data = JSON.parse(raw);
+ ['p1', 'p2'].forEach(pre => { if (data[pre] && data[pre].data) { imageStore[pre] = data[pre]; renderImage(pre); } });
+ } catch (e) { console.warn('Erro ao carregar fotos:', e); }
+}
 
 // Helper to get display value from select/input
 function getVal(id) {
@@ -466,8 +567,21 @@ function exportPDF() {
 
  // Produtos
  [['1', 'p1'], ['2', 'p2']].forEach(([num, pre]) => {
- ensure(95);
+ const photo = imageStore[pre];
+ let dw = 0, dh = 0;
+ if (photo) {
+ const MAXH = 90;
+ const sc = Math.min(W / photo.w, MAXH / photo.h);
+ dw = photo.w * sc; dh = photo.h * sc;
+ }
+ ensure(photo ? 11 + dh + 5 + 72 : 95);
  sectionTitle('Produto ' + num);
+ if (photo) {
+ const ix = M + (W - dw) / 2;
+ doc.addImage(photo.data, 'JPEG', ix, y, dw, dh);
+ doc.setDrawColor(...LINE); doc.setLineWidth(0.2); doc.rect(ix, y, dw, dh);
+ y += dh + 5;
+ }
  row('Nome do produto', getVal(pre + '-name'));
  row('Link do STL', getVal(pre + '-stl'), { link: true });
  row('Link da loja que vende', getVal(pre + '-store'), { link: true });
