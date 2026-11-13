@@ -118,6 +118,29 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 .module-info h3 { font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.15rem; }
 .module-info p { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
 
+
+/* Aulas em blocos */
+.aula { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+.aula:hover, .aula.open { border-color: var(--accent); }
+.aula-head { display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1rem 1.4rem; background: none; border: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.aula-head .module-info { flex: 1; min-width: 0; }
+.aula-chevron { color: var(--text-muted); font-size: 0.9rem; transition: transform 0.2s; }
+.aula.open .aula-chevron { transform: rotate(180deg); color: var(--accent); }
+.aula-body { display: none; padding: 0 1.4rem 1.4rem; }
+.aula.open .aula-body { display: block; }
+.aula-body .video-wrapper { margin-bottom: 1rem; }
+.part-tabs { display: flex; gap: 0.5rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+.part-tab { padding: 0.45rem 1rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-2); color: var(--text-dim); font-family: var(--font-display); font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.part-tab.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.video-msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.7rem; padding: 1rem; text-align: center; color: var(--text-dim); font-size: 0.92rem; }
+.video-msg button { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-2); color: var(--text); font-family: var(--font-display); font-weight: 600; cursor: pointer; }
+.caderno-card { background: var(--bg-2); border: 1px solid var(--accent); border-radius: 12px; padding: 1.1rem 1.4rem; display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+.caderno-card .ic { font-size: 1.8rem; }
+.caderno-card .tx { flex: 1; min-width: 200px; }
+.caderno-card .tt { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+.caderno-card .ds { font-size: 0.85rem; color: var(--text-dim); }
+.caderno-card a { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1.4rem; background: var(--accent); color: #03241f; border-radius: 8px; font-family: var(--font-display); font-size: 0.88rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+
 footer {
  margin-top: 4rem; padding: 2rem; text-align: center;
  border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted);
@@ -126,6 +149,8 @@ footer {
 @media (max-width: 720px) {
  .course-container { padding: 1.5rem; }
  .module-item { padding: 0.8rem 1rem; }
+ .aula-head { padding: 0.8rem 1rem; }
+ .aula-body { padding: 0 1rem 1rem; }
 }
 </style>
 </head>
@@ -153,56 +178,9 @@ footer {
  <p>4 aulas completas gravadas ao vivo. Assista no seu ritmo, quantas vezes quiser.</p>
  </div>
 
- <!-- VIDEO PLAYER -->
- <div class="video-wrapper">
- <video controls preload="metadata" playsinline controlslist="nodownload noremoteplayback" disablepictureinpicture oncontextmenu="return false;">
- <source src="" type="video/mp4" id="course-video-source">
- Seu navegador não suporta vídeo HTML5.
- </video>
- </div>
-
- <!-- CADERNO DO ALUNO -->
- <div style="background: var(--bg-card); border: 1px solid var(--accent); border-radius: 14px; padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap;">
- <div style="font-size: 2rem;">📓</div>
- <div style="flex: 1; min-width: 200px;">
- <div style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; margin-bottom: 0.2rem;">Caderno do Aluno — Tarefa Aula 1</div>
- <div style="font-size: 0.85rem; color: var(--text-dim);">Preencha a ficha de análise dos 2 produtos escolhidos e exporte em PDF para enviar no grupo.</div>
- </div>
- <a href="caderno-aluno.html" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1.4rem; background: var(--accent); color: #03241f; border-radius: 8px; font-family: var(--font-display); font-size: 0.88rem; font-weight: 700; text-decoration: none; white-space: nowrap; transition: all 0.2s;">Abrir Caderno →</a>
- </div>
-
- <!-- MODULES -->
+ <!-- AULAS (cada aula tem o seu vídeo dentro do bloco) -->
  <div class="modules-title">Conteúdo das Aulas</div>
- <div class="module-list">
- <div class="module-item">
- <div class="module-num">01</div>
- <div class="module-info">
- <h3>Introdução e Fundamentos</h3>
- <p>Quem somos, por que o 3D nos EUA, máquinas e materiais.</p>
- </div>
- </div>
- <div class="module-item">
- <div class="module-num">02</div>
- <div class="module-info">
- <h3>Produtos Campeões</h3>
- <p>Como encontrar, validar e escolher os melhores produtos para vender.</p>
- </div>
- </div>
- <div class="module-item">
- <div class="module-num">03</div>
- <div class="module-info">
- <h3>Vendas e Precificação</h3>
- <p>Análise de exercícios, canais de venda e estratégia de preços.</p>
- </div>
- </div>
- <div class="module-item">
- <div class="module-num">04</div>
- <div class="module-info">
- <h3>Logística &amp; Análise</h3>
- <p>Análise dos anúncios criados (Exercício B), GoShipoo, agregadores de frete e logística, tira-dúvidas e próximos passos.</p>
- </div>
- </div>
- </div>
+ <div class="module-list" id="aulas-list"></div>
 
  <footer>
  <p>&copy; 2026 3DnaGringa · Acesso restrito por senha</p>
@@ -210,9 +188,114 @@ footer {
 </div>
 
 <script>
+// Cada vídeo é pedido à API só depois da senha. "id" é o nome combinado com a API (api/video-url.js).
+const AULAS = [
+ { n: '01', title: 'Introdução e Fundamentos', desc: 'Quem somos, por que o 3D nos EUA, máquinas e materiais.', parts: [{ id: 'aula1' }], caderno: true },
+ { n: '02', title: 'Produtos Campeões', desc: 'Como encontrar, validar e escolher os melhores produtos para vender.', parts: [{ id: 'aula2-p1', label: 'Parte 1' }, { id: 'aula2-p2', label: 'Parte 2' }] },
+ { n: '03', title: 'Vendas e Precificação', desc: 'Análise de exercícios, canais de venda e estratégia de preços.', parts: [{ id: 'aula3' }] },
+ { n: '04', title: 'Logística & Análise', desc: 'Análise dos anúncios criados (Exercício B), GoShipoo, agregadores de frete e logística, tira-dúvidas e próximos passos.', parts: [{ id: 'aula4' }] },
+];
+
+let coursePass = '';
+let reqCounter = 0;
+
+function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+function buildAulas() {
+ const list = document.getElementById('aulas-list');
+ list.innerHTML = AULAS.map((a, i) => `
+ <div class="aula" id="aula-${i}">
+ <button type="button" class="aula-head" onclick="toggleAula(${i})" aria-expanded="false">
+ <div class="module-num">${a.n}</div>
+ <div class="module-info"><h3>${esc(a.title)}</h3><p>${esc(a.desc)}</p></div>
+ <div class="aula-chevron">▼</div>
+ </button>
+ <div class="aula-body">
+ ${a.parts.length > 1 ? `<div class="part-tabs">${a.parts.map((p, j) => `<button type="button" class="part-tab${j === 0 ? ' active' : ''}" onclick="selectPart(${i}, ${j})">${esc(p.label)}</button>`).join('')}</div>` : ''}
+ <div class="video-wrapper" id="player-${i}"></div>
+ ${a.caderno ? `<div class="caderno-card"><div class="ic">📓</div><div class="tx"><div class="tt">Caderno do Aluno — Tarefa Aula 1</div><div class="ds">Preencha a ficha de análise dos 2 produtos escolhidos e exporte em PDF para enviar no grupo.</div></div><a href="caderno-aluno.html">Abrir Caderno →</a></div>` : ''}
+ </div>
+ </div>`).join('');
+}
+
+function stopVideo(i) {
+ const box = document.getElementById('player-' + i);
+ const v = box && box.querySelector('video');
+ if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
+ if (box) { box.innerHTML = ''; box.dataset.loaded = ''; }
+}
+
+function toggleAula(i) {
+ const el = document.getElementById('aula-' + i);
+ const willOpen = !el.classList.contains('open');
+ AULAS.forEach((_, k) => {
+ const other = document.getElementById('aula-' + k);
+ if (k !== i && other.classList.contains('open')) {
+ other.classList.remove('open');
+ other.querySelector('.aula-head').setAttribute('aria-expanded', 'false');
+ stopVideo(k);
+ }
+ });
+ el.classList.toggle('open', willOpen);
+ el.querySelector('.aula-head').setAttribute('aria-expanded', String(willOpen));
+ if (willOpen) {
+ const box = document.getElementById('player-' + i);
+ if (!box.dataset.loaded) {
+ const active = el.querySelector('.part-tab.active');
+ const j = active ? Array.from(el.querySelectorAll('.part-tab')).indexOf(active) : 0;
+ loadPart(i, j);
+ }
+ } else {
+ stopVideo(i);
+ }
+}
+
+function selectPart(i, j) {
+ const tabs = document.querySelectorAll('#aula-' + i + ' .part-tab');
+ tabs.forEach((t, k) => t.classList.toggle('active', k === j));
+ stopVideo(i);
+ loadPart(i, j);
+}
+
+function showMsg(box, html) { box.innerHTML = '<div class="video-msg">' + html + '</div>'; }
+
+async function loadPart(i, j) {
+ const box = document.getElementById('player-' + i);
+ const part = AULAS[i].parts[j];
+ const token = String(++reqCounter);
+ box.dataset.req = token;
+ box.dataset.loaded = '1';
+ showMsg(box, 'Carregando vídeo...');
+ try {
+ const res = await fetch('/api/video-url', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ password: coursePass, video: part.id })
+ });
+ const data = await res.json().catch(() => ({}));
+ if (box.dataset.req !== token) return; // o aluno já trocou de aula/parte
+ if (res.status === 404) { showMsg(box, '🎬 Esta aula será publicada em breve.'); return; }
+ if (!res.ok || !data.ok) throw new Error('falha');
+ box.innerHTML = '';
+ const v = document.createElement('video');
+ v.controls = true; v.preload = 'metadata'; v.playsInline = true;
+ v.setAttribute('controlslist', 'nodownload noremoteplayback');
+ v.disablePictureInPicture = true;
+ v.addEventListener('contextmenu', e => e.preventDefault());
+ v.addEventListener('dragstart', e => e.preventDefault());
+ v.src = data.url;
+ box.appendChild(v);
+ } catch (e) {
+ if (box.dataset.req !== token) return;
+ showMsg(box, 'Não foi possível carregar o vídeo.<button type="button" onclick="loadPart(' + i + ',' + j + ')">Tentar de novo</button>');
+ }
+}
+
 function showCourse() {
  document.getElementById('auth-overlay').classList.add('hidden');
  document.getElementById('course-content').classList.add('visible');
+ buildAulas();
+ toggleAula(0); // a Aula 1 já abre sozinha
 }
 
 async function unlock(pass) {
@@ -223,9 +306,7 @@ async function unlock(pass) {
  });
  const data = await res.json().catch(() => ({}));
  if (!res.ok || !data.ok) return false;
- const video = document.querySelector('video');
- document.getElementById('course-video-source').src = data.url;
- video.load();
+ coursePass = pass;
  showCourse();
  return true;
 }
@@ -262,24 +343,9 @@ document.getElementById('auth-pass').addEventListener('keypress', function(e) {
  document.getElementById('auth-pass').focus();
 })();
 
-// Bloquear download do vídeo: desabilitar clique direito, drag e atalhos
-document.addEventListener('DOMContentLoaded', function() {
- const video = document.querySelector('video');
- if (!video) return;
-
- // Bloquear arrastar o vídeo
- video.addEventListener('dragstart', function(e) { e.preventDefault(); });
-
- // Bloquear clique direito no player
- video.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-
- // Bloquear atalhos de teclado que podem expor o vídeo
- document.addEventListener('keydown', function(e) {
- // Ctrl+S, Ctrl+Shift+S, Ctrl+U (view source)
- if ((e.ctrlKey || e.metaKey) && ['s','u'].includes(e.key.toLowerCase())) {
- e.preventDefault();
- }
- });
+// Bloquear atalhos que expõem o vídeo (Ctrl+S, Ctrl+U)
+document.addEventListener('keydown', function(e) {
+ if ((e.ctrlKey || e.metaKey) && ['s','u'].includes(e.key.toLowerCase())) e.preventDefault();
 });
 </script>
 
