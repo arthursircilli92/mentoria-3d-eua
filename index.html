@@ -142,6 +142,17 @@ nav a.cta:hover { background: #00eabb; border-color: #00eabb; transform: transla
  background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border);
 }
 
+.badge-new {
+ position: static; display: inline-block; margin: 0 0 0.7rem; background: #ff9f1c; color: #2a1700;
+ box-shadow: 0 0 0 0 rgba(255,159,28,0.55); animation: badge-pulse 2s ease-out infinite;
+}
+@keyframes badge-pulse {
+ 0% { box-shadow: 0 0 0 0 rgba(255,159,28,0.55); }
+ 70% { box-shadow: 0 0 0 8px rgba(255,159,28,0); }
+ 100% { box-shadow: 0 0 0 0 rgba(255,159,28,0); }
+}
+@media (prefers-reduced-motion: reduce) { .badge-new { animation: none; } }
+
 /* Card active link */
 .card-link {
  display: inline-flex; align-items: center; gap: 0.4rem;
@@ -262,6 +273,7 @@ footer a:hover { color: var(--accent); }
  <div class="card">
  <div class="card-badge">Disponível</div>
  <img class="card-img" src="img/curso-mentoria-v2.jpg" alt="Mentoria Vendas 3D" loading="lazy">
+ <div class="card-badge badge-new">🔥 Novas aulas</div>
  <h3>Curso Online Completo</h3>
  <p>Gravação completa da mentoria: 4 aulas cobrindo fundamentos, produtos, vendas e logística. Assista no seu ritmo, acesso vitalício.</p>
  <a href="curso-online.html" class="card-link">Assistir →</a>
