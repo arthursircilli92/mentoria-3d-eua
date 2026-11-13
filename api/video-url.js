@@ -8,11 +8,12 @@ const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 // Só estes vídeos podem ser pedidos (id usado na página -> arquivo no bucket).
 // Para publicar uma aula nova, basta enviar o arquivo com o nome abaixo para o bucket.
 const VIDEOS = {
-  'aula1': 'aula1-editada.mp4',
-  'aula2-p1': 'aula2-parte1.mp4',
-  'aula2-p2': 'aula2-parte2.mp4',
-  'aula3': 'aula3.mp4',
-  'aula4': 'aula4.mp4',
+  'aula1': ['aula1-editada.mp4'],
+  // A aula 2 aceita o nome limpo ou o nome que o HandBrake deixou no arquivo.
+  'aula2-p1': ['aula2-parte1.mp4', 'aula2-parte1(handbrake).mp4'],
+  'aula2-p2': ['aula2-parte2.mp4', 'aula2-parte2(handbrake).mp4'],
+  'aula3': ['aula3.mp4'],
+  'aula4': ['aula4.mp4'],
 };
 const URL_TTL_SECONDS = 4 * 60 * 60; // link do vídeo vale 4h
 
@@ -43,8 +44,8 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  const key = Object.prototype.hasOwnProperty.call(VIDEOS, body.video) ? VIDEOS[body.video] : null;
-  if (!key) {
+  const candidates = Object.prototype.hasOwnProperty.call(VIDEOS, body.video) ? VIDEOS[body.video] : null;
+  if (!candidates) {
     return res.status(400).json({ ok: false, error: 'Vídeo inválido' });
   }
 
@@ -55,16 +56,22 @@ module.exports = async function handler(req, res) {
       credentials: { accessKeyId: R2_ACCESS_KEY_ID, secretAccessKey: R2_SECRET_ACCESS_KEY },
     });
 
-    // O arquivo já foi enviado ao bucket? Se não, a aula aparece como "Em breve".
-    try {
-      await client.send(new HeadObjectCommand({ Bucket: R2_BUCKET, Key: key }));
-    } catch (err) {
-      const status = err && err.$metadata && err.$metadata.httpStatusCode;
-      if (status === 404 || (err && (err.name === 'NotFound' || err.name === 'NoSuchKey'))) {
-        res.setHeader('Cache-Control', 'no-store');
-        return res.status(404).json({ ok: false, error: 'not_found' });
+    // Qual dos nomes possíveis já foi enviado ao bucket? Se nenhum, a aula aparece como "Em breve".
+    let key = null;
+    for (const candidate of candidates) {
+      try {
+        await client.send(new HeadObjectCommand({ Bucket: R2_BUCKET, Key: candidate }));
+        key = candidate;
+        break;
+      } catch (err) {
+        const status = err && err.$metadata && err.$metadata.httpStatusCode;
+        const notFound = status === 404 || (err && (err.name === 'NotFound' || err.name === 'NoSuchKey'));
+        if (!notFound) throw err;
       }
-      throw err;
+    }
+    if (!key) {
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(404).json({ ok: false, error: 'not_found' });
     }
 
     const url = await getSignedUrl(
