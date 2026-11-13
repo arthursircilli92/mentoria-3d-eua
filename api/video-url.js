@@ -1,10 +1,19 @@
 const crypto = require('crypto');
-const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 // Variáveis de ambiente (configurar na Vercel):
 // COURSE_PASSWORD, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET
-const VIDEO_KEY = 'aula1-editada.mp4';
+//
+// Só estes vídeos podem ser pedidos (id usado na página -> arquivo no bucket).
+// Para publicar uma aula nova, basta enviar o arquivo com o nome abaixo para o bucket.
+const VIDEOS = {
+  'aula1': 'aula1-editada.mp4',
+  'aula2-p1': 'aula2-parte1.mp4',
+  'aula2-p2': 'aula2-parte2.mp4',
+  'aula3': 'aula3.mp4',
+  'aula4': 'aula4.mp4',
+};
 const URL_TTL_SECONDS = 4 * 60 * 60; // link do vídeo vale 4h
 
 function safeEqual(a, b) {
@@ -23,9 +32,20 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ ok: false, error: 'Servidor não configurado' });
   }
 
-  const password = (req.body && req.body.password) || '';
-  if (!safeEqual(password, COURSE_PASSWORD)) {
+  const body = req.body || {};
+  if (!safeEqual(body.password || '', COURSE_PASSWORD)) {
     return res.status(401).json({ ok: false, error: 'Senha incorreta' });
+  }
+
+  // Sem "video": só confere a senha (usado ao entrar no curso).
+  if (body.video === undefined || body.video === null || body.video === '') {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json({ ok: true });
+  }
+
+  const key = Object.prototype.hasOwnProperty.call(VIDEOS, body.video) ? VIDEOS[body.video] : null;
+  if (!key) {
+    return res.status(400).json({ ok: false, error: 'Vídeo inválido' });
   }
 
   try {
@@ -35,9 +55,21 @@ module.exports = async function handler(req, res) {
       credentials: { accessKeyId: R2_ACCESS_KEY_ID, secretAccessKey: R2_SECRET_ACCESS_KEY },
     });
 
+    // O arquivo já foi enviado ao bucket? Se não, a aula aparece como "Em breve".
+    try {
+      await client.send(new HeadObjectCommand({ Bucket: R2_BUCKET, Key: key }));
+    } catch (err) {
+      const status = err && err.$metadata && err.$metadata.httpStatusCode;
+      if (status === 404 || (err && (err.name === 'NotFound' || err.name === 'NoSuchKey'))) {
+        res.setHeader('Cache-Control', 'no-store');
+        return res.status(404).json({ ok: false, error: 'not_found' });
+      }
+      throw err;
+    }
+
     const url = await getSignedUrl(
       client,
-      new GetObjectCommand({ Bucket: R2_BUCKET, Key: VIDEO_KEY, ResponseContentType: 'video/mp4' }),
+      new GetObjectCommand({ Bucket: R2_BUCKET, Key: key, ResponseContentType: 'video/mp4' }),
       { expiresIn: URL_TTL_SECONDS }
     );
 
