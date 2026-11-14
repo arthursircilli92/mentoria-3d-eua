@@ -1,5 +1,7 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" }
-  ]
+  "buildCommand": "node scripts/build.js",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/acesso.js": { "includeFiles": "private/calculadora.html" }
+  }
 }

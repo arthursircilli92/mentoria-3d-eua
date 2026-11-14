@@ -234,7 +234,7 @@
     <div class="paywall-divider"></div>
     <div class="paywall-recover">
       <div class="paywall-recover-label">Já assinou? Recupere seu acesso:</div>
-      <form class="paywall-email-row" onsubmit="recoverAccess(event)">
+      <form class="paywall-email-row" onsubmit="event.preventDefault(); if (typeof recoverAccess === 'function') recoverAccess(event); else document.getElementById('recover-msg').textContent = 'O acesso não carregou. Atualize a página e tente novamente.';">
         <input aria-label="E-mail da assinatura" required type="email" id="recover-email" placeholder="seu@email.com" class="paywall-email-input" />
         <button class="paywall-btn-recover" id="recover-btn" type="submit">
           <span class="paywall-label">Liberar</span>
