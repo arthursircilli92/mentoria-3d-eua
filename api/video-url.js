@@ -12,7 +12,10 @@ const VIDEOS = {
   // A aula 2 aceita o nome limpo ou o nome que o HandBrake deixou no arquivo.
   'aula2-p1': ['aula2-parte1.mp4', 'aula2-parte1(handbrake).mp4'],
   'aula2-p2': ['aula2-parte2.mp4', 'aula2-parte2(handbrake).mp4'],
-  'aula3': ['aula3.mp4'],
+  'aula3-p1': ['AULA3-PT1.mp4', 'aula3-pt1.mp4', 'aula3-parte1.mp4'],
+  'aula3-p2': ['AULA3-PT2.mp4', 'aula3-pt2.mp4', 'aula3-parte2.mp4'],
+  'aula3-p3': ['AULA3-PT3.mp4', 'aula3-pt3.mp4', 'aula3-parte3.mp4'],
+  'aula3-p4': ['AULA3-PT4.mp4', 'aula3-pt4.mp4', 'aula3-parte4.mp4'],
   'aula4': ['aula4.mp4'],
 };
 const URL_TTL_SECONDS = 4 * 60 * 60; // link do vídeo vale 4h
