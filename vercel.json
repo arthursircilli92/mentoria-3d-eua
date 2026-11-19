@@ -3,11 +3,12 @@
  "outputDirectory": "dist",
  "rewrites": [
  { "source": "/pack-prompts/api/(.*)", "destination": "/api/pack-prompts/$1" },
- { "source": "/pack-prompts/", "destination": "/pack-prompts/index.html" },
- { "source": "/pack-prompts", "destination": "/pack-prompts/index.html" }
+ { "source": "/pack-prompts/", "destination": "/api/pack-prompts/index" },
+ { "source": "/pack-prompts", "destination": "/api/pack-prompts/index" }
  ],
  "functions": {
  "api/acesso.js": { "includeFiles": "private/calculadora.html" },
+ "api/pack-prompts/index.js": { "includeFiles": "dist/pack-prompts/index.html" },
  "api/pack-prompts/acesso-pack.js": { "includeFiles": "pack-prompts/private/galeria.html" },
  "api/pack-prompts/create-checkout-pack.js": {}
  }
