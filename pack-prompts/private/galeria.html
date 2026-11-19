@@ -1,64 +1,105 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Biblioteca de Prompts - Pack Prompt I.A.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg: #eef0f8;
+  --surface: rgba(255,255,255,0.65);
+  --surface-2: rgba(255,255,255,0.4);
+  --border: rgba(100,100,140,0.12);
+  --border-strong: rgba(100,100,140,0.2);
+  --text: #1a1a2e;
+  --text-dim: #4a4a6a;
+  --text-muted: #8888a8;
+  --accent: #6366f1;
+  --accent-2: #818cf8;
+  --success: #059669;
+  --success-bg: rgba(5,150,105,0.1);
+}
+[data-theme="dark"] {
+  --bg: #0c0c1d;
+  --surface: rgba(255,255,255,0.06);
+  --surface-2: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.1);
+  --border-strong: rgba(255,255,255,0.18);
+  --text: #f0f0ff;
+  --text-dim: #a0a0c0;
+  --text-muted: #606080;
+  --accent: #818cf8;
+  --accent-2: #a78bfa;
+  --success: #34d399;
+  --success-bg: rgba(52,211,153,0.12);
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#111;color:#f5f5f5;line-height:1.6;min-height:100vh}
-header{background:#1a1a1a;border-bottom:1px solid #333;padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+[data-theme="dark"] body{
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(129,140,248,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(167,139,250,0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(52,211,153,0.06) 0%, transparent 60%);
+}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-h1{font-size:1.25rem;font-weight:700;color:#ff6a1a}
-.back-link{color:#aaa;text-decoration:none;font-size:.85rem;transition:color .2s}
-.back-link:hover{color:#ff6a1a}
+h1{font-size:1.25rem;font-weight:700;color:var(--text);letter-spacing:-0.02em}
+.back-link{color:var(--text-muted);text-decoration:none;font-size:.85rem;transition:color .2s}
+.back-link:hover{color:var(--accent)}
 .controls{max-width:1200px;margin:2rem auto;padding:0 1.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
 .search-box{flex:1;min-width:240px;position:relative}
-.search-box input{width:100%;padding:.75rem 1rem .75rem 2.5rem;border:2px solid #333;border-radius:8px;background:#1a1a1a;color:#fff;font-size:.95rem;transition:border-color .2s}
-.search-box input:focus{outline:none;border-color:#ff6a1a}
+.search-box input{width:100%;padding:.75rem 1rem .75rem 2.5rem;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);font-size:.95rem;font-family:'Inter',sans-serif;transition:border-color .2s}
+.search-box input:focus{outline:none;border-color:var(--accent)}
+.search-box input::placeholder{color:var(--text-muted)}
 .search-box::before{content:'🔍';position:absolute;left:.85rem;top:50%;transform:translateY(-50%);font-size:.9rem;opacity:.5}
 .filters{display:flex;flex-wrap:wrap;gap:.5rem}
-.filter-btn{padding:.5rem 1rem;border:1px solid #444;border-radius:20px;background:transparent;color:#ccc;font-size:.8rem;cursor:pointer;transition:all .2s}
-.filter-btn:hover{border-color:#ff6a1a;color:#ff6a1a}
-.filter-btn.active{background:#ff6a1a;border-color:#ff6a1a;color:#fff}
+.filter-btn{padding:.5rem 1rem;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text-dim);font-size:.8rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+.filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.filter-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff}
 .grid{max-width:1200px;margin:0 auto 3rem;padding:0 1.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem}
-.card{background:#1a1a1a;border-radius:12px;overflow:hidden;border:1px solid #333;display:flex;flex-direction:column}
-.card-preview{aspect-ratio:4/3;background:#222;position:relative;overflow:hidden}
+.card{background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);display:flex;flex-direction:column;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:border-color .2s,box-shadow .2s}
+.card:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(99,102,241,0.15)}
+[data-theme="dark"] .card:hover{box-shadow:0 4px 20px rgba(129,140,248,0.2)}
+.card-preview{aspect-ratio:4/3;background:var(--surface-2);position:relative;overflow:hidden}
 .card-preview img,.card-preview video{width:100%;height:100%;object-fit:cover;display:block}
 .card-preview video{position:absolute;inset:0;opacity:0;transition:opacity .3s}
 .card-preview.playing video{opacity:1}
-.card-badge{position:absolute;top:.75rem;right:.75rem;background:rgba(0,0,0,.7);color:#ff6a1a;font-size:.7rem;font-weight:600;padding:.25rem .6rem;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;z-index:2}
-.video-indicator{position:absolute;bottom:.75rem;right:.75rem;background:rgba(255,106,26,.9);color:#fff;font-size:.65rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;z-index:2;display:flex;align-items:center;gap:.3rem}
+.card-badge{position:absolute;top:.75rem;right:.75rem;background:rgba(0,0,0,0.6);color:var(--accent-2);font-size:.7rem;font-weight:600;padding:.25rem .6rem;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;z-index:2;backdrop-filter:blur(4px)}
+.video-indicator{position:absolute;bottom:.75rem;right:.75rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:.65rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;z-index:2;display:flex;align-items:center;gap:.3rem}
 .video-indicator::before{content:'▶';font-size:.5rem}
 .card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;gap:.75rem}
-.card-title{font-size:1rem;font-weight:600;color:#fff}
-.card-desc{font-size:.85rem;color:#aaa}
-.prompt-container{position:relative;background:#111;border:1px solid #333;border-radius:8px;overflow:hidden}
-.prompt-text{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.8rem;line-height:1.6;color:#e0e0e0;white-space:pre-wrap;word-break:break-word;padding:1rem;max-height:6.4em;overflow:hidden;transition:max-height .3s ease}
+.card-title{font-size:1rem;font-weight:600;color:var(--text)}
+.card-desc{font-size:.85rem;color:var(--text-dim)}
+.prompt-container{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.prompt-text{font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.6;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;padding:1rem;max-height:6.4em;overflow:hidden;transition:max-height .3s ease}
 .prompt-text.expanded{max-height:none}
-.prompt-fade{position:absolute;bottom:0;left:0;right:0;height:2.5em;background:linear-gradient(to bottom,transparent,#111);pointer-events:none;transition:opacity .3s}
+.prompt-fade{position:absolute;bottom:0;left:0;right:0;height:2.5em;background:linear-gradient(to bottom,transparent,var(--surface-2));pointer-events:none;transition:opacity .3s}
+[data-theme="dark"] .prompt-fade{background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.03))}
 .prompt-text.expanded+.prompt-fade{opacity:0}
-.prompt-actions{display:flex;gap:.5rem;padding:.75rem 1rem;border-top:1px solid #333;align-items:center}
-.expand-btn{flex:1;padding:.5rem;border:none;border-radius:6px;background:#222;color:#aaa;font-size:.8rem;cursor:pointer;transition:background .2s,color .2s}
-.expand-btn:hover{background:#333;color:#fff}
-.copy-btn{padding:.5rem 1rem;border:none;border-radius:6px;background:#ff6a1a;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap}
-.copy-btn:hover{background:#e55a0a}
-.copy-btn.copied{background:#22c55e}
-.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:.75rem 1.5rem;border-radius:8px;font-size:.9rem;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300}
+.prompt-actions{display:flex;gap:.5rem;padding:.75rem 1rem;border-top:1px solid var(--border);align-items:center}
+.expand-btn{flex:1;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);color:var(--text-dim);font-size:.8rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+.expand-btn:hover{border-color:var(--accent);color:var(--accent)}
+.copy-btn{padding:.5rem 1rem;border:none;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:.8rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:transform .15s,box-shadow .15s;white-space:nowrap}
+.copy-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.3)}
+.copy-btn.copied{background:var(--success)}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:.75rem 1.5rem;border-radius:8px;font-size:.9rem;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300}
 .toast.show{opacity:1}
-.empty-state{text-align:center;padding:4rem 1rem;color:#666}
+.empty-state{text-align:center;padding:4rem 1rem;color:var(--text-muted)}
 .empty-state p{font-size:1.1rem}
-.attachments{font-size:.8rem;color:#888;padding:0 1rem .75rem}
-.attachments strong{color:#aaa}
+.attachments{font-size:.8rem;color:var(--text-muted);padding:0 1rem .75rem}
+.attachments strong{color:var(--text-dim)}
 @media(max-width:640px){
- header{padding:1rem}
- .controls{padding:0 1rem}
- .grid{padding:0 1rem;grid-template-columns:1fr}
+  header{padding:1rem}
+  .controls{padding:0 1rem}
+  .grid{padding:0 1rem;grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){
- .card-preview video{display:none!important}
- .card-preview.playing video{opacity:0!important}
- .video-indicator{display:none}
+  .card-preview video{display:none!important}
+  .card-preview.playing video{opacity:0!important}
+  .video-indicator{display:none}
 }
 </style>
 </head>
@@ -88,162 +129,154 @@ let activeCategory = 'todos';
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 async function init() {
- try {
- const res = await fetch('/pack-prompts/prompts.json');
- if (!res.ok) throw new Error('Falha ao carregar prompts');
- const data = await res.json();
- prompts = data.prompts;
- renderFilters(data.categories);
- renderGrid();
- } catch (err) {
- document.getElementById('empty').style.display = 'block';
- document.getElementById('empty').querySelector('p').textContent = 'Erro ao carregar biblioteca.';
- }
+  try {
+    const res = await fetch('/pack-prompts/prompts.json');
+    if (!res.ok) throw new Error('Falha ao carregar prompts');
+    const data = await res.json();
+    prompts = data.prompts;
+    renderFilters(data.categories);
+    renderGrid();
+  } catch (err) {
+    document.getElementById('empty').style.display = 'block';
+    document.getElementById('empty').querySelector('p').textContent = 'Erro ao carregar biblioteca.';
+  }
 }
 
 function renderFilters(categories) {
- const container = document.getElementById('filters');
- const all = document.createElement('button');
- all.className = 'filter-btn active';
- all.textContent = 'Todos';
- all.dataset.cat = 'todos';
- container.appendChild(all);
- categories.forEach(cat => {
- const btn = document.createElement('button');
- btn.className = 'filter-btn';
- btn.textContent = cat.label;
- btn.dataset.cat = cat.id;
- container.appendChild(btn);
- });
- container.addEventListener('click', e => {
- if (!e.target.classList.contains('filter-btn')) return;
- container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
- e.target.classList.add('active');
- activeCategory = e.target.dataset.cat;
- renderGrid();
- });
+  const container = document.getElementById('filters');
+  const all = document.createElement('button');
+  all.className = 'filter-btn active';
+  all.textContent = 'Todos';
+  all.dataset.cat = 'todos';
+  container.appendChild(all);
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = cat.label;
+    btn.dataset.cat = cat.id;
+    container.appendChild(btn);
+  });
+  container.addEventListener('click', e => {
+    if (!e.target.classList.contains('filter-btn')) return;
+    container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    activeCategory = e.target.dataset.cat;
+    renderGrid();
+  });
 }
 
 function getCatLabel(id) {
- const map = {individuais:'Imagens do anúncio',lote:'Lote',extras:'Imagens extras',storyboard:'Storyboard',video:'Vídeo'};
- return map[id] || id;
+  const map = {individuais:'Imagens do anúncio',lote:'Lote',extras:'Imagens extras',storyboard:'Storyboard',video:'Vídeo'};
+  return map[id] || id;
 }
 
 function escapeHtml(s) {
- return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function renderGrid() {
- const query = document.getElementById('search').value.toLowerCase().trim();
- const filtered = prompts.filter(p => {
- const matchCat = activeCategory === 'todos' || p.category === activeCategory;
- const matchSearch = !query || p.title.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
- return matchCat && matchSearch;
- });
- const grid = document.getElementById('grid');
- const empty = document.getElementById('empty');
- if (!filtered.length) {
- grid.innerHTML = '';
- empty.style.display = 'block';
- return;
- }
- empty.style.display = 'none';
- grid.innerHTML = filtered.map(p => {
- const isVideo = p.category === 'video';
- const previewPath = '/pack-prompts/' + p.preview;
- return `
- <div class="card" data-id="${p.id}" data-video="${isVideo ? 'true' : ''}">
- <div class="card-preview" data-preview="${previewPath}">
- <img src="${previewPath}" alt="${escapeHtml(p.title)}" loading="lazy">
- ${isVideo && !prefersReducedMotion ? `<video src="" muted loop playsinline preload="none" aria-hidden="true"></video>` : ''}
- <span class="card-badge">${getCatLabel(p.category)}</span>
- ${isVideo ? '<span class="video-indicator">VÍDEO NO FLOW</span>' : ''}
- </div>
- <div class="card-body">
- <div class="card-title">${escapeHtml(p.title)}</div>
- <div class="card-desc">${escapeHtml(p.description)}</div>
- </div>
- <div class="attachments"><strong>Anexar:</strong> ${p.attachments.map(a => escapeHtml(a)).join(', ')}</div>
- <div class="prompt-container">
- <div class="prompt-text" data-full="${escapeAttr(p.prompt)}">${escapeHtml(p.prompt)}</div>
- <div class="prompt-fade"></div>
- <div class="prompt-actions">
- <button class="expand-btn" aria-expanded="false">Expandir prompt</button>
- <button class="copy-btn">Copiar prompt</button>
- </div>
- </div>
- </div>`;
- }).join('');
+  const query = document.getElementById('search').value.toLowerCase().trim();
+  const filtered = prompts.filter(p => {
+    const matchCat = activeCategory === 'todos' || p.category === activeCategory;
+    const matchSearch = !query || p.title.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+    return matchCat && matchSearch;
+  });
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  if (!filtered.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = filtered.map(p => {
+    const isVideo = p.category === 'video';
+    const previewPath = '/pack-prompts/' + p.preview;
+    return `
+    <div class="card" data-id="${p.id}" data-video="${isVideo ? 'true' : ''}">
+      <div class="card-preview" data-preview="${previewPath}">
+        <img src="${previewPath}" alt="${escapeHtml(p.title)}" loading="lazy">
+        ${isVideo && !prefersReducedMotion ? `<video src="" muted loop playsinline preload="none" aria-hidden="true"></video>` : ''}
+        <span class="card-badge">${getCatLabel(p.category)}</span>
+        ${isVideo ? '<span class="video-indicator">VÍDEO NO FLOW</span>' : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-title">${escapeHtml(p.title)}</div>
+        <div class="card-desc">${escapeHtml(p.description)}</div>
+      </div>
+      <div class="attachments"><strong>Anexar:</strong> ${p.attachments.map(a => escapeHtml(a)).join(', ')}</div>
+      <div class="prompt-container">
+        <div class="prompt-text" data-full="${escapeAttr(p.prompt)}">${escapeHtml(p.prompt)}</div>
+        <div class="prompt-fade"></div>
+        <div class="prompt-actions">
+          <button class="expand-btn" aria-expanded="false">Expandir prompt</button>
+          <button class="copy-btn">Copiar prompt</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
- // Bind events
- grid.querySelectorAll('.card').forEach(card => {
- const preview = card.querySelector('.card-preview');
- const video = card.querySelector('video');
- const expandBtn = card.querySelector('.expand-btn');
- const copyBtn = card.querySelector('.copy-btn');
- const promptText = card.querySelector('.prompt-text');
+  grid.querySelectorAll('.card').forEach(card => {
+    const preview = card.querySelector('.card-preview');
+    const video = card.querySelector('video');
+    const expandBtn = card.querySelector('.expand-btn');
+    const copyBtn = card.querySelector('.copy-btn');
+    const promptText = card.querySelector('.prompt-text');
 
- // Video hover/touch
- if (video && !prefersReducedMotion) {
- let touchActive = false;
- const playVideo = () => {
- if (!video.src) {
- // Placeholder: quando houver vídeo real, definir src aqui
- // Por enquanto, apenas adiciona classe para feedback visual
- }
- preview.classList.add('playing');
- video.play().catch(() => {});
- };
- const stopVideo = () => {
- preview.classList.remove('playing');
- video.pause();
- video.currentTime = 0;
- };
- preview.addEventListener('mouseenter', () => { if (!touchActive) playVideo(); });
- preview.addEventListener('mouseleave', () => { if (!touchActive) stopVideo(); });
- preview.addEventListener('click', (e) => {
- if (window.innerWidth <= 768) {
- touchActive = !touchActive;
- touchActive ? playVideo() : stopVideo();
- e.stopPropagation();
- }
- });
- }
+    if (video && !prefersReducedMotion) {
+      let touchActive = false;
+      const playVideo = () => {
+        preview.classList.add('playing');
+        video.play().catch(() => {});
+      };
+      const stopVideo = () => {
+        preview.classList.remove('playing');
+        video.pause();
+        video.currentTime = 0;
+      };
+      preview.addEventListener('mouseenter', () => { if (!touchActive) playVideo(); });
+      preview.addEventListener('mouseleave', () => { if (!touchActive) stopVideo(); });
+      preview.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          touchActive = !touchActive;
+          touchActive ? playVideo() : stopVideo();
+          e.stopPropagation();
+        }
+      });
+    }
 
- // Expand/collapse
- expandBtn.addEventListener('click', () => {
- const expanded = promptText.classList.toggle('expanded');
- expandBtn.textContent = expanded ? 'Recolher' : 'Expandir prompt';
- expandBtn.setAttribute('aria-expanded', expanded);
- });
+    expandBtn.addEventListener('click', () => {
+      const expanded = promptText.classList.toggle('expanded');
+      expandBtn.textContent = expanded ? 'Recolher' : 'Expandir prompt';
+      expandBtn.setAttribute('aria-expanded', expanded);
+    });
 
- // Copy
- copyBtn.addEventListener('click', () => {
- const fullPrompt = promptText.dataset.full;
- navigator.clipboard.writeText(fullPrompt).then(() => {
- copyBtn.textContent = 'Copiado!';
- copyBtn.classList.add('copied');
- showToast();
- setTimeout(() => {
- copyBtn.textContent = 'Copiar prompt';
- copyBtn.classList.remove('copied');
- }, 2000);
- }).catch(() => {
- copyBtn.textContent = 'Erro ao copiar';
- setTimeout(() => { copyBtn.textContent = 'Copiar prompt'; }, 2000);
- });
- });
- });
+    copyBtn.addEventListener('click', () => {
+      const fullPrompt = promptText.dataset.full;
+      navigator.clipboard.writeText(fullPrompt).then(() => {
+        copyBtn.textContent = 'Copiado!';
+        copyBtn.classList.add('copied');
+        showToast();
+        setTimeout(() => {
+          copyBtn.textContent = 'Copiar prompt';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        copyBtn.textContent = 'Erro ao copiar';
+        setTimeout(() => { copyBtn.textContent = 'Copiar prompt'; }, 2000);
+      });
+    });
+  });
 }
 
 function escapeAttr(s) {
- return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function showToast() {
- const toast = document.getElementById('toast');
- toast.classList.add('show');
- setTimeout(() => toast.classList.remove('show'), 2000);
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
 }
 
 document.getElementById('search').addEventListener('input', renderGrid);
