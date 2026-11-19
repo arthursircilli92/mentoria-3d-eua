@@ -1,9 +1,14 @@
 {
-  "buildCommand": "node scripts/build.js",
-  "outputDirectory": "dist",
-  "functions": {
-    "api/acesso.js": { "includeFiles": "private/calculadora.html" },
-    "pack-prompts/api/acesso-pack.js": { "includeFiles": "pack-prompts/private/galeria.html" },
-    "pack-prompts/api/create-checkout-pack.js": {}
-  }
+ "buildCommand": "node scripts/build.js",
+ "outputDirectory": "dist",
+ "rewrites": [
+ { "source": "/pack-prompts/api/(.*)", "destination": "/api/pack-prompts/$1" },
+ { "source": "/pack-prompts/", "destination": "/pack-prompts/index.html" },
+ { "source": "/pack-prompts", "destination": "/pack-prompts/index.html" }
+ ],
+ "functions": {
+ "api/acesso.js": { "includeFiles": "private/calculadora.html" },
+ "api/pack-prompts/acesso-pack.js": { "includeFiles": "pack-prompts/private/galeria.html" },
+ "api/pack-prompts/create-checkout-pack.js": {}
+ }
 }

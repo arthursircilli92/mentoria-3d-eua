@@ -1,4 +1,4 @@
-const endpoint = '/pack-prompts/api/acesso-pack';
+const endpoint = '/api/pack-prompts/acesso-pack';
 const galleryPage = endpoint + '?view=page';
 const message = document.getElementById('msg');
 const emailInput = document.getElementById('email');
