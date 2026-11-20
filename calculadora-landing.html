@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Precificação 3D - Mentoria 3D EUA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+ --bg: #eef0f8;
+ --surface: rgba(255,255,255,0.65);
+ --surface-2: rgba(255,255,255,0.4);
+ --border: rgba(100,100,140,0.12);
+ --border-strong: rgba(100,100,140,0.2);
+ --text: #1a1a2e;
+ --text-dim: #4a4a6a;
+ --text-muted: #8888a8;
+ --accent: #6366f1;
+ --accent-2: #818cf8;
+ --success: #059669;
+ --success-bg: rgba(5,150,105,0.1);
+}
+[data-theme="dark"] {
+ --bg: #0c0c1d;
+ --surface: rgba(255,255,255,0.06);
+ --surface-2: rgba(255,255,255,0.03);
+ --border: rgba(255,255,255,0.1);
+ --border-strong: rgba(255,255,255,0.18);
+ --text: #f0f0ff;
+ --text-dim: #a0a0c0;
+ --text-muted: #606080;
+ --accent: #818cf8;
+ --accent-2: #a78bfa;
+ --success: #34d399;
+ --success-bg: rgba(52,211,153,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+[data-theme="dark"] body{
+ background-image:
+ radial-gradient(circle at 15% 20%, rgba(129,140,248,0.15) 0%, transparent 50%),
+ radial-gradient(circle at 85% 80%, rgba(167,139,250,0.12) 0%, transparent 50%),
+ radial-gradient(circle at 50% 50%, rgba(52,211,153,0.06) 0%, transparent 60%);
+}
+.back-link{
+ position:fixed;top:1.5rem;left:1.5rem;z-index:10000;
+ display:inline-flex;align-items:center;gap:.3rem;
+ padding:.45rem 1rem;
+ background:var(--surface);border:1px solid var(--border-strong);border-radius:999px;
+ color:var(--text-dim);font-size:.85rem;text-decoration:none;transition:all .2s;
+}
+.back-link:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Hero */
+.hero{max-width:900px;margin:0 auto;padding:6rem 1.5rem 4rem;text-align:center}
+.hero-badge{
+ display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+ color:var(--accent);background:rgba(99,102,241,0.1);padding:.3rem .8rem;border-radius:6px;margin-bottom:1.5rem;
+}
+[data-theme="dark"] .hero-badge{background:rgba(129,140,248,0.12)}
+.hero h1{
+ font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-0.03em;
+ margin-bottom:1rem;line-height:1.15;
+}
+.hero h1 span{
+ background:linear-gradient(135deg,var(--accent),var(--accent-2));
+ -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{font-size:1.1rem;color:var(--text-dim);max-width:600px;margin:0 auto 2rem}
+.hero-cta{
+ display:inline-flex;align-items:center;gap:.5rem;
+ padding:1rem 2rem;
+ background:linear-gradient(135deg,var(--accent),var(--accent-2));
+ color:#fff;border:none;border-radius:12px;
+ font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;
+ transition:transform .15s,box-shadow .15s;
+}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,0.35)}
+
+/* Features grid */
+.features{max-width:1000px;margin:0 auto;padding:0 1.5rem 4rem}
+.features-title{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:2.5rem;letter-spacing:-0.02em}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.feature-card{
+ background:var(--surface);border:1px solid var(--border);border-radius:14px;
+ padding:1.5rem;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+ transition:border-color .2s;
+}
+.feature-card:hover{border-color:var(--accent)}
+.feature-icon{font-size:1.8rem;margin-bottom:.75rem}
+.feature-card h3{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.feature-card p{font-size:.88rem;color:var(--text-dim);line-height:1.5}
+
+/* Screenshots section */
+.screenshots{max-width:1000px;margin:0 auto;padding:0 1.5rem 4rem}
+.screenshots-title{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;letter-spacing:-0.02em}
+.screenshots-subtitle{text-align:center;font-size:.95rem;color:var(--text-dim);margin-bottom:2.5rem}
+.screenshot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1.5rem}
+.screenshot-card{
+ background:var(--surface);border:1px solid var(--border);border-radius:14px;
+ overflow:hidden;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.screenshot-mockup{
+ aspect-ratio:16/10;
+ background:var(--surface-2);
+ display:flex;align-items:center;justify-content:center;
+ border-bottom:1px solid var(--border);
+ position:relative;overflow:hidden;
+}
+.screenshot-mockup::before{
+ content:'';position:absolute;inset:0;
+ background:repeating-linear-gradient(
+ 0deg,
+ transparent,
+ transparent 20px,
+ rgba(255,255,255,0.02) 20px,
+ rgba(255,255,255,0.02) 21px
+ ),
+ repeating-linear-gradient(
+ 90deg,
+ transparent,
+ transparent 20px,
+ rgba(255,255,255,0.02) 20px,
+ rgba(255,255,255,0.02) 21px
+ );
+}
+.screenshot-placeholder{
+ text-align:center;color:var(--text-muted);font-size:.85rem;z-index:1;
+}
+.screenshot-placeholder .icon{font-size:2rem;margin-bottom:.5rem;display:block;opacity:.5}
+.screenshot-label{padding:1rem 1.25rem}
+.screenshot-label h4{font-size:.9rem;font-weight:600;margin-bottom:.2rem}
+.screenshot-label p{font-size:.8rem;color:var(--text-muted)}
+
+/* Plans */
+.plans{max-width:800px;margin:0 auto;padding:0 1.5rem 5rem}
+.plans-title{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;letter-spacing:-0.02em}
+.plans-subtitle{text-align:center;font-size:.95rem;color:var(--text-dim);margin-bottom:2.5rem}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+.plan-card{
+ background:var(--surface);border:2px solid var(--border);border-radius:16px;
+ padding:2rem;text-align:center;position:relative;
+ backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+ transition:border-color .2s,transform .2s;
+}
+.plan-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.plan-card.featured{border-color:var(--accent)}
+.plan-card.featured::before{
+ content:'MAIS POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+ background:linear-gradient(135deg,var(--accent),var(--accent-2));
+ color:#fff;font-size:.65rem;font-weight:700;letter-spacing:.08em;
+ padding:.25rem .8rem;border-radius:999px;white-space:nowrap;
+}
+.plan-name{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:600;margin-bottom:.5rem}
+.plan-price{font-family:'JetBrains Mono',monospace;font-size:2.2rem;font-weight:700;margin-bottom:.25rem}
+.plan-period{font-size:.85rem;color:var(--text-dim);margin-bottom:1.5rem}
+.plan-features{list-style:none;text-align:left;margin-bottom:2rem}
+.plan-features li{
+ padding:.4rem 0;font-size:.88rem;color:var(--text-dim);
+ display:flex;align-items:flex-start;gap:.5rem;
+}
+.plan-features li::before{content:'✓';color:var(--success);font-weight:700;flex-shrink:0}
+.plan-btn{
+ display:block;width:100%;padding:.85rem;
+ border:2px solid var(--accent);border-radius:10px;
+ background:transparent;color:var(--accent);
+ font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:none;
+ transition:all .2s;text-align:center;
+}
+.plan-btn:hover,.plan-card.featured .plan-btn{
+ background:linear-gradient(135deg,var(--accent),var(--accent-2));
+ border-color:transparent;color:#fff;
+}
+.plan-card.featured .plan-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(99,102,241,0.3)}
+
+/* FAQ */
+.faq{max-width:700px;margin:0 auto;padding:0 1.5rem 5rem}
+.faq-title{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:2rem;letter-spacing:-0.02em}
+.faq-item{border-bottom:1px solid var(--border);padding:1.25rem 0}
+.faq-item:first-child{border-top:1px solid var(--border)}
+.faq-q{font-weight:600;font-size:.95rem;margin-bottom:.4rem}
+.faq-a{font-size:.88rem;color:var(--text-dim);line-height:1.6}
+
+/* Footer CTA */
+.footer-cta{
+ text-align:center;padding:3rem 1.5rem 4rem;
+ border-top:1px solid var(--border);
+}
+.footer-cta p{color:var(--text-muted);font-size:.85rem;margin-top:1rem}
+.footer-cta a{color:var(--accent);text-decoration:none}
+.footer-cta a:hover{text-decoration:underline}
+
+@media(max-width:640px){
+ .hero{padding:5rem 1rem 3rem}
+ .hero h1{font-size:1.8rem}
+ .screenshot-grid{grid-template-columns:1fr}
+ .plans-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<a href="/" class="back-link">← Voltar ao site</a>
+
+<!-- HERO -->
+<section class="hero">
+ <div class="hero-badge">Ferramenta exclusiva</div>
+ <h1>Precifique com precisão.<br><span>Venda com lucro real.</span></h1>
+ <p>Calculadora de precificação para quem vende impressão 3D nos EUA. Custo exato por peça, preço com margem alvo, simulador de ROAS e projeção de escala até 10x.</p>
+ <a href="calculadora-vendas.html" class="hero-cta">Acessar Calculadora →</a>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+ <h2 class="features-title">Tudo que você precisa para precificar com confiança</h2>
+ <div class="features-grid">
+ <div class="feature-card">
+ <div class="feature-icon">🧮</div>
+ <h3>Custo exato por peça</h3>
+ <p>Calcule o custo real de cada impressão considerando filamento, energia, tempo de máquina e desgaste.</p>
+ </div>
+ <div class="feature-card">
+ <div class="feature-icon">💰</div>
+ <h3>Preço com margem alvo</h3>
+ <p>Defina sua margem de lucro e receba o preço de venda sugerido automaticamente, já com taxas do marketplace.</p>
+ </div>
+ <div class="feature-card">
+ <div class="feature-icon">📊</div>
+ <h3>Simulador de ROAS</h3>
+ <p>Projete o retorno sobre investimento em anúncios antes de gastar. Saiba quanto precisa vender para lucrar.</p>
+ </div>
+ <div class="feature-card">
+ <div class="feature-icon">🚀</div>
+ <h3>Escala até 10x</h3>
+ <p>Simule cenários de crescimento e veja como seu lucro se comporta ao escalar de 1x até 10x o volume mensal.</p>
+ </div>
+ <div class="feature-card">
+ <div class="feature-icon">🌐</div>
+ <h3>8 marketplaces em tempo real</h3>
+ <p>Compare taxas, alcance e competitividade entre Etsy, Amazon, eBay, Shopify e outros canais americanos.</p>
+ </div>
+ <div class="feature-card">
+ <div class="feature-icon">📱</div>
+ <h3>Modo escuro + mobile</h3>
+ <p>Interface moderna que funciona perfeitamente no celular. Use na oficina, no escritório ou onde estiver.</p>
+ </div>
+ </div>
+</section>
+
+<!-- SCREENSHOTS (mockups para substituir depois) -->
+<section class="screenshots">
+ <h2 class="screenshots-title">Veja a calculadora em ação</h2>
+ <p class="screenshots-subtitle">Interface intuitiva projetada para vendedores de impressão 3D</p>
+ <div class="screenshot-grid">
+ <div class="screenshot-card">
+ <div class="screenshot-mockup">
+ <div class="screenshot-placeholder">
+ <span class="icon">🖥️</span>
+ Print: Calculadora de custo por peça
+ </div>
+ </div>
+ <div class="screenshot-label">
+ <h4>Cálculo de custo unitário</h4>
+ <p>Insira material, tempo e energia para obter o custo exato da peça.</p>
+ </div>
+ </div>
+ <div class="screenshot-card">
+ <div class="screenshot-mockup">
+ <div class="screenshot-placeholder">
+ <span class="icon">📈</span>
+ Print: Simulador de ROAS e escala
+ </div>
+ </div>
+ <div class="screenshot-label">
+ <h4>Projeção de lucro e escala</h4>
+ <p>Visualize cenários de crescimento e retorno sobre anúncios.</p>
+ </div>
+ </div>
+ <div class="screenshot-card">
+ <div class="screenshot-mockup">
+ <div class="screenshot-placeholder">
+ <span class="icon">🔄</span>
+ Print: Comparativo de marketplaces
+ </div>
+ </div>
+ <div class="screenshot-label">
+ <h4>Comparativo de canais de venda</h4>
+ <p>Taxas, alcance e competitividade de 8 marketplaces lado a lado.</p>
+ </div>
+ </div>
+ <div class="screenshot-card">
+ <div class="screenshot-mockup">
+ <div class="screenshot-placeholder">
+ <span class="icon">📱</span>
+ Print: Versão mobile com modo escuro
+ </div>
+ </div>
+ <div class="screenshot-label">
+ <h4>Funciona no celular</h4>
+ <p>Interface responsiva com modo escuro para usar em qualquer lugar.</p>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- PLANS -->
+<section class="plans">
+ <h2 class="plans-title">Escolha seu plano</h2>
+ <p class="plans-subtitle">Acesso completo à calculadora. Cancele quando quiser.</p>
+ <div class="plans-grid">
+ <div class="plan-card featured">
+ <div class="plan-name">Mensal</div>
+ <div class="plan-price">$9,90</div>
+ <div class="plan-period">por mês</div>
+ <ul class="plan-features">
+ <li>Cálculos ilimitados de preço e ROAS</li>
+ <li>Simulador de escala até 10x</li>
+ <li>Comparativo de 8 marketplaces</li>
+ <li>Projeção de lucro mensal pós-ads</li>
+ <li>Modo escuro + mobile</li>
+ <li>Atualizações inclusas</li>
+ </ul>
+ <a href="calculadora-vendas.html" class="plan-btn">Assinar Mensal</a>
+ </div>
+ <div class="plan-card">
+ <div class="plan-name">Anual</div>
+ <div class="plan-price">$89,90</div>
+ <div class="plan-period">por ano (economia de 25%)</div>
+ <ul class="plan-features">
+ <li>Tudo do plano mensal</li>
+ <li>2 meses grátis na assinatura anual</li>
+ <li>Acesso antecipado a novas funções</li>
+ <li>Suporte prioritário</li>
+ <li>Atualizações inclusas</li>
+ <li>Melhor custo-benefício</li>
+ </ul>
+ <a href="calculadora-vendas.html" class="plan-btn">Assinar Anual</a>
+ </div>
+ </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+ <h2 class="faq-title">Perguntas frequentes</h2>
+ <div class="faq-item">
+ <div class="faq-q">A calculadora funciona para qualquer tipo de impressão 3D?</div>
+ <div class="faq-a">Sim. A calculadora é genérica e funciona para FDM, resina e outros processos. Você insere os parâmetros específicos da sua máquina e material.</div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q">Preciso instalar algo?</div>
+ <div class="faq-a">Não. A calculadora funciona diretamente no navegador, sem instalação. Basta acessar pelo computador ou celular.</div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q">Posso cancelar a qualquer momento?</div>
+ <div class="faq-a">Sim. No plano mensal, você cancela quando quiser sem multa. No plano anual, o acesso permanece até o fim do período pago.</div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q">Os dados dos marketplaces são atualizados?</div>
+ <div class="faq-a">Sim. As taxas e condições dos 8 marketplaces são atualizadas regularmente para refletir as políticas vigentes.</div>
+ </div>
+</section>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta">
+ <a href="calculadora-vendas.html" class="hero-cta">Começar Agora →</a>
+ <p>Dúvidas? <a href="mailto:contato@3dnagringa.com">Fale conosco</a></p>
+ <p style="margin-top:2rem;font-size:.75rem;color:var(--text-muted)">© 2026 3DnaGringa · Todos os direitos reservados</p>
+</div>
+
+</body>
+</html>
