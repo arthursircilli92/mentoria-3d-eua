@@ -223,7 +223,7 @@ footer {
 
 <!-- COURSE CONTENT (hidden until auth) -->
 <div class="course-container" id="course-content">
- <a href="/" class="back-link">← Voltar ao site</a>
+ <a href="/" class="turma-back-link" onclick="try{sessionStorage.removeItem('curso3d_pass');sessionStorage.removeItem('curso3d_turma');}catch(e){}">← Voltar ao site</a>
 
  <div class="course-header">
  <div class="course-tag">Gravação Completa da Mentoria</div>
@@ -430,27 +430,7 @@ document.getElementById('auth-pass').addEventListener('keypress', function(e) {
  if (e.key === 'Enter') checkAuth();
 });
 
-// Auto-login se sessão existir
-(async function init() {
- try {
- const savedPass = sessionStorage.getItem('curso3d_pass');
- const savedTurma = sessionStorage.getItem('curso3d_turma');
- if (savedPass && savedTurma && TURMAS[savedTurma]) {
- currentTurma = savedTurma;
- const res = await fetch('/api/video-url', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ password: savedPass, turma: savedTurma })
- });
- const data = await res.json().catch(() => ({}));
- if (res.ok && data.ok) {
- coursePass = savedPass;
- showCourse();
- return;
- }
- }
- } catch (e) {}
-})();
+// Auto-login removido: sempre mostrar tela de seleção de turmas
 </script>
 </body>
 </html>
