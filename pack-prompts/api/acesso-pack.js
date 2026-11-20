@@ -14,13 +14,11 @@ function eligible(sub) {
 }
 
 async function findPackAccess(email) {
-  // Busca assinatura ativa do pack
   for await (const customer of stripe.customers.list({ email, limit: 100 })) {
     for await (const sub of stripe.subscriptions.list({ customer: customer.id, status: 'all', limit: 100 })) {
       if (eligible(sub)) return { type: 'subscription', id: sub.id };
     }
   }
-  // Busca pagamento único concluído (PaymentIntent com metadata pack_prompts)
   for await (const customer of stripe.customers.list({ email, limit: 100 })) {
     for await (const pi of stripe.paymentIntents.list({ customer: customer.id, limit: 100 })) {
       if (pi.status === 'succeeded' && pi.metadata?.pack_prompts === 'true') {
@@ -46,7 +44,6 @@ async function grant(req, res) {
     }
     email = checkout.customer_details?.email;
     if (checkout.mode === 'payment') {
-      // Compra única - pode ter PaymentIntent ou Invoice (cupom 100%)
       if (checkout.payment_intent) {
         try {
           const pi = await stripe.paymentIntents.retrieve(checkout.payment_intent);
@@ -56,7 +53,6 @@ async function grant(req, res) {
           return res.status(403).json({ error: 'Erro ao verificar pagamento.' });
         }
       } else if (checkout.invoice) {
-        // Cupom 100% gera invoice sem payment_intent
         try {
           const invoice = await stripe.invoices.retrieve(checkout.invoice);
           if (invoice.status !== 'paid') return res.status(403).json({ error: 'Pagamento não confirmado.' });
@@ -65,7 +61,6 @@ async function grant(req, res) {
           return res.status(403).json({ error: 'Erro ao verificar pagamento.' });
         }
       }
-      // Se não tem payment_intent nem invoice, mas checkout está complete, aceita
     } else if (checkout.subscription) {
       if (!eligible(checkout.subscription)) return res.status(403).json({ error: 'Acesso ao pack não encontrado.' });
     }
@@ -75,26 +70,19 @@ async function grant(req, res) {
   }
   const access = await findPackAccess(email.trim().toLowerCase());
 
-  // Se não encontrou acesso via busca direta, mas veio de sessionId válido,
-  // cria acesso baseado no checkout session diretamente
   if (!access && req.body?.sessionId) {
-    // Para compras com cupom 100%, o PaymentIntent pode não ter metadata ainda
-    // Vamos buscar pelo customer do checkout
     let checkout;
     try {
       checkout = await stripe.checkout.sessions.retrieve(req.body.sessionId);
     } catch {
       return res.status(403).json({ error: 'Nenhum acesso ativo ao Pack Prompt I.A. para esse e-mail.' });
     }
-
     const customerId = checkout.customer;
     if (customerId) {
-      // Tenta encontrar PaymentIntent recente deste customer
       try {
         const pis = await stripe.paymentIntents.list({ customer: customerId, limit: 5 });
         for (const pi of pis.data) {
           if (pi.status === 'succeeded') {
-            // Adiciona metadata se não tiver
             if (!pi.metadata?.pack_prompts) {
               await stripe.paymentIntents.update(pi.id, { metadata: { pack_prompts: 'true' } });
             }
@@ -108,19 +96,14 @@ async function grant(req, res) {
       } catch (err) {
         console.error('Erro ao buscar PaymentIntents do customer:', err.message);
       }
-
-      // Se não achou PI, pode ser cupom 100% - verifica invoices
       try {
         const invoices = await stripe.invoices.list({ customer: customerId, limit: 5 });
         for (const inv of invoices.data) {
           if (inv.status === 'paid') {
-            // Verifica se a invoice contém o produto do pack
             const hasPackItem = inv.lines?.data?.some(line => line.price?.product === PACK_PRODUCT_ID);
             if (hasPackItem) {
               const token = randomBytes(32).toString('hex');
-              // Usa invoice ID como identificador
-              const invoiceId = inv.id;
-              res.setHeader('Set-Cookie', cookieName + '=invoice.' + invoiceId + '.' + token +
+              res.setHeader('Set-Cookie', cookieName + '=invoice.' + inv.id + '.' + token +
                 '; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000');
               return res.status(200).json({ active: true });
             }
@@ -130,7 +113,6 @@ async function grant(req, res) {
         console.error('Erro ao buscar Invoices do customer:', err.message);
       }
     }
-
     return res.status(403).json({ error: 'Nenhum acesso ativo ao Pack Prompt I.A. para esse e-mail.' });
   }
 
@@ -169,10 +151,8 @@ module.exports = async function handler(req, res) {
         const sub = await stripe.subscriptions.retrieve(resourceId);
         valid = eligible(sub) && sub.metadata.pack_session === digest(token);
       } else if (type === 'invoice') {
-        // Acesso via invoice (cupom 100%)
         const inv = await stripe.invoices.retrieve(resourceId);
         valid = inv.status === 'paid';
-        // Verifica se a invoice contém o produto do pack
         if (valid) {
           const hasPackItem = inv.lines?.data?.some(line => line.price?.product === PACK_PRODUCT_ID);
           valid = valid && hasPackItem;
