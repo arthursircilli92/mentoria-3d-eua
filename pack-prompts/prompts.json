@@ -332,39 +332,6 @@
       "preview": "img/previews/18-lancamento.jpg",
       "previewStatus": "ok",
       "validationStatus": "redigido - ainda não testado no Flow"
-    },
-    {
-      "id": "19-tema-sazonal",
-      "order": 19,
-      "category": "extras",
-      "categoryLabel": "Imagens extras",
-      "title": "Imagem temática sazonal",
-      "description": "Adapte o cenário a uma ocasião sem modificar o produto.",
-      "attachments": [
-        "Foto real do produto.",
-        "Ocasião desejada: Natal, Dia dos Pais ou outra."
-      ],
-      "output": "1 imagem quadrada",
-      "prompt": "Gere uma imagem de campanha sazonal com o produto anexado como protagonista. Se eu não tiver informado a ocasião, pergunte qual tema desejo antes de gerar. Use a ocasião escolhida somente para orientar o fundo, as cores e poucos elementos decorativos.\n\nNão acrescente desenhos, adesivos, chapéus, acessórios ou alterações ao próprio produto. Os elementos temáticos devem ficar no cenário e não parecer inclusos no pedido. Use uma chamada curta relacionada à ocasião, sem afirmar promoção, disponibilidade, embalagem para presente ou entrega antes de uma data. Evite afirmar adequação a crianças ou qualquer público específico sem confirmação. Mantenha o produto bem visível e não cubra detalhes com decoração.\n\nUse a foto real anexada como referência principal do produto. Preserve geometria, proporções, cor, textura, inscrições, encaixes e componentes visíveis. Se for uma peça impressa em 3D, mantenha as linhas de camada reais. Não transforme a peça em outro modelo nem invente partes ocultas, acessórios, luz própria, movimento ou funções. Use somente características e dados comerciais que eu informar; não deduza material, medidas, resistência, compatibilidade, quantidade vendida ou garantia pela aparência. Objetos de cenário não podem parecer itens inclusos. Se faltarem informações essenciais à tarefa, faça uma pergunta curta antes de gerar; nos demais casos, avance usando apenas o que está confirmado.\n\nProduza fotografia publicitária realista, com acabamento profissional e sem aparência de ilustração. Use formato quadrado 1:1, produto nítido, composição limpa e margens seguras. Quando houver texto, escreva em português brasileiro, com frases curtas, ortografia correta, fonte sem serifa e alto contraste. Não inclua preços, descontos, avaliações, selos, logos de marketplace ou marca-d'água inventados. Se eu anexar uma arte anterior como referência de estilo, siga sua paleta e tipografia, mas use a foto original para preservar o produto. Entregue a imagem final, não apenas uma descrição ou um novo prompt.",
-      "preview": "img/previews/19-tema-sazonal.svg",
-      "previewStatus": "pendente",
-      "validationStatus": "redigido - ainda não testado no Flow"
-    },
-    {
-      "id": "20-tres-capas",
-      "order": 20,
-      "category": "extras",
-      "categoryLabel": "Imagens extras",
-      "title": "Três alternativas de capa",
-      "description": "Compare três direções visuais para o mesmo produto.",
-      "attachments": [
-        "Foto real do produto."
-      ],
-      "output": "3 imagens quadradas separadas",
-      "prompt": "Gere três imagens quadradas separadas de capa para o mesmo produto anexado. Não entregue uma colagem. Mantenha o mesmo produto, cor e quantidade visual nas três opções. Não coloque letras A, B ou C dentro das artes; use esses identificadores apenas na organização da entrega.\n\nOpção A: fundo branco de estúdio, produto inteiro centralizado, sombra de contato suave.\nOpção B: fundo sólido em cor complementar, iluminação suave e composição assimétrica com espaço negativo.\nOpção C: ambientação minimalista adequada ao produto, com contexto discreto e foco absoluto na peça.\n\nNão inclua textos nas três capas. Preserve a vista da referência quando não houver outros ângulos disponíveis. Varie fundo, luz e composição, sem mudar geometria ou inventar funções. Entregue as três opções para comparação visual, sem afirmar que uma delas terá mais cliques ou vendas. Se alguma não for gerada, informe claramente qual ficou pendente.\n\nUse a foto real anexada como referência principal do produto. Preserve geometria, proporções, cor, textura, inscrições, encaixes e componentes visíveis. Se for uma peça impressa em 3D, mantenha as linhas de camada reais. Não transforme a peça em outro modelo nem invente partes ocultas, acessórios, luz própria, movimento ou funções. Use somente características e dados comerciais que eu informar; não deduza material, medidas, resistência, compatibilidade, quantidade vendida ou garantia pela aparência. Objetos de cenário não podem parecer itens inclusos. Se faltarem informações essenciais à tarefa, faça uma pergunta curta antes de gerar; nos demais casos, avance usando apenas o que está confirmado.\n\nProduza fotografia publicitária realista, com acabamento profissional e sem aparência de ilustração. Use formato quadrado 1:1, produto nítido, composição limpa e margens seguras. Quando houver texto, escreva em português brasileiro, com frases curtas, ortografia correta, fonte sem serifa e alto contraste. Não inclua preços, descontos, avaliações, selos, logos de marketplace ou marca-d'água inventados. Se eu anexar uma arte anterior como referência de estilo, siga sua paleta e tipografia, mas use a foto original para preservar o produto. Entregue a imagem final, não apenas uma descrição ou um novo prompt.",
-      "preview": "img/previews/20-tres-capas.svg",
-      "previewStatus": "pendente",
-      "validationStatus": "redigido - ainda não testado no Flow"
     }
   ]
 }
