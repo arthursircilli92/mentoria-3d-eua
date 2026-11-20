@@ -32,14 +32,35 @@ async function findPackAccess(email) {
 async function grant(req, res) {
   let email = req.body?.email;
   if (req.body?.sessionId) {
-    const checkout = await stripe.checkout.sessions.retrieve(req.body.sessionId, { expand: ['subscription'] });
+    let checkout;
+    try {
+      checkout = await stripe.checkout.sessions.retrieve(req.body.sessionId, { expand: ['subscription'] });
+    } catch (err) {
+      console.error('Erro ao recuperar checkout session:', err.message);
+      return res.status(403).json({ error: 'Sessão de checkout inválida.' });
+    }
     if (checkout.status !== 'complete') {
       return res.status(403).json({ error: 'Pagamento não confirmado.' });
     }
     email = checkout.customer_details?.email;
     if (checkout.mode === 'payment') {
-      const pi = await stripe.paymentIntents.retrieve(checkout.payment_intent);
-      if (pi.status !== 'succeeded') return res.status(403).json({ error: 'Pagamento não confirmado.' });
+      if (checkout.payment_intent) {
+        try {
+          const pi = await stripe.paymentIntents.retrieve(checkout.payment_intent);
+          if (pi.status !== 'succeeded') return res.status(403).json({ error: 'Pagamento não confirmado.' });
+        } catch (err) {
+          console.error('Erro ao verificar PaymentIntent:', err.message);
+          return res.status(403).json({ error: 'Erro ao verificar pagamento.' });
+        }
+      } else if (checkout.invoice) {
+        try {
+          const invoice = await stripe.invoices.retrieve(checkout.invoice);
+          if (invoice.status !== 'paid') return res.status(403).json({ error: 'Pagamento não confirmado.' });
+        } catch (err) {
+          console.error('Erro ao verificar Invoice:', err.message);
+          return res.status(403).json({ error: 'Erro ao verificar pagamento.' });
+        }
+      }
     } else if (checkout.subscription) {
       if (!eligible(checkout.subscription)) return res.status(403).json({ error: 'Acesso ao pack não encontrado.' });
     }
@@ -48,6 +69,53 @@ async function grant(req, res) {
     return res.status(400).json({ error: 'Informe o e-mail da compra.' });
   }
   const access = await findPackAccess(email.trim().toLowerCase());
+
+  if (!access && req.body?.sessionId) {
+    let checkout;
+    try {
+      checkout = await stripe.checkout.sessions.retrieve(req.body.sessionId);
+    } catch {
+      return res.status(403).json({ error: 'Nenhum acesso ativo ao Pack Prompt I.A. para esse e-mail.' });
+    }
+    const customerId = checkout.customer;
+    if (customerId) {
+      try {
+        const pis = await stripe.paymentIntents.list({ customer: customerId, limit: 5 });
+        for (const pi of pis.data) {
+          if (pi.status === 'succeeded') {
+            if (!pi.metadata?.pack_prompts) {
+              await stripe.paymentIntents.update(pi.id, { metadata: { pack_prompts: 'true' } });
+            }
+            const token = randomBytes(32).toString('hex');
+            await stripe.paymentIntents.update(pi.id, { metadata: { pack_session: digest(token) } });
+            res.setHeader('Set-Cookie', cookieName + '=one_time.' + pi.id + '.' + token +
+              '; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000');
+            return res.status(200).json({ active: true });
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao buscar PaymentIntents do customer:', err.message);
+      }
+      try {
+        const invoices = await stripe.invoices.list({ customer: customerId, limit: 5 });
+        for (const inv of invoices.data) {
+          if (inv.status === 'paid') {
+            const hasPackItem = inv.lines?.data?.some(line => line.price?.product === PACK_PRODUCT_ID);
+            if (hasPackItem) {
+              const token = randomBytes(32).toString('hex');
+              res.setHeader('Set-Cookie', cookieName + '=invoice.' + inv.id + '.' + token +
+                '; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000');
+              return res.status(200).json({ active: true });
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao buscar Invoices do customer:', err.message);
+      }
+    }
+    return res.status(403).json({ error: 'Nenhum acesso ativo ao Pack Prompt I.A. para esse e-mail.' });
+  }
+
   if (!access) return res.status(403).json({ error: 'Nenhum acesso ativo ao Pack Prompt I.A. para esse e-mail.' });
   const token = randomBytes(32).toString('hex');
   if (access.type === 'subscription') {
@@ -74,7 +142,7 @@ module.exports = async function handler(req, res) {
     }
     if (req.method !== 'GET') return res.status(405).end();
     const value = (req.headers.cookie || '').split(/;\s*/).find(c => c.startsWith(cookieName + '='))?.slice(cookieName.length + 1);
-    const match = /^(one_time|subscription)\.([A-Za-z0-9_]+)\.([a-f0-9]{64})$/.exec(value || '');
+    const match = /^(one_time|subscription|invoice)\.([A-Za-z0-9_]+)\.([a-f0-9]{64})$/.exec(value || '');
     let reason = 'login';
     if (match) {
       const [, type, resourceId, token] = match;
@@ -82,6 +150,13 @@ module.exports = async function handler(req, res) {
       if (type === 'subscription') {
         const sub = await stripe.subscriptions.retrieve(resourceId);
         valid = eligible(sub) && sub.metadata.pack_session === digest(token);
+      } else if (type === 'invoice') {
+        const inv = await stripe.invoices.retrieve(resourceId);
+        valid = inv.status === 'paid';
+        if (valid) {
+          const hasPackItem = inv.lines?.data?.some(line => line.price?.product === PACK_PRODUCT_ID);
+          valid = valid && hasPackItem;
+        }
       } else {
         const pi = await stripe.paymentIntents.retrieve(resourceId);
         valid = pi.status === 'succeeded' && pi.metadata?.pack_prompts === 'true' && pi.metadata?.pack_session === digest(token);
@@ -96,7 +171,7 @@ module.exports = async function handler(req, res) {
     if (page) return res.redirect(303, '/pack-prompts/?motivo=' + reason);
     return res.status(401).json({ reason });
   } catch (error) {
-    console.error('Falha ao consultar acesso do pack', error.type || error.name);
+    console.error('Falha ao consultar acesso do pack', error.type || error.name, error.message);
     return res.status(503).json({ error: 'Acesso indisponível no momento. Tente novamente.' });
   }
 };
