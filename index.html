@@ -201,6 +201,10 @@ nav a.cta:hover { background: #00eabb; border-color: #00eabb; transform: transla
 .mentor-avatar {
  width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 1rem;
  background: var(--bg-panel); border: 2px solid var(--border-strong);
+ overflow: hidden; display: flex; align-items: center; justify-content: center;
+}
+.mentor-avatar img {
+ width: 100%; height: 100%; object-fit: cover;
  display: flex; align-items: center; justify-content: center;
  font-size: 2rem;
 }
@@ -361,13 +365,13 @@ footer a:hover { color: var(--accent); }
  <p class="subtitle">Não é teoria. É experiência real de quem opera máquinas, lista produtos e fatura em dólar todos os meses.</p>
  <div class="mentores">
  <div class="mentor">
- <div class="mentor-avatar">🇧🇷</div>
+ <div class="mentor-avatar"><img src="img/arthur-mentor.jpg" alt="Arthur"></div>
  <h3>Arthur</h3>
  <div class="role">Estrategista de E-commerce · Brasil</div>
  <p>Estrategista de e-commerce com experiência em modelagem 3D e criação de imagens para anúncios com IA. Criador de ferramentas de análise de mercado. Expert em SEO, precificação, anúncios de alta conversão e automação com IA.</p>
  </div>
  <div class="mentor">
- <div class="mentor-avatar">👤</div>
+ <div class="mentor-avatar"><img src="img/guilherme-mentor.png" alt="Guilherme"></div>
  <h3>Guilherme</h3>
  <div class="role">Estrategista de Operações · Digital</div>
  <p>Sempre do digital e vendas online. Estrategista de operações que criou processos do zero. Especialista em validação e prospecção de produtos vendáveis e escaláveis. Educador desde 2018.</p>
