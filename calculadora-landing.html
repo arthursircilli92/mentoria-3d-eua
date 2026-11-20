@@ -136,10 +136,21 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-he
 .plan-card.featured .plan-btn:hover{background:var(--accent-2);border-color:var(--accent-2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,212,170,0.25)}
 
 /* FAQ */
-.faq{max-width:700px;margin:0 auto;padding:0 1.5rem 5rem}
-.faq-title{font-family:var(--font-display);text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:2rem;letter-spacing:-0.02em}
-.faq-item{border-bottom:1px solid var(--border);padding:1.25rem 0}
-.faq-item:first-child{border-top:1px solid var(--border)}
+.faq{max-width:1000px;margin:0 auto;padding:0 1.5rem 5rem}
+.faq-title{font-family:var(--font-display);text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:2.5rem;letter-spacing:-0.02em}
+.faq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.faq-card{
+ background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+ padding:1.5rem;transition:border-color .2s;
+}
+.faq-card:hover{border-color:var(--accent)}
+.faq-icon{
+ width:40px;height:40px;border-radius:10px;
+ background:var(--accent-dim);
+ display:flex;align-items:center;justify-content:center;
+ margin-bottom:1rem;
+}
+.faq-icon svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .faq-q{font-family:var(--font-display);font-weight:600;font-size:.95rem;margin-bottom:.4rem}
 .faq-a{font-size:.88rem;color:var(--text-dim);line-height:1.6}
 
@@ -295,21 +306,27 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-he
 <!-- FAQ -->
 <section class="faq">
  <h2 class="faq-title">Perguntas frequentes</h2>
- <div class="faq-item">
- <div class="faq-q">A calculadora funciona para qualquer tipo de impressão 3D?</div>
- <div class="faq-a">Sim. A calculadora é genérica e funciona para FDM, resina e outros processos. Você insere os parâmetros específicos da sua máquina e material.</div>
- </div>
- <div class="faq-item">
- <div class="faq-q">Preciso instalar algo?</div>
- <div class="faq-a">Não. A calculadora funciona diretamente no navegador, sem instalação. Basta acessar pelo computador ou celular.</div>
- </div>
- <div class="faq-item">
- <div class="faq-q">Posso cancelar a qualquer momento?</div>
- <div class="faq-a">Sim. No plano mensal, você cancela quando quiser sem multa. No plano anual, o acesso permanece até o fim do período pago.</div>
- </div>
- <div class="faq-item">
- <div class="faq-q">Os dados dos marketplaces são atualizados?</div>
- <div class="faq-a">Sim. As taxas e condições dos 8 marketplaces são atualizadas regularmente para refletir as políticas vigentes.</div>
+ <div class="faq-grid">
+  <div class="faq-card">
+   <div class="faq-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+   <div class="faq-q">A calculadora funciona para qualquer tipo de impressão 3D?</div>
+   <div class="faq-a">Sim. A calculadora é genérica e funciona para FDM, resina e outros processos. Você insere os parâmetros específicos da sua máquina e material.</div>
+  </div>
+  <div class="faq-card">
+   <div class="faq-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+   <div class="faq-q">Preciso instalar algo?</div>
+   <div class="faq-a">Não. A calculadora funciona diretamente no navegador, sem instalação. Basta acessar pelo computador ou celular.</div>
+  </div>
+  <div class="faq-card">
+   <div class="faq-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+   <div class="faq-q">Posso cancelar a qualquer momento?</div>
+   <div class="faq-a">Sim. No plano mensal, você cancela quando quiser sem multa. No plano anual, o acesso permanece até o fim do período pago.</div>
+  </div>
+  <div class="faq-card">
+   <div class="faq-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+   <div class="faq-q">Os dados dos marketplaces são atualizados?</div>
+   <div class="faq-a">Sim. As taxas e condições dos 8 marketplaces são atualizadas regularmente para refletir as políticas vigentes.</div>
+  </div>
  </div>
 </section>
 
