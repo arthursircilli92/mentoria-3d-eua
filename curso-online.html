@@ -26,23 +26,53 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
 
-/* ===== AUTH OVERLAY ===== */
-#auth-overlay {
+/* ===== TURMA SELECTION OVERLAY ===== */
+#turma-overlay {
  position: fixed; inset: 0; z-index: 9999;
  background: var(--bg);
  display: flex; align-items: center; justify-content: center;
  padding: 24px;
 }
-#auth-overlay.hidden { display: none; }
-.auth-card {
- max-width: 420px; width: 100%; text-align: center;
+#turma-overlay.hidden { display: none; }
+.turma-container {
+ max-width: 520px; width: 100%; text-align: center;
 }
-.auth-icon { font-size: 3rem; margin-bottom: 1rem; }
-.auth-title {
+.turma-icon { font-size: 3rem; margin-bottom: 1rem; }
+.turma-title {
  font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
  margin-bottom: 0.5rem; letter-spacing: -0.02em;
 }
-.auth-desc { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; }
+.turma-desc { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; }
+.turma-cards { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.turma-card {
+ flex: 1; min-width: 200px;
+ padding: 1.5rem 1rem;
+ background: var(--bg-card); border: 2px solid var(--border); border-radius: 14px;
+ cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.turma-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.turma-card.selected { border-color: var(--accent); background: var(--accent-dim); }
+.turma-card-num {
+ font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+ color: var(--accent); margin-bottom: 0.3rem;
+}
+.turma-card-label {
+ font-family: var(--font-display); font-size: 0.9rem; font-weight: 600;
+ color: var(--text); margin-bottom: 0.2rem;
+}
+.turma-card-meta { font-size: 0.75rem; color: var(--text-muted); }
+
+/* ===== AUTH FORM (hidden until turma selected) ===== */
+#auth-form { display: none; animation: fadeIn 0.3s ease; }
+#auth-form.visible { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.auth-back {
+ display: inline-flex; align-items: center; gap: 0.3rem;
+ font-size: 0.8rem; color: var(--text-muted); cursor: pointer;
+ margin-bottom: 1rem; border: none; background: none; font-family: var(--font-body);
+ transition: color 0.2s;
+}
+.auth-back:hover { color: var(--accent); }
 .auth-input {
  width: 100%; padding: 1rem;
  background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 10px;
@@ -66,17 +96,15 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 /* ===== COURSE CONTENT ===== */
 .course-container {
  max-width: 960px; margin: 0 auto; padding: 2rem;
- display: none; /* hidden until auth */
+ display: none;
 }
 .course-container.visible { display: block; }
-
 .back-link {
  display: inline-flex; align-items: center; gap: 0.4rem;
  font-family: var(--font-display); font-size: 0.85rem; color: var(--text-dim);
  text-decoration: none; margin-bottom: 2rem; transition: color 0.2s;
 }
 .back-link:hover { color: var(--accent); }
-
 .course-header { margin-bottom: 2rem; }
 .course-tag {
  display: inline-block;
@@ -92,7 +120,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 /* Video Player */
 .video-wrapper {
- position: relative; width: 100%; padding-bottom: 56.25%; /* 16:9 */
+ position: relative; width: 100%; padding-bottom: 56.25%;
  background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
  overflow: hidden; margin-bottom: 2rem;
 }
@@ -105,19 +133,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
  font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 1rem;
 }
 .module-list { display: flex; flex-direction: column; gap: 0.6rem; }
-.module-item {
- display: flex; align-items: center; gap: 1rem;
- background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
- padding: 1rem 1.4rem; transition: border-color 0.2s;
-}
-.module-item:hover { border-color: var(--accent); }
-.module-num {
- font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
- color: var(--accent); opacity: 0.6; min-width: 32px;
-}
-.module-info h3 { font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 0.15rem; }
-.module-info p { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
-
 
 /* Aulas em blocos */
 .aula { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
@@ -151,6 +166,7 @@ footer {
 
 @media (max-width: 720px) {
  .course-container { padding: 1.5rem; }
+ .turma-cards { flex-direction: column; }
  .module-item { padding: 0.8rem 1rem; }
  .aula-head { padding: 0.8rem 1rem; }
  .aula-body { padding: 0 1rem 1rem; }
@@ -159,15 +175,34 @@ footer {
 </head>
 <body>
 
-<!-- AUTH OVERLAY -->
-<div id="auth-overlay">
- <div class="auth-card">
- <div class="auth-icon">🎬</div>
- <div class="auth-title">Curso Online — Mentoria 3D EUA</div>
- <div class="auth-desc">Digite a senha de acesso para assistir às aulas gravadas.</div>
- <input type="password" id="auth-pass" class="auth-input" placeholder="Senha de acesso" />
+<!-- TURMA SELECTION + AUTH OVERLAY -->
+<div id="turma-overlay">
+ <div class="turma-container">
+ <div class="turma-icon">🎬</div>
+ <div class="turma-title">Curso Online — Mentoria 3D EUA</div>
+ <div class="turma-desc">Selecione sua turma para acessar as aulas gravadas.</div>
+
+ <!-- Cards de seleção de turma -->
+ <div class="turma-cards" id="turma-cards">
+ <div class="turma-card" onclick="selectTurma('t1')" id="card-t1">
+ <div class="turma-card-num">01</div>
+ <div class="turma-card-label">Turma 1</div>
+ <div class="turma-card-meta">Primeira turma</div>
+ </div>
+ <div class="turma-card" onclick="selectTurma('t2')" id="card-t2">
+ <div class="turma-card-num">02</div>
+ <div class="turma-card-label">Turma 2</div>
+ <div class="turma-card-meta">Segunda turma</div>
+ </div>
+ </div>
+
+ <!-- Formulário de senha (aparece após escolher turma) -->
+ <div id="auth-form">
+ <button class="auth-back" onclick="backToTurmas()">← Voltar à seleção de turmas</button>
+ <input type="password" id="auth-pass" class="auth-input" placeholder="Senha da turma" />
  <button class="auth-btn" onclick="checkAuth()">Acessar Curso</button>
  <div class="auth-error" id="auth-error">Senha incorreta. Tente novamente.</div>
+ </div>
  </div>
 </div>
 
@@ -177,21 +212,36 @@ footer {
 
  <div class="course-header">
  <div class="course-tag">Gravação Completa da Mentoria</div>
- <h1>Curso Online — Impressão 3D nos EUA</h1>
+ <h1 id="course-title">Curso Online — Impressão 3D nos EUA</h1>
  <p>4 aulas completas gravadas ao vivo. Assista no seu ritmo, quantas vezes quiser.</p>
  </div>
 
- <!-- AULAS (cada aula tem o seu vídeo dentro do bloco) -->
  <div class="modules-title">Conteúdo das Aulas</div>
  <div class="module-list" id="aulas-list"></div>
 
  <footer>
- <p>&copy; 2026 3DnaGringa · Acesso restrito por senha</p>
+ <p>&copy; 2026 3DnaGringa · Acesso restrito por turma</p>
  </footer>
 </div>
 
 <script>
-// Cada vídeo é pedido à API só depois da senha. "id" é o nome combinado com a API (api/video-url.js).
+// Configuração de vídeos por turma
+// Turma 1: nomes originais (sem prefixo)
+// Turma 2: prefixo "t2-" nos arquivos do R2
+const TURMAS = {
+ t1: {
+ label: 'Turma 1',
+ passwordEnv: 'COURSE_PASSWORD_TURMA1',
+ videoPrefix: '',
+ },
+ t2: {
+ label: 'Turma 2',
+ passwordEnv: 'COURSE_PASSWORD_TURMA2',
+ videoPrefix: 't2-',
+ }
+};
+
+// Estrutura das aulas (mesma para ambas as turmas, os IDs são prefixados na API)
 const AULAS = [
  { n: '01', title: 'Introdução e Fundamentos', desc: 'Quem somos, por que o 3D nos EUA, máquinas e materiais.', parts: [{ id: 'aula1' }], caderno: true },
  { n: '02', title: 'Produtos Campeões + Bônus (imagens e vídeos com I.A.)', desc: 'Como encontrar, validar e escolher os melhores produtos para vender. Bônus: skill para gerar prompts de imagens e vídeos em lote.', parts: [{ id: 'aula2-p1', label: 'Parte 1' }, { id: 'aula2-p2', label: 'Parte 2' }] },
@@ -199,18 +249,84 @@ const AULAS = [
  { n: '04', title: 'Logística & Análise', desc: 'Análise dos anúncios criados (Exercício B), GoShipoo, agregadores de frete e logística, tira-dúvidas e próximos passos.', parts: [{ id: 'aula4' }] },
 ];
 
+let currentTurma = '';
 let coursePass = '';
 let reqCounter = 0;
 
+// ===== TURMA SELECTION =====
+function selectTurma(turmaId) {
+ currentTurma = turmaId;
+ // Highlight selected card
+ document.querySelectorAll('.turma-card').forEach(c => c.classList.remove('selected'));
+ document.getElementById('card-' + turmaId).classList.add('selected');
+ // Hide cards, show auth form
+ document.getElementById('turma-cards').style.display = 'none';
+ document.querySelector('.turma-desc').textContent = TURMAS[turmaId].label + ' — Digite sua senha de acesso.';
+ const form = document.getElementById('auth-form');
+ form.classList.add('visible');
+ document.getElementById('auth-pass').value = '';
+ document.getElementById('auth-error').style.display = 'none';
+ setTimeout(() => document.getElementById('auth-pass').focus(), 100);
+}
+
+function backToTurmas() {
+ currentTurma = '';
+ document.getElementById('auth-form').classList.remove('visible');
+ document.getElementById('turma-cards').style.display = 'flex';
+ document.querySelector('.turma-desc').textContent = 'Selecione sua turma para acessar as aulas gravadas.';
+ document.querySelectorAll('.turma-card').forEach(c => c.classList.remove('selected'));
+ document.getElementById('auth-pass').value = '';
+ document.getElementById('auth-error').style.display = 'none';
+}
+
+// ===== AUTH =====
 function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
+async function unlock(pass) {
+ const res = await fetch('/api/video-url', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ password: pass, turma: currentTurma })
+ });
+ const data = await res.json().catch(() => ({}));
+ if (!res.ok || !data.ok) return false;
+ coursePass = pass;
+ showCourse();
+ return true;
+}
+
+async function checkAuth() {
+ const input = document.getElementById('auth-pass');
+ const err = document.getElementById('auth-error');
+ const pass = input.value;
+ let ok = false;
+ try { ok = await unlock(pass); } catch (e) { ok = false; }
+
+ if (ok) {
+ try { sessionStorage.setItem('curso3d_pass', pass); sessionStorage.setItem('curso3d_turma', currentTurma); } catch (e) {}
+ } else {
+ err.style.display = 'block';
+ input.value = '';
+ input.focus();
+ }
+}
+
+function showCourse() {
+ document.getElementById('turma-overlay').classList.add('hidden');
+ document.getElementById('course-content').classList.add('visible');
+ document.getElementById('course-title').textContent = 'Curso Online — ' + TURMAS[currentTurma].label;
+ buildAulas();
+ toggleAula(0);
+}
+
+// ===== AULAS =====
 function buildAulas() {
  const list = document.getElementById('aulas-list');
  list.innerHTML = AULAS.map((a, i) => `
  <div class="aula" id="aula-${i}">
  <button type="button" class="aula-head" onclick="toggleAula(${i})" aria-expanded="false">
- <div class="module-num">${a.n}</div>
- <div class="module-info"><h3>${esc(a.title)}${a.badge ? ` <span class="badge-new">${esc(a.badge)}</span>` : ''}</h3><p>${esc(a.desc)}</p></div>
+ <div class="module-num" style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--accent);opacity:0.6;min-width:32px;">${a.n}</div>
+ <div class="module-info"><h3 style="font-family:var(--font-display);font-size:0.95rem;margin-bottom:0.15rem;">${esc(a.title)}${a.badge ? ` <span class="badge-new">${esc(a.badge)}</span>` : ''}</h3><p style="font-size:0.8rem;color:var(--text-muted);font-family:var(--font-mono);">${esc(a.desc)}</p></div>
  <div class="aula-chevron">▼</div>
  </button>
  <div class="aula-body">
@@ -273,10 +389,10 @@ async function loadPart(i, j) {
  const res = await fetch('/api/video-url', {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ password: coursePass, video: part.id })
+ body: JSON.stringify({ password: coursePass, video: part.id, turma: currentTurma })
  });
  const data = await res.json().catch(() => ({}));
- if (box.dataset.req !== token) return; // o aluno já trocou de aula/parte
+ if (box.dataset.req !== token) return;
  if (res.status === 404) { showMsg(box, '🎬 Esta aula será publicada em breve.'); return; }
  if (!res.ok || !data.ok) throw new Error('falha');
  box.innerHTML = '';
@@ -294,63 +410,32 @@ async function loadPart(i, j) {
  }
 }
 
-function showCourse() {
- document.getElementById('auth-overlay').classList.add('hidden');
- document.getElementById('course-content').classList.add('visible');
- buildAulas();
- toggleAula(0); // a Aula 1 já abre sozinha
-}
-
-async function unlock(pass) {
- const res = await fetch('/api/video-url', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ password: pass })
- });
- const data = await res.json().catch(() => ({}));
- if (!res.ok || !data.ok) return false;
- coursePass = pass;
- showCourse();
- return true;
-}
-
-async function checkAuth() {
- const input = document.getElementById('auth-pass');
- const err = document.getElementById('auth-error');
- const pass = input.value;
- let ok = false;
- try { ok = await unlock(pass); } catch (e) { ok = false; }
-
- if (ok) {
- try { sessionStorage.setItem('curso3d_pass', pass); } catch (e) {}
- } else {
- err.style.display = 'block';
- input.value = '';
- input.focus();
- }
-}
-
 // Enter key
 document.getElementById('auth-pass').addEventListener('keypress', function(e) {
  if (e.key === 'Enter') checkAuth();
 });
 
-// Reabrir sessão ao recarregar a página
-(async function() {
- let saved = null;
- try { saved = sessionStorage.getItem('curso3d_pass'); } catch (e) {}
- if (saved) {
- try { if (await unlock(saved)) return; } catch (e) {}
- try { sessionStorage.removeItem('curso3d_pass'); } catch (e) {}
+// Auto-login se sessão existir
+(async function init() {
+ try {
+ const savedPass = sessionStorage.getItem('curso3d_pass');
+ const savedTurma = sessionStorage.getItem('curso3d_turma');
+ if (savedPass && savedTurma && TURMAS[savedTurma]) {
+ currentTurma = savedTurma;
+ const res = await fetch('/api/video-url', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ password: savedPass, turma: savedTurma })
+ });
+ const data = await res.json().catch(() => ({}));
+ if (res.ok && data.ok) {
+ coursePass = savedPass;
+ showCourse();
+ return;
  }
- document.getElementById('auth-pass').focus();
+ }
+ } catch (e) {}
 })();
-
-// Bloquear atalhos que expõem o vídeo (Ctrl+S, Ctrl+U)
-document.addEventListener('keydown', function(e) {
- if ((e.ctrlKey || e.metaKey) && ['s','u'].includes(e.key.toLowerCase())) e.preventDefault();
-});
 </script>
-
 </body>
 </html>

@@ -3,13 +3,19 @@ const { S3Client, GetObjectCommand, HeadObjectCommand } = require('@aws-sdk/clie
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 // Variáveis de ambiente (configurar na Vercel):
-// COURSE_PASSWORD, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET
+// COURSE_PASSWORD_TURMA1, COURSE_PASSWORD_TURMA2
+// R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET
 //
-// Só estes vídeos podem ser pedidos (id usado na página -> arquivo no bucket).
-// Para publicar uma aula nova, basta enviar o arquivo com o nome abaixo para o bucket.
-const VIDEOS = {
+// Turma 1: arquivos sem prefixo (aula1-editada.mp4, aula2-parte1.mp4, etc.)
+// Turma 2: arquivos com prefixo "t2-" (t2-aula1-editada.mp4, t2-aula2-parte1.mp4, etc.)
+const TURMAS = {
+  t1: { passwordEnv: 'COURSE_PASSWORD_TURMA1', videoPrefix: '' },
+  t2: { passwordEnv: 'COURSE_PASSWORD_TURMA2', videoPrefix: 't2-' },
+};
+
+// Nomes possíveis dos arquivos no bucket (sem prefixo de turma)
+const VIDEO_CANDIDATES = {
   'aula1': ['aula1-editada.mp4'],
-  // A aula 2 aceita o nome limpo ou o nome que o HandBrake deixou no arquivo.
   'aula2-p1': ['aula2-parte1.mp4', 'aula2-parte1(handbrake).mp4'],
   'aula2-p2': ['aula2-parte2.mp4', 'aula2-parte2(handbrake).mp4'],
   'aula3-p1': ['AULA3-PT1.mp4', 'aula3-pt1.mp4', 'aula3-parte1.mp4'],
@@ -18,6 +24,7 @@ const VIDEOS = {
   'aula3-p4': ['AULA3-PT4.mp4', 'aula3-pt4.mp4', 'aula3-parte4.mp4'],
   'aula4': ['aula4.mp4'],
 };
+
 const URL_TTL_SECONDS = 4 * 60 * 60; // link do vídeo vale 4h
 
 function safeEqual(a, b) {
@@ -31,26 +38,48 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  const { COURSE_PASSWORD, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET } = process.env;
-  if (!COURSE_PASSWORD || !R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET) {
-    return res.status(500).json({ ok: false, error: 'Servidor não configurado' });
+  const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET } = process.env;
+  if (!R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET) {
+    return res.status(500).json({ ok: false, error: 'Servidor não configurado (R2)' });
   }
 
   const body = req.body || {};
-  if (!safeEqual(body.password || '', COURSE_PASSWORD)) {
+  const turmaId = body.turma;
+
+  // Valida turma
+  if (!turmaId || !TURMAS[turmaId]) {
+    return res.status(400).json({ ok: false, error: 'Turma inválida' });
+  }
+
+  const turmaConfig = TURMAS[turmaId];
+  const expectedPassword = process.env[turmaConfig.passwordEnv];
+
+  if (!expectedPassword) {
+    return res.status(500).json({ ok: false, error: `Senha da ${turmaId} não configurada no servidor` });
+  }
+
+  // Valida senha da turma
+  if (!safeEqual(body.password || '', expectedPassword)) {
     return res.status(401).json({ ok: false, error: 'Senha incorreta' });
   }
 
-  // Sem "video": só confere a senha (usado ao entrar no curso).
+  // Sem "video": só confere a senha (usado ao entrar no curso)
   if (body.video === undefined || body.video === null || body.video === '') {
     res.setHeader('Cache-Control', 'no-store');
     return res.status(200).json({ ok: true });
   }
 
-  const candidates = Object.prototype.hasOwnProperty.call(VIDEOS, body.video) ? VIDEOS[body.video] : null;
-  if (!candidates) {
+  // Busca candidatos de arquivo para o vídeo solicitado
+  const baseCandidates = Object.prototype.hasOwnProperty.call(VIDEO_CANDIDATES, body.video)
+    ? VIDEO_CANDIDATES[body.video]
+    : null;
+
+  if (!baseCandidates) {
     return res.status(400).json({ ok: false, error: 'Vídeo inválido' });
   }
+
+  // Aplica prefixo da turma aos nomes dos arquivos
+  const candidates = baseCandidates.map(name => turmaConfig.videoPrefix + name);
 
   try {
     const client = new S3Client({
@@ -59,7 +88,7 @@ module.exports = async function handler(req, res) {
       credentials: { accessKeyId: R2_ACCESS_KEY_ID, secretAccessKey: R2_SECRET_ACCESS_KEY },
     });
 
-    // Qual dos nomes possíveis já foi enviado ao bucket? Se nenhum, a aula aparece como "Em breve".
+    // Qual dos nomes possíveis já foi enviado ao bucket?
     let key = null;
     for (const candidate of candidates) {
       try {
@@ -72,6 +101,7 @@ module.exports = async function handler(req, res) {
         if (!notFound) throw err;
       }
     }
+
     if (!key) {
       res.setHeader('Cache-Control', 'no-store');
       return res.status(404).json({ ok: false, error: 'not_found' });
