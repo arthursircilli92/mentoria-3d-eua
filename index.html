@@ -168,9 +168,11 @@ nav a.cta:hover { background: #00eabb; border-color: #00eabb; transform: transla
  letter-spacing: 0.06em;
 }
 
-/* Card soon opacity */
-.card-soon { opacity: 0.7; }
-.card-soon:hover { opacity: 1; }
+/* Card soon opacity + desaturation */
+.card-soon { opacity: 0.55; }
+.card-soon:hover { opacity: 0.85; }
+.card-soon .card-img { filter: grayscale(0.7) saturate(0.4); transition: filter 0.3s ease; }
+.card-soon:hover .card-img { filter: grayscale(0.3) saturate(0.7); }
 .card-soon .card-icon { background: var(--bg-panel); color: var(--text-muted); }
 
 /* ===== AULAS ===== */
@@ -282,13 +284,13 @@ footer a:hover { color: var(--accent); }
  <a href="curso-online.html" class="card-link">Assistir →</a>
  </div>
 
- <!-- CALCULADORA (DISPONÍVEL) -->
- <div class="card">
- <div class="card-badge">Novo</div>
+ <!-- CALCULADORA (EM BREVE) -->
+ <div class="card card-soon">
+ <div class="card-badge badge-soon">Em Breve</div>
  <img class="card-img" src="img/calculadora-v2.jpg" alt="Calculadora de Precificação 3D" loading="lazy">
  <h3>Calculadora de Precificação</h3>
  <p>Custo exato por peça, preço com margem alvo, simulador de ROAS e projeção de escala até 10x. Compare 8 marketplaces em tempo real.</p>
- <a href="calculadora-vendas.html" class="card-link">Acessar →</a>
+ <span class="card-soon-tag">Vendida separadamente</span>
  </div>
 
  <!-- PACK PRODUTOS CAMPEÕES (EM BREVE) -->
