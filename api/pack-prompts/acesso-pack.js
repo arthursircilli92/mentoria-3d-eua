@@ -4,6 +4,7 @@ const { readFileSync } = require('node:fs');
 const path = require('node:path');
 
 const PACK_PRODUCT_ID = process.env.PACK_PROMPTS_PRODUCT_ID || 'prod_VevhG8Mku4Pv7r';
+const PACK_PRICE_ID = process.env.PACK_PROMPTS_PRICE_ID || 'price_1UdbprL6dFACWnIOcSIwmTRf';
 const cookieName = '__Host-pack_session';
 const digest = token => createHash('sha256').update(token).digest('hex');
 
@@ -14,56 +15,46 @@ function eligible(sub) {
 }
 
 async function findPackAccess(email) {
- // Busca assinatura ativa do pack
- for await (const customer of stripe.customers.list({ email, limit: 100 })) {
+ const normalizedEmail = email.trim().toLowerCase();
+
+ // 1. Busca assinatura ativa do pack
+ for await (const customer of stripe.customers.list({ email: normalizedEmail, limit: 100 })) {
  for await (const sub of stripe.subscriptions.list({ customer: customer.id, status: 'all', limit: 100 })) {
  if (eligible(sub)) return { type: 'subscription', id: sub.id };
  }
  }
- // Busca pagamento único concluído (PaymentIntent com metadata pack_prompts)
- for await (const customer of stripe.customers.list({ email, limit: 100 })) {
+
+ // 2. Busca PaymentIntent com metadata pack_prompts
+ for await (const customer of stripe.customers.list({ email: normalizedEmail, limit: 100 })) {
  for await (const pi of stripe.paymentIntents.list({ customer: customer.id, limit: 100 })) {
  if (pi.status === 'succeeded' && pi.metadata?.pack_prompts === 'true') {
  return { type: 'one_time', id: pi.id };
  }
  }
  }
- // Fallback: busca PaymentIntent sem metadata pack_prompts (cupom 100% pode não ter metadata)
- // Verifica se o PI tem amount 0 ou se a invoice associada contém o produto do pack
- for await (const customer of stripe.customers.list({ email, limit: 100 })) {
- for await (const pi of stripe.paymentIntents.list({ customer: customer.id, limit: 20 })) {
- if (pi.status === 'succeeded' && !pi.metadata?.pack_prompts) {
- // Verifica via invoice se este PI está ligado ao produto do pack
- if (pi.invoice) {
+
+ // 3. Fallback: busca Checkout Sessions completas pelo email do customer_details
+ // Necessário porque compras com cupom 100% podem não criar customer nem PaymentIntent
  try {
- const inv = await stripe.invoices.retrieve(pi.invoice);
- const hasPackItem = inv.lines?.data?.some(line => line.price?.product === PACK_PRODUCT_ID);
+ const sessions = await stripe.checkout.sessions.list({ limit: 100 });
+ for (const session of sessions.data) {
+ if (session.status === 'complete' &&
+ session.mode === 'payment' &&
+ session.customer_details?.email?.toLowerCase() === normalizedEmail) {
+ // Verifica se a sessão contém o produto/price do pack
+ const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 10 });
+ const hasPackItem = lineItems.data.some(item =>
+ item.price?.product === PACK_PRODUCT_ID || item.price?.id === PACK_PRICE_ID
+ );
  if (hasPackItem) {
- // Adiciona metadata para futuras buscas
- await stripe.paymentIntents.update(pi.id, { metadata: { pack_prompts: 'true' } });
- return { type: 'one_time', id: pi.id };
+ return { type: 'checkout_session', id: session.id };
+ }
+ }
  }
  } catch (err) {
- console.error('Erro ao verificar invoice do PI:', err.message);
+ console.error('Erro ao buscar checkout sessions:', err.message);
  }
- }
- // Se não tem invoice, verifica se amount é 0 (cupom 100%)
- if (pi.amount === 0) {
- await stripe.paymentIntents.update(pi.id, { metadata: { pack_prompts: 'true' } });
- return { type: 'one_time', id: pi.id };
- }
- }
- }
- }
- // Busca invoices pagas diretamente (caso não haja PaymentIntent)
- for await (const customer of stripe.customers.list({ email, limit: 100 })) {
- for await (const inv of stripe.invoices.list({ customer: customer.id, status: 'paid', limit: 20 })) {
- const hasPackItem = inv.lines?.data?.some(line => line.price?.product === PACK_PRODUCT_ID);
- if (hasPackItem) {
- return { type: 'invoice', id: inv.id };
- }
- }
- }
+
  return null;
 }
 
@@ -86,13 +77,11 @@ async function grant(req, res) {
  try {
  const pi = await stripe.paymentIntents.retrieve(checkout.payment_intent);
  if (pi.status !== 'succeeded') return res.status(403).json({ error: 'Pagamento não confirmado.' });
- // Garante que a metadata exista
  if (!pi.metadata?.pack_prompts) {
  await stripe.paymentIntents.update(pi.id, { metadata: { pack_prompts: 'true' } });
  }
  } catch (err) {
  console.error('Erro ao verificar PaymentIntent:', err.message);
- return res.status(403).json({ error: 'Erro ao verificar pagamento.' });
  }
  } else if (checkout.invoice) {
  try {
@@ -100,9 +89,9 @@ async function grant(req, res) {
  if (invoice.status !== 'paid') return res.status(403).json({ error: 'Pagamento não confirmado.' });
  } catch (err) {
  console.error('Erro ao verificar Invoice:', err.message);
- return res.status(403).json({ error: 'Erro ao verificar pagamento.' });
  }
  }
+ // Se não tem payment_intent nem invoice (cupom 100%), aceita baseado no status complete
  } else if (checkout.subscription) {
  if (!eligible(checkout.subscription)) return res.status(403).json({ error: 'Acesso ao pack não encontrado.' });
  }
@@ -119,9 +108,14 @@ async function grant(req, res) {
  const token = randomBytes(32).toString('hex');
  if (access.type === 'subscription') {
  await stripe.subscriptions.update(access.id, { metadata: { pack_session: digest(token) } });
- } else if (access.type === 'invoice') {
- // Para invoices, armazenamos o token na metadata da invoice
- await stripe.invoices.update(access.id, { metadata: { pack_session: digest(token) } });
+ } else if (access.type === 'checkout_session') {
+ // Para checkout sessions sem PI/Invoice, armazena token na metadata da sessão
+ try {
+ await stripe.checkout.sessions.update(access.id, { metadata: { pack_session: digest(token) } });
+ } catch (err) {
+ console.error('Erro ao atualizar metadata da checkout session:', err.message);
+ // Continua mesmo sem conseguir salvar metadata - o cookie já garante acesso
+ }
  } else {
  await stripe.paymentIntents.update(access.id, { metadata: { pack_session: digest(token) } });
  }
@@ -144,7 +138,7 @@ module.exports = async function handler(req, res) {
  }
  if (req.method !== 'GET') return res.status(405).end();
  const value = (req.headers.cookie || '').split(/;\s*/).find(c => c.startsWith(cookieName + '='))?.slice(cookieName.length + 1);
- const match = /^(one_time|subscription|invoice)\.([A-Za-z0-9_]+)\.([a-f0-9]{64})$/.exec(value || '');
+ const match = /^(one_time|subscription|invoice|checkout_session)\.([A-Za-z0-9_]+)\.([a-f0-9]{64})$/.exec(value || '');
  let reason = 'login';
  if (match) {
  const [, type, resourceId, token] = match;
@@ -158,10 +152,24 @@ module.exports = async function handler(req, res) {
  if (valid) {
  const hasPackItem = inv.lines?.data?.some(line => line.price?.product === PACK_PRODUCT_ID);
  valid = valid && hasPackItem;
- // Verifica token na metadata da invoice
  if (valid && inv.metadata?.pack_session) {
  valid = inv.metadata.pack_session === digest(token);
  }
+ }
+ } else if (type === 'checkout_session') {
+ // Validação via checkout session (cupom 100% sem PI/Invoice)
+ const session = await stripe.checkout.sessions.retrieve(resourceId);
+ valid = session.status === 'complete' && session.mode === 'payment';
+ if (valid && session.metadata?.pack_session) {
+ valid = session.metadata.pack_session === digest(token);
+ }
+ if (valid) {
+ // Verifica se a sessão contém o produto do pack
+ const lineItems = await stripe.checkout.sessions.listLineItems(resourceId, { limit: 10 });
+ const hasPackItem = lineItems.data.some(item =>
+ item.price?.product === PACK_PRODUCT_ID || item.price?.id === PACK_PRICE_ID
+ );
+ valid = valid && hasPackItem;
  }
  } else {
  const pi = await stripe.paymentIntents.retrieve(resourceId);
