@@ -37,6 +37,15 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 .turma-container {
  max-width: 520px; width: 100%; text-align: center;
 }
+.turma-back-link {
+ display: inline-flex; align-items: center; gap: 0.3rem;
+ padding: 0.45rem 1rem;
+ background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 999px;
+ color: var(--text-dim); font-family: var(--font-body); font-size: 0.85rem;
+ text-decoration: none; transition: all 0.2s;
+ margin-bottom: 1.5rem;
+}
+.turma-back-link:hover { border-color: var(--accent); color: var(--accent); }
 .turma-cover {
  width: min(208px, 65%);
  height: auto;
@@ -183,7 +192,7 @@ footer {
 <!-- TURMA SELECTION + AUTH OVERLAY -->
 <div id="turma-overlay">
  <div class="turma-container">
- <a href="/" class="auth-back" style="margin-bottom:1.5rem;display:inline-flex;">← Voltar ao site</a>
+ <a href="/" class="turma-back-link">← Voltar ao site</a>
  <img class="turma-cover" src="/img/turma-cover.jpg" alt="Mentoria Vendas 3D" width="208" height="208">
  <div class="turma-title">Curso Online - Mentoria 3D EUA</div>
  <div class="turma-desc">Selecione sua turma para acessar as aulas gravadas.</div>
