@@ -63,8 +63,9 @@ h1{font-size:1.25rem;font-weight:700;color:var(--text);letter-spacing:-0.02em}
 .card{background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);display:flex;flex-direction:column;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:border-color .2s,box-shadow .2s}
 .card:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(99,102,241,0.15)}
 [data-theme="dark"] .card:hover{box-shadow:0 4px 20px rgba(129,140,248,0.2)}
-.card-preview{aspect-ratio:4/3;background:var(--surface-2);position:relative;overflow:hidden}
-.card-preview img,.card-preview video{width:100%;height:100%;object-fit:cover;display:block}
+.card-preview{aspect-ratio:1/1;background:var(--surface-2);position:relative;overflow:hidden}
+.card-preview img,.card-preview video{width:100%;height:100%;object-fit:contain;display:block}
+.card-preview[data-video-preview]{background:#000}
 .card-preview video{position:absolute;inset:0;opacity:0;transition:opacity .3s}
 .card-preview.playing video{opacity:1}
 .card-badge{position:absolute;top:.75rem;right:.75rem;background:rgba(0,0,0,0.6);color:var(--accent-2);font-size:.7rem;font-weight:600;padding:.25rem .6rem;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;z-index:2;backdrop-filter:blur(4px)}
@@ -190,13 +191,13 @@ function renderGrid() {
   }
   empty.style.display = 'none';
   grid.innerHTML = filtered.map(p => {
-    const isVideo = p.category === 'video';
+    const isVideo = p.category === 'video' && !!p.previewVideo;
     const previewPath = '/pack-prompts/' + p.preview;
     return `
     <div class="card" data-id="${p.id}" data-video="${isVideo ? 'true' : ''}">
-      <div class="card-preview" data-preview="${previewPath}">
+      <div class="card-preview" data-preview="${previewPath}"${p.previewRatio && !p.previewVideo ? ` style="aspect-ratio:${p.previewRatio}"` : ''}${p.previewVideo ? ' data-video-preview' : ''}>
         <img src="${previewPath}" alt="${escapeHtml(p.title)}" loading="lazy">
-        ${isVideo && !prefersReducedMotion ? `<video src="" muted loop playsinline preload="none" aria-hidden="true"></video>` : ''}
+        ${isVideo && !prefersReducedMotion ? `<video data-src="/pack-prompts/${p.previewVideo}" muted loop playsinline preload="none" aria-hidden="true"></video>` : ''}
         <span class="card-badge">${getCatLabel(p.category)}</span>
         ${isVideo ? '<span class="video-indicator">VÍDEO NO FLOW</span>' : ''}
       </div>
@@ -226,6 +227,7 @@ function renderGrid() {
     if (video && !prefersReducedMotion) {
       let touchActive = false;
       const playVideo = () => {
+        if (!video.src && video.dataset.src) video.src = video.dataset.src;
         preview.classList.add('playing');
         video.play().catch(() => {});
       };
