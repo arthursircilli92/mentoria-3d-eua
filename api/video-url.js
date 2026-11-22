@@ -6,15 +6,14 @@ const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 // COURSE_PASSWORD_TURMA1, COURSE_PASSWORD_TURMA2
 // R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET
 //
-// Turma 1: arquivos sem prefixo (aula1-editada.mp4, aula2-parte1.mp4, etc.)
-// Turma 2: arquivos com prefixo "t2-" (t2-aula1-editada.mp4, t2-aula2-parte1.mp4, etc.)
+// Cada turma tem seu próprio mapa de vídeos (id usado na página -> nomes possíveis no bucket)
 const TURMAS = {
-  t1: { passwordEnv: 'COURSE_PASSWORD_TURMA1', videoPrefix: '' },
-  t2: { passwordEnv: 'COURSE_PASSWORD_TURMA2', videoPrefix: 't2-' },
+  t1: { passwordEnv: 'COURSE_PASSWORD_TURMA1' },
+  t2: { passwordEnv: 'COURSE_PASSWORD_TURMA2' },
 };
 
-// Nomes possíveis dos arquivos no bucket (sem prefixo de turma)
-const VIDEO_CANDIDATES = {
+// Turma 1
+const VIDEOS_T1 = {
   'aula1': ['aula1-editada.mp4'],
   'aula2-p1': ['aula2-parte1.mp4', 'aula2-parte1(handbrake).mp4'],
   'aula2-p2': ['aula2-parte2.mp4', 'aula2-parte2(handbrake).mp4'],
@@ -24,6 +23,15 @@ const VIDEO_CANDIDATES = {
   'aula3-p4': ['AULA3-PT4.mp4', 'aula3-pt4.mp4', 'aula3-parte4.mp4'],
   'aula4': ['aula4.mp4'],
 };
+
+// Turma 2 (por enquanto só a Aula 1, em 3 partes)
+const VIDEOS_T2 = {
+  'aula1-p1': ['MENTORIA-T2A1-PT01.mp4', 'mentoria-t2a1-pt01.mp4'],
+  'aula1-p2': ['MENTORIA-T2A1-PT02.mp4', 'mentoria-t2a1-pt02.mp4'],
+  'aula1-p3': ['MENTORIA-T2A1-PT03.mp4', 'mentoria-t2a1-pt03.mp4'],
+};
+
+const VIDEO_CANDIDATES = { t1: VIDEOS_T1, t2: VIDEOS_T2 };
 
 const URL_TTL_SECONDS = 4 * 60 * 60; // link do vídeo vale 4h
 
@@ -70,16 +78,16 @@ module.exports = async function handler(req, res) {
   }
 
   // Busca candidatos de arquivo para o vídeo solicitado
-  const baseCandidates = Object.prototype.hasOwnProperty.call(VIDEO_CANDIDATES, body.video)
-    ? VIDEO_CANDIDATES[body.video]
+  const turmaVideos = VIDEO_CANDIDATES[turmaId];
+  const baseCandidates = Object.prototype.hasOwnProperty.call(turmaVideos, body.video)
+    ? turmaVideos[body.video]
     : null;
 
   if (!baseCandidates) {
     return res.status(400).json({ ok: false, error: 'Vídeo inválido' });
   }
 
-  // Aplica prefixo da turma aos nomes dos arquivos
-  const candidates = baseCandidates.map(name => turmaConfig.videoPrefix + name);
+  const candidates = baseCandidates;
 
   try {
     const client = new S3Client({
