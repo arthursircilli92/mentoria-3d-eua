@@ -160,6 +160,9 @@ nav a.cta:hover { background: #00eabb; border-color: #00eabb; transform: transla
  color: var(--accent); text-decoration: none; transition: all 0.2s;
 }
 .card-link:hover { gap: 0.6rem; }
+.card-link::after { content: ""; position: absolute; inset: 0; z-index: 3; }
+.card:has(.card-link) { cursor: pointer; }
+.card:has(.card-link:hover) .card-link { gap: 0.6rem; }
 
 /* Card soon tag */
 .card-soon-tag {
