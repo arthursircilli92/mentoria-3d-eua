@@ -1,4 +1,4 @@
-# Mentoria 3D EUA — Sala de Controle
+# Mentoria 3D EUA - Sala de Controle
 
 Material completo das 4 aulas da mentoria de impressão 3D para o mercado americano, com **Painel de Troca** para definir quem apresenta cada bloco (Arthur ou Guilherme).
 
@@ -21,13 +21,13 @@ Pronto! O site estará no ar em segundos.
 
 ## 📋 Estrutura
 
-- `index.html` — Arquivo único com todo o conteúdo (HTML + CSS + JS embutidos).
+- `index.html` - Arquivo único com todo o conteúdo (HTML + CSS + JS embutidos).
 - Nenhuma dependência externa (exceto Google Fonts).
 
 ## 👥 Apresentadores
 
-- **Guilherme (FL)** — Etsy, validação de produto, impressão 3D.
-- **Arthur (BR)** — Facebook Marketplace, conta americana, logística, GoShipoo.
+- **Guilherme (FL)** - Etsy, validação de produto, impressão 3D.
+- **Arthur (BR)** - Facebook Marketplace, conta americana, logística, GoShipoo.
 
 ---
 

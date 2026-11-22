@@ -1,6 +1,6 @@
 # 📊 Guia de Estudo: ROAS (Return on Ad Spend)
 
-> Material de apoio para a Aula 3 — Precificação Estratégica  
+> Material de apoio para a Aula 3 - Precificação Estratégica  
 > Mentoria 3D EUA · Arthur + Guilherme
 
 ---
@@ -128,7 +128,7 @@ Semana 2 (campanha ruim):
 2. **Mostre o cálculo ao vivo**: abra uma campanha real (sua ou print) e calcule o ROAS junto com os alunos
 3. **Conecte com precificação**: ROAS baixo pode significar preço errado, não necessariamente anúncio ruim
 4. **Enfatize**: ROAS não é lucro! É receita bruta gerada. Sempre descontar custos antes de celebrar
-5. **Contexto 3D**: produtos únicos têm vantagem — menos comparação direta de preço, margem maior, ROAS potencialmente melhor
+5. **Contexto 3D**: produtos únicos têm vantagem - menos comparação direta de preço, margem maior, ROAS potencialmente melhor
 
 ---
 
@@ -139,7 +139,7 @@ Semana 2 (campanha ruim):
 - [ ] Sei diferenciar ROAS de lucro líquido
 - [ ] Sei quando pausar, otimizar ou escalar
 - [ ] Conheço os benchmarks da minha plataforma
-- [ ] Estou monitorando ROAS semanalmente (não diariamente — volatilidade normal)
+- [ ] Estou monitorando ROAS semanalmente (não diariamente - volatilidade normal)
 
 ---
 

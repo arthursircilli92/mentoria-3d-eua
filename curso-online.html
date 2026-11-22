@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Curso Online — Mentoria 3D EUA</title>
+<title>Curso Online - Mentoria 3D EUA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -227,7 +227,7 @@ footer {
 
  <div class="course-header">
  <div class="course-tag">Gravação Completa da Mentoria</div>
- <h1 id="course-title">Curso Online — Impressão 3D nos EUA</h1>
+ <h1 id="course-title">Curso Online - Impressão 3D nos EUA</h1>
  <p>4 aulas completas gravadas ao vivo. Assista no seu ritmo, quantas vezes quiser.</p>
  </div>
 
@@ -256,13 +256,22 @@ const TURMAS = {
  }
 };
 
-// Estrutura das aulas (mesma para ambas as turmas, os IDs são prefixados na API)
-const AULAS = [
+// Estrutura das aulas por turma (os IDs dos vídeos são mapeados para arquivos na API)
+const AULAS_T1 = [
  { n: '01', title: 'Introdução e Fundamentos', desc: 'Quem somos, por que o 3D nos EUA, máquinas e materiais.', parts: [{ id: 'aula1' }], caderno: true },
  { n: '02', title: 'Produtos Campeões + Bônus (imagens e vídeos com I.A.)', desc: 'Como encontrar, validar e escolher os melhores produtos para vender. Bônus: skill para gerar prompts de imagens e vídeos em lote.', parts: [{ id: 'aula2-p1', label: 'Parte 1' }, { id: 'aula2-p2', label: 'Parte 2' }] },
- { n: '03', title: 'Vendas e Precificação', badge: '🔥 Nova aula', desc: 'Análise de exercícios, canais de venda e estratégia de preços.', parts: [{ id: 'aula3-p1', label: 'Parte 1' }, { id: 'aula3-p2', label: 'Parte 2' }, { id: 'aula3-p3', label: 'Parte 3' }, { id: 'aula3-p4', label: 'Parte 4' }] },
+ { n: '03', title: 'Vendas e Precificação', desc: 'Análise de exercícios, canais de venda e estratégia de preços.', parts: [{ id: 'aula3-p1', label: 'Parte 1' }, { id: 'aula3-p2', label: 'Parte 2' }, { id: 'aula3-p3', label: 'Parte 3' }, { id: 'aula3-p4', label: 'Parte 4' }] },
  { n: '04', title: 'Logística & Análise', desc: 'Análise dos anúncios criados (Exercício B), GoShipoo, agregadores de frete e logística, tira-dúvidas e próximos passos.', parts: [{ id: 'aula4' }] },
 ];
+// Turma 2: por enquanto só a Aula 1 (em 3 partes). As demais ficam vazias (parts: []).
+const AULAS_T2 = [
+ { n: '01', title: 'Introdução e Fundamentos', badge: '🔥 Nova aula', desc: 'Quem somos, por que o 3D nos EUA, máquinas e materiais.', parts: [{ id: 'aula1-p1', label: 'Parte 1' }, { id: 'aula1-p2', label: 'Parte 2' }, { id: 'aula1-p3', label: 'Parte 3' }], caderno: true },
+ { n: '02', title: 'Produtos Campeões + Bônus (imagens e vídeos com I.A.)', desc: 'Como encontrar, validar e escolher os melhores produtos para vender. Bônus: skill para gerar prompts de imagens e vídeos em lote.', parts: [] },
+ { n: '03', title: 'Vendas e Precificação', desc: 'Análise de exercícios, canais de venda e estratégia de preços.', parts: [] },
+ { n: '04', title: 'Logística & Análise', desc: 'Análise dos anúncios criados (Exercício B), GoShipoo, agregadores de frete e logística, tira-dúvidas e próximos passos.', parts: [] },
+];
+const AULAS_POR_TURMA = { t1: AULAS_T1, t2: AULAS_T2 };
+let AULAS = AULAS_T1;
 
 let currentTurma = '';
 let coursePass = '';
@@ -276,7 +285,7 @@ function selectTurma(turmaId) {
  document.getElementById('card-' + turmaId).classList.add('selected');
  // Hide cards, show auth form
  document.getElementById('turma-cards').style.display = 'none';
- document.querySelector('.turma-desc').textContent = TURMAS[turmaId].label + ' — Digite sua senha de acesso.';
+ document.querySelector('.turma-desc').textContent = TURMAS[turmaId].label + ' - Digite sua senha de acesso.';
  const form = document.getElementById('auth-form');
  form.classList.add('visible');
  document.getElementById('auth-pass').value = '';
@@ -329,7 +338,8 @@ async function checkAuth() {
 function showCourse() {
  document.getElementById('turma-overlay').classList.add('hidden');
  document.getElementById('course-content').classList.add('visible');
- document.getElementById('course-title').textContent = 'Curso Online — ' + TURMAS[currentTurma].label;
+ document.getElementById('course-title').textContent = 'Curso Online - ' + TURMAS[currentTurma].label;
+ AULAS = AULAS_POR_TURMA[currentTurma] || AULAS_T1;
  buildAulas();
  toggleAula(0);
 }
@@ -347,7 +357,7 @@ function buildAulas() {
  <div class="aula-body">
  ${a.parts.length > 1 ? `<div class="part-tabs">${a.parts.map((p, j) => `<button type="button" class="part-tab${j === 0 ? ' active' : ''}" onclick="selectPart(${i}, ${j})">${esc(p.label)}</button>`).join('')}</div>` : ''}
  <div class="video-wrapper" id="player-${i}"></div>
- ${a.caderno ? `<div class="caderno-card"><div class="ic">📓</div><div class="tx"><div class="tt">Caderno do Aluno — Tarefa Aula 1</div><div class="ds">Preencha a ficha de análise dos 2 produtos escolhidos e exporte em PDF para enviar no grupo.</div></div><a href="caderno-aluno.html">Abrir Caderno →</a></div>` : ''}
+ ${a.caderno ? `<div class="caderno-card"><div class="ic">📓</div><div class="tx"><div class="tt">Caderno do Aluno - Tarefa Aula 1</div><div class="ds">Preencha a ficha de análise dos 2 produtos escolhidos e exporte em PDF para enviar no grupo.</div></div><a href="caderno-aluno.html">Abrir Caderno →</a></div>` : ''}
  </div>
  </div>`).join('');
 }
@@ -396,6 +406,7 @@ function showMsg(box, html) { box.innerHTML = '<div class="video-msg">' + html +
 async function loadPart(i, j) {
  const box = document.getElementById('player-' + i);
  const part = AULAS[i].parts[j];
+ if (!part) { box.dataset.loaded = '1'; showMsg(box, '🎬 Esta aula será publicada em breve.'); return; }
  const token = String(++reqCounter);
  box.dataset.req = token;
  box.dataset.loaded = '1';
