@@ -21,7 +21,10 @@ const VIDEOS_T1 = {
   'aula3-p2': ['AULA3-PT2.mp4', 'aula3-pt2.mp4', 'aula3-parte2.mp4'],
   'aula3-p3': ['AULA3-PT3.mp4', 'aula3-pt3.mp4', 'aula3-parte3.mp4'],
   'aula3-p4': ['AULA3-PT4.mp4', 'aula3-pt4.mp4', 'aula3-parte4.mp4'],
-  'aula4': ['aula4.mp4'],
+  'aula4-p1': ['T1A4-PT1(OK).mp4'],
+  'aula4-p2': ['T1A4-PT2(OK).mp4'],
+  'aula4-p3': ['T1A4-PT3(OK).mp4'],
+  'aula4-p4': ['T1A4-PT4(OK).mp4'],
 };
 
 // Turma 2 (por enquanto só a Aula 1, em 3 partes)
