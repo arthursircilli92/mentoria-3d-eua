@@ -32,6 +32,12 @@ const VIDEOS_T2 = {
   'aula1-p1': ['MENTORIA-T2A1-PT01.mp4', 'mentoria-t2a1-pt01.mp4'],
   'aula1-p2': ['MENTORIA-T2A1-PT02.mp4', 'mentoria-t2a1-pt02.mp4'],
   'aula1-p3': ['MENTORIA-T2A1-PT03.mp4', 'mentoria-t2a1-pt03.mp4'],
+  'aula2-p1': ['T2A2-PT1(OK).mp4'],
+  'aula2-p2': ['T2A2-PT2(OK).mp4'],
+  'aula2-p3': ['T2A2-PT3(OK).mp4'],
+  'aula2-p4': ['T2A2-PT4(OK).mp4'],
+  'aula2-p5': ['T2A2-PT5(OK).mp4'],
+  'aula2-p6': ['T2A2-PT6(OK).mp4'],
 };
 
 const VIDEO_CANDIDATES = { t1: VIDEOS_T1, t2: VIDEOS_T2 };
